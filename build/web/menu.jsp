@@ -1,7 +1,7 @@
 <div id="menubar" class="menubar-inverse animate">
 
         <div class="nano has-scrollbar" style="height: 877px;"><div class="nano-content" tabindex="0" style="right: -15px;"><div class="menubar-scroll-panel" style="padding-bottom: 55px;">
-            <img src="./img/logo.png" width="235">
+            <img src="./img/logo.png" width="235" class="img-responsive">
             <hr>
             <!-- BEGIN MAIN MENU -->
             <ul id="main-menu" class="gui-controls">
@@ -21,6 +21,12 @@
                     <a href="http://10.0.6.183:8084/registroC31/detalles.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-signal"></span></div>
                       <span class="title">Estadistics a Detalle</span>
+                    </a>
+              </li>
+              <li>
+                    <a href="http://10.0.6.183:8084/registroC31/programado.jsp" class="">
+                      <div class="gui-icon"><span class="glyphicon glyphicon-stats"></span></div>
+                      <span class="title">Programado</span>
                     </a>
               </li>
               <li>

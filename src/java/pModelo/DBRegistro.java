@@ -1,6 +1,4 @@
 package pModelo;
-
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

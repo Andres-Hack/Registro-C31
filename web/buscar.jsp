@@ -133,49 +133,93 @@
                                         </div>
                                     </form>
                                     <%
-
-                                        String consulta = null;
+                                        String gamuep = "";
+                                        String consulta = null, consulta2 = null, consulta3 = null;
                                         String partida = request.getParameter("partida");
                                         String subc = request.getParameter("subc");
-                                        String gamuep = request.getParameter("txtGamuep");
+                                        gamuep = request.getParameter("txtGamuep");
                                         String suba = request.getParameter("suba");
                                         String bid_ctr = request.getParameter("bid_ctr");
 
                                         Connection con = DBConexion.IniciarSesion();
 
                                         consulta = "select * from tabla_c31 where id >= '1'";
+                                        consulta2 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= '1'";
+                                        consulta3 = "select ROUND(SUM(importe_usd), 2) total from tabla_c31 where id >= '1'";
+                                        
                                         
                                         if (partida != "") {
                                            consulta += " and partida = '"+partida+"'";
+                                           consulta2 += " and partida = '"+partida+"'";
+                                           consulta3 += " and partida = '"+partida+"'";
                                         }
                                         if (subc != "") {
                                            consulta += " and subc = '"+subc+"'";
+                                           consulta2 += " and subc = '"+subc+"'";
+                                           consulta3 += " and subc = '"+subc+"'";
                                         }
                                         if (gamuep != "") {
                                            consulta += " and gam_uep = '"+gamuep+"'";
+                                           consulta2 += " and gam_uep = '"+gamuep+"'";
+                                           consulta3 += " and gam_uep = '"+gamuep+"'";
                                         }
                                         if (suba != "") {
                                            consulta += " and subact = '"+suba+"' ";
+                                           consulta2 += " and subact = '"+suba+"' ";
+                                           consulta3 += " and subact = '"+suba+"' ";
                                         }
                                         if (bid_ctr != "") {
-                                           consulta += " and bid_ctr = '"+suba+"' ";
+                                           consulta += " and bid_ctr = '"+bid_ctr+"' ";
+                                           consulta2 += " and bid_ctr = '"+bid_ctr+"' ";
+                                           consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
                                         }
 
 
-                                        ResultSet rs = null;
-                                        PreparedStatement pst = null;
+                                        ResultSet rs = null, rs2 = null, rs3 = null;
+                                        PreparedStatement pst = null, pst2 = null, pst3 = null;
                                         pst = con.prepareStatement(consulta);
-                                        rs = pst.executeQuery();                               
+                                        pst2 = con.prepareStatement(consulta2);
+                                        pst3 = con.prepareStatement(consulta3);
+                                        rs = pst.executeQuery();             
+                                        rs2 = pst2.executeQuery();             
+                                        rs3 = pst3.executeQuery();
+                                        
+                                        
                                     %>
                                 </div>
                             </div>    
                         </div>    
-                    </div>
-
-                    <button id="btnExport" class="btn btn-primary-dark">Exportar</button>
-
+                    </div>                  
                     <div class="row">
                         <div class="col-md-12">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <table border="0">
+                                        <tbody>
+                                          <tr>
+                                            <td>GAM / UEP :</td>
+                                            <td>&nbsp;&nbsp;&nbsp;<%= gamuep %></td>
+                                            <td WIDTH="200"></td>
+                                            <td>SUB-ACTIVIDAD :</td>
+                                            <td>&nbsp;&nbsp;&nbsp;<%= suba %></td>
+                                            <td WIDTH="200"></td>
+                                            <td>ACTIVIDAD :</td>
+                                            <td>&nbsp;&nbsp;&nbsp;Dooley</td>
+                                          </tr>
+                                          <tr>
+                                            <td>SUB-COMPONENTE :</td>
+                                            <td>&nbsp;&nbsp;&nbsp;<%= subc %></td>
+                                            <td WIDTH="200"></td>
+                                            <td>PARTIDA :</td>
+                                            <td>&nbsp;&nbsp;&nbsp;<%= partida %></td>
+                                            <td WIDTH="200"></td>
+                                            <td>FUENTE :</td>
+                                            <td>&nbsp;&nbsp;&nbsp;<%= bid_ctr %></td>
+                                          </tr>
+                                        </tbody>
+                                     </table>
+                                </div>
+                        </div>
                             <div class="card" id="dvData">
                                 <table id="grid" class="table table-bordered no-padding table-striped text-sm table-hover" data-selection="true" data-multi-select="true" data-row-select="true" data-keep-selection="true">
                                     <thead>
@@ -191,6 +235,7 @@
                                             <th data-column-id="descripcion" data-align="center" data-visible="false" >Descripción</th>
                                             <th data-column-id="importe" data-align="center" data-visible="false" >Importe (Bs)</th>
                                             <th data-column-id="importe_sus" data-align="center" data-visible="false" >Importe ($us)</th>
+                                            <th data-column-id="fuente" data-align="center" data-visible="false" >Fuente</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -207,6 +252,7 @@
                                                 <td><%= rs.getString("descripcion") %></td>
                                                 <td><%= rs.getString("importe") %></td>
                                                 <td><%= rs.getString("importe_usd") %></td>
+                                                <td><%= rs.getString("bid_ctr") %></td>
                                             </tr>
                                         <% } %>
                                     </tbody>
