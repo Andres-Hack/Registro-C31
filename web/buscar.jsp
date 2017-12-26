@@ -133,13 +133,14 @@
                                         </div>
                                     </form>
                                     <%
-                                        String gamuep = "";
+                                        String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="", v23="", v22="";
                                         String consulta = null, consulta2 = null, consulta3 = null;
-                                        String partida = request.getParameter("partida");
-                                        String subc = request.getParameter("subc");
+                                        partida = request.getParameter("partida");
+                                        subc = request.getParameter("subc");
                                         gamuep = request.getParameter("txtGamuep");
-                                        String suba = request.getParameter("suba");
-                                        String bid_ctr = request.getParameter("bid_ctr");
+                                        suba = request.getParameter("suba");
+                                        bid_ctr = request.getParameter("bid_ctr");
+                                        actividad = request.getParameter("txtAct");
 
                                         Connection con = DBConexion.IniciarSesion();
 
@@ -173,6 +174,11 @@
                                            consulta2 += " and bid_ctr = '"+bid_ctr+"' ";
                                            consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
                                         }
+                                        if (actividad != "") {
+                                           consulta += " and act = '"+actividad+"' ";
+                                           consulta2 += " and act = '"+actividad+"' ";
+                                           consulta3 += " and act = '"+actividad+"' ";
+                                        }
 
 
                                         ResultSet rs = null, rs2 = null, rs3 = null;
@@ -204,7 +210,7 @@
                                             <td>&nbsp;&nbsp;&nbsp;<%= suba %></td>
                                             <td WIDTH="200"></td>
                                             <td>ACTIVIDAD :</td>
-                                            <td>&nbsp;&nbsp;&nbsp;Dooley</td>
+                                            <td>&nbsp;&nbsp;&nbsp;<%= actividad %></td>
                                           </tr>
                                           <tr>
                                             <td>SUB-COMPONENTE :</td>
@@ -256,10 +262,14 @@
                                             </tr>
                                         <% } %>
                                     </tbody>
+                                        <h4><i>TOTAL : <%while (rs2.next()) {%><%= rs2.getString("total") %><%}%> Bs,&nbsp;&nbsp;&nbsp;<%while (rs3.next()) {%><%= rs3.getString("total") %><%}%> $us</i></h3><br />
                                 </table>
                             </div>
                         </div>
                     </div>
+                    <a href="reporte?v1=<%= gamuep %>&v2=<%= subc %>&v3=<%= partida %>&v4=<%= suba %>&v5=<%= bid_ctr %>&v6=<%= actividad %>" target="_blank">
+                        <button class="btn btn-danger"><spam class="glyphicon glyphicon-print"></spam>&nbsp;&nbsp;IMPRIMIR REPORTE</button>
+                    </a>
                 </div>
             </div>
         </section>

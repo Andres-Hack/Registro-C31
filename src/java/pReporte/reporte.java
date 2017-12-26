@@ -36,17 +36,89 @@ public class reporte extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        String municipio = request.getParameter("variable");
+        
+        String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="",municipio="";
+        String consulta="", consulta2="", consulta3="", num3 = "", num4="";
+        float valorX = 0, valorY=0;
+        
+        gamuep = request.getParameter("v1");
+        municipio=gamuep;
+        subc = request.getParameter("v2");
+        partida = request.getParameter("v3");
+        suba = request.getParameter("v4");
+        bid_ctr = request.getParameter("v5");
+        actividad = request.getParameter("v6");
+        switch (gamuep){
+            case "CBB" : gamuep="COCHABAMBA"; break;
+            case "COB" : gamuep="COBIJA"; break;
+            case "EAL" : gamuep="EL ALTO"; break;
+            case "TOR" : gamuep="EL TORNO"; break;
+            case "ORU" : gamuep="ORURO"; break;
+            case "POT" : gamuep="POTOSI"; break;
+            case "SAC" : gamuep="SACABA"; break;
+            case "SRE" : gamuep="SUCRE"; break;
+            case "TAR" : gamuep="TARIJA"; break;
+            case "TDD" : gamuep="TRINIDAD"; break;
+            case "VIA" : gamuep="VIACHA"; break;
+            case "SCZ" : gamuep="SANTA CRUZ"; break;
+            default: gamuep=""; break;
+        }
+        
         try {
             DecimalFormat df = new DecimalFormat("###,###,###.##");
             
             response.setContentType("application/pdf");
             Connection con = DBConexion.IniciarSesion();
             
-            String consulta = "select * from tabla_c31 where gam_uep='CBB' and gestion='2017' limit 100";
+            consulta = "select * from tabla_c31 where id >= '1'";
+            consulta2 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= '1'";
+            consulta3 = "select ROUND(SUM(importe_usd), 2) total from tabla_c31 where id >= '1'";
             
-            PreparedStatement pst = con.prepareStatement(consulta);
-            ResultSet rs = pst.executeQuery();
+            if (partida != "") {
+                consulta += " and partida = '"+partida+"'";
+                consulta2 += " and partida = '"+partida+"'";
+                consulta3 += " and partida = '"+partida+"'";
+            }
+            if (subc != "") {
+                consulta += " and subc = '"+subc+"'";
+                consulta2 += " and subc = '"+subc+"'";
+                consulta3 += " and subc = '"+subc+"'";
+            }
+            if (municipio != "") {
+                consulta += " and gam_uep = '"+municipio+"'";
+                consulta2 += " and gam_uep = '"+municipio+"'";
+                consulta3 += " and gam_uep = '"+municipio+"'";
+            }
+            if (suba != "") {
+                consulta += " and subact = '"+suba+"' ";
+                consulta2 += " and subact = '"+suba+"' ";
+                consulta3 += " and subact = '"+suba+"' ";
+            }
+            if (bid_ctr != "") {
+                consulta += " and bid_ctr = '"+bid_ctr+"' ";
+                consulta2 += " and bid_ctr = '"+bid_ctr+"' ";
+                consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
+            }
+            if (actividad != "") {
+                consulta += " and act = '"+actividad+"' ";
+                consulta2 += " and act = '"+actividad+"' ";
+                consulta3 += " and act = '"+actividad+"' ";
+            }
+            ResultSet rs = null, rs2 = null, rs3 = null;
+            PreparedStatement pst = null, pst2 = null, pst3 = null;
+            pst = con.prepareStatement(consulta);
+            pst2 = con.prepareStatement(consulta2);
+            pst3 = con.prepareStatement(consulta3);
+            rs = pst.executeQuery();             
+            rs2 = pst2.executeQuery();             
+            rs3 = pst3.executeQuery();
+            while (rs2.next()) {
+                valorX = rs2.getFloat("total");
+                
+            }
+            while (rs3.next()) {
+                valorY = rs3.getFloat("total");
+            }
             
             Date date = new Date();
             DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -78,11 +150,11 @@ public class reporte extends HttpServlet {
                 caratula.setWidths(new float[] {0.8f,1,1,0.5f});
                 caratula.setWidthPercentage(100);
                 PdfPCell celda1 = new PdfPCell(new Paragraph("Municipio :", fuente0));
-                PdfPCell celda2 = new PdfPCell(new Paragraph(municipio, fuente0));
+                PdfPCell celda2 = new PdfPCell(new Paragraph(gamuep, fuente0));
                 PdfPCell celda3 = new PdfPCell(new Paragraph("", fuente0));
                 PdfPCell celda4 = new PdfPCell(new Paragraph("Version 1.0", fuente0));
-                PdfPCell celda5 = new PdfPCell(new Paragraph("Gestion :", fuente0));
-                PdfPCell celda6 = new PdfPCell(new Paragraph("", fuente0));
+                PdfPCell celda5 = new PdfPCell(new Paragraph("Sub componente :", fuente0));
+                PdfPCell celda6 = new PdfPCell(new Paragraph(subc, fuente0));
                 PdfPCell celda7 = new PdfPCell(new Paragraph("", fuente0));
                 PdfPCell celda8 = new PdfPCell(new Paragraph("", fuente0));
                 PdfPCell celda9 = new PdfPCell(new Paragraph("Fecha de reporte :", fuente0));
@@ -139,8 +211,11 @@ public class reporte extends HttpServlet {
                     String v6 = rs.getString("concepto");
                     Float v7 = rs.getFloat("importe");
                     Float v8 = rs.getFloat("importe_usd");
+                    
                     String num1 = df.format(v7);
                     String num2 = df.format(v8);
+                    num3 = df.format(valorX);
+                    num4 = df.format(valorY);
                     tablesup.addCell(new Paragraph(v1, fuente));
                     tablesup.addCell(new Paragraph(v2, fuente));
                     tablesup.addCell(new Paragraph(v3, fuente));
@@ -150,9 +225,14 @@ public class reporte extends HttpServlet {
                     tablesup.addCell(new Paragraph(num1 , fuente));
                     tablesup.addCell(new Paragraph(num2, fuente));
                 }
+                tablesup.addCell(new Paragraph("", fuente));
+                tablesup.addCell(new Paragraph("", fuente));
+                tablesup.addCell(new Paragraph("", fuente));
+                tablesup.addCell(new Paragraph("", fuente));
+                tablesup.addCell(new Paragraph("", fuente));
                 tablesup.addCell(new Paragraph("TOTAL", fuente));
-                tablesup.addCell(new Paragraph("1.000,98" , fuente));
-                tablesup.addCell(new Paragraph("45,98", fuente));
+                tablesup.addCell(new Paragraph(num3 , fuente));
+                tablesup.addCell(new Paragraph(num4, fuente));
                 document.add(tablesup);
                 
                                
