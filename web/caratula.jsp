@@ -12,6 +12,8 @@
 <%@page import="javax.servlet.http.HttpSession" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<% HttpSession sesion = request.getSession(); %>
+<% if(sesion.getAttribute("usuario") != null) {%>
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -299,3 +301,7 @@
     }%>
 </body>
 </html>
+<%}
+else {
+    response.sendRedirect("index.jsp");
+}%>

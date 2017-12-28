@@ -7,9 +7,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-
 <!DOCTYPE html>    
+<% HttpSession sesion = request.getSession(); %>
+<% if(sesion.getAttribute("usuario") != null) {%>
 <html lang="es" xml:lang="es">
 
     <head>
@@ -45,7 +45,7 @@
                                                         <div class="form-group">
                                                             <select name="Gamuep" class="form-control">
                                                                 <option value="" selected="selected"></option>
-                                                                <option value="UEP">UEP</option>
+                                                                <option value="TODO">TODO</option>
                                                                 <option value="CBB">COCHABAMBA</option>
                                                                 <option value="COB">COBIJA</option>
                                                                 <option value="EAL">EL ALTO</option>
@@ -159,7 +159,7 @@
         },
 
         xAxis: {
-            categories: ['Monto Asignado', 'Monto Gastado', 'Monto Pendiente']
+            categories: ['Monto Programado', 'Monto Ejecutado', 'Monto por Ejecutar']
         },
 
         yAxis: {
@@ -235,7 +235,7 @@ var chart = new Highcharts.Chart({
         text: 'Grafico Resumido'
     },
     xAxis: {
-            categories: ['Programado']
+            categories: ['']
         },
     yAxis: {
             allowDecimals: false,
@@ -258,15 +258,15 @@ var chart = new Highcharts.Chart({
         },
     
     series: [{
-            name: 'Monto Asignado',
+            name: 'Monto Programado',
             data: [<c:out value="${datos[6]}"/>],
             depth: 'male'
         }, {
-            name: 'Monto Gastado',
+            name: 'Monto Ejecutado',
             data: [<c:out value="${datos3[8]}"/>],
             depth: 'male'
         }, {
-            name: 'Monto Pendiente',
+            name: 'Monto por Ejecutar',
             data: [<c:out value="${datos[6]}"/>-<c:out value="${datos3[8]}"/>],
             depth: 'male'
         }]
@@ -291,3 +291,7 @@ showValues();
 
 </body>
 </html>
+<%}
+else {
+    response.sendRedirect("http://10.0.6.183:8084/registroC31/");
+}%>

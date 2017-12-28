@@ -24,10 +24,10 @@
 			<div class="box-header">
 				<h2>PMGM - C2</h2>
 			</div>
-                        <form action="CTRLUsuario" method="post">
+                        <form action="CTRLUsuario">
                             Usuario : <input type="text" name="txtusuario"/><br>
                             Contraseña : <input type="password" name="txtcontra"/><br>
-                            <input type="submit" name="btningresar" value="Ingresar"/>
+                            <input type="submit" name="btningresar" value="Ingresar" class="btn btn-success"/>
                         </form>
                 </div>
 	</div>

@@ -135,33 +135,33 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                <select class="form-control" name="txtAct" ng-model="act">
-                                                    <option value="{{x.a}}" ng-repeat="x in actividad.integrantes" ng-bind="x.a" ng-if=" subc == '2,1'"></option>
-                                                    <option value="{{x.b}}" ng-repeat="x in actividad.integrantes" ng-bind="x.b" ng-if=" subc == '2,2'"></option>
-                                                    <option value="{{x.c}}" ng-repeat="x in actividad.integrantes" ng-bind="x.c" ng-if=" subc == '2,3'"></option>
-                                                    <option value="{{x.d}}" ng-repeat="x in actividad.integrantes" ng-bind="x.d" ng-if=" subc == '2,4'"></option>
+                                                    <option value="{{x.a2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.a" ng-if=" subc == '2,1'"></option>
+                                                    <option value="{{x.b2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.b" ng-if=" subc == '2,2'"></option>
+                                                    <option value="{{x.c2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.c" ng-if=" subc == '2,3'"></option>
+                                                    <option value="{{x.d2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.d" ng-if=" subc == '2,4'"></option>
                                                 </select>
                                               <label for='cite_original'>Actividad</label>  
                                             </div>
                                         </div> 
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <select class="form-control" name="txtSubAct" >
+                                                <select class="form-control" name="txtSubAct" ng-model="subact">
                                                     <option value="" ></option>
-                                                    <option value="{{y.aa}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.aa" ng-if=" act == '2,1,1 : CARTOGRAFIA BASE MUNICIPIOS'"></option>
-                                                    <option value="{{y.bb}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.bb" ng-if=" act == '2,1,2 : LEVANTAMIENTO INFORMACIÓN CATASTRAL MUNICIPIOS'"></option>
-                                                    <option value="{{y.cc}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.cc" ng-if=" act == '2,1,3 : VALORACIÓN CATASTRAL MUNICIPIOS'"></option>
-                                                    <option value="{{y.dd}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.dd" ng-if=" act == '2,1,4 : SANEAMIENTO TECNICO DE LA PROPIEDAD URBANA'"></option>
-                                                    <option value="{{y.ee}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ee" ng-if=" act == '2,1,6 : SISTEMA DE CATASTRO URBANO INTERCONECTADO CON LA ADMINISTRACIÓN TRIBUTARIA'"></option>
-                                                    <option value="{{y.ff}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ff" ng-if=" act == '2,1,7 : NORMATIVA DE USO DE SUELO URBANO Y PARAMETRO DE EDIFICACIÓN'"></option>
-                                                    <option value="{{y.gg}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.gg" ng-if=" act == '2,1,8 : NORMATIVA DE USO DE SUELO URBANO Y PARAMETRO DE EDIFICACIÓN'"></option>
-                                                    <option value="{{y.hh}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.hh" ng-if=" act == '2,2,1 : ADQUISICION DEL SOFTWARE, MIGRACIÓN E IMPLEMENTACIÓN'"></option>
-                                                    <option value="{{y.ii}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ii" ng-if=" act == '2,3,1 : CAPACITACIÓN MUNICIPIOS'"></option>
-                                                    <option value="{{y.jj}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.jj" ng-if=" act == '2,4,1 : SERVICIOS PERSONALES'"></option>
-                                                    <option value="{{y.kk}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.kk" ng-if=" act == '2,4,2 : SERVICIOS NO PERSONALES'"></option>
-                                                    <option value="{{y.ll}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ll" ng-if=" act == '2,4,3 : MATERIALES Y SUMINISTROS'"></option>
-                                                    <option value="{{y.mm}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.mm" ng-if=" act == '2,4,4 : ACTIVOS REALES'"></option>
-                                                    <option value="{{y.nn}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.nn" ng-if=" act == '2,4,5 : EVALUACIÓN Y AUDITORIAS'"></option>
-                                                    <option value="{{y.oo}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.oo" ng-if=" act == '2,4,6'"></option>
+                                                    <option value="{{y.aa2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.aa" ng-if=" act == '2,1,1'"></option>
+                                                    <option value="{{y.bb2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.bb" ng-if=" act == '2,1,2'"></option>
+                                                    <option value="{{y.cc2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.cc" ng-if=" act == '2,1,3'"></option>
+                                                    <option value="{{y.dd2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.dd" ng-if=" act == '2,1,4'"></option>
+                                                    <option value="{{y.ee2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ee" ng-if=" act == '2,1,6'"></option>
+                                                    <option value="{{y.ff2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ff" ng-if=" act == '2,1,7'"></option>
+                                                    <option value="{{y.gg2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.gg" ng-if=" act == '2,1,8'"></option>
+                                                    <option value="{{y.hh2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.hh" ng-if=" act == '2,2,1'"></option>
+                                                    <option value="{{y.ii2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ii" ng-if=" act == '2,3,1'"></option>
+                                                    <option value="{{y.jj2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.jj" ng-if=" act == '2,4,1'"></option>
+                                                    <option value="{{y.kk2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.kk" ng-if=" act == '2,4,2'"></option>
+                                                    <option value="{{y.ll2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ll" ng-if=" act == '2,4,3'"></option>
+                                                    <option value="{{y.mm2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.mm" ng-if=" act == '2,4,4'"></option>
+                                                    <option value="{{y.nn2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.nn" ng-if=" act == '2,4,5'"></option>
+                                                    <option value="{{y.oo2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.oo" ng-if=" act == '2,4,6'"></option>
                                                 </select>
                                               <label for='cite_original'>Sub actividad</label>  
                                             </div>
@@ -176,7 +176,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input type="text" name="txtTg" class="form-control">
+                                                <input type="text" name="txtTipo" class="form-control">
                                                 <label for='cite_original'>Tipo de gasto</label>
                                             </div>
                                         </div>
@@ -190,7 +190,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <select class="form-control" name="txtInst">
+                                                <select class="form-control" name="txtInst" ng-model="inS" ng-init="inS='GAM'">
                                                     <option value="GAM" >GAM</option>
                                                     <option value="UEP" >UEP</option>
                                                 </select>
@@ -199,20 +199,23 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <select class="form-control" name="txtGamuep">
-                                                    <option value="UEP" >UEP</option>
-                                                    <option value="EL ALTO" >El Alto</option>
-                                                    <option value="TARIJA" >Tarija</option>
-                                                    <option value="TRINIDAD" >Trinidad</option>
-                                                    <option value="COBIJA" >Cobija</option>
-                                                    <option value="VIACHA" >Viacha</option>
-                                                    <option value="COCHABAMBA" >Cochabamba</option>
-                                                    <option value="EL TORNO" >El Torno</option>
-                                                    <option value="POTOSI" >Potosi</option>
-                                                    <option value="ORURO" >Oruro</option>
-                                                    <option value="SUCRE" >Sucre</option>
-                                                    <option value="SACABA" >Sacaba</option>
-                                                </select>
+                                                    <select class="form-control" name="txtGamuep"  ng-if="inS=='UEP'">
+                                                        <option value="UEP">UEP</option>
+                                                    </select>
+                                                    <select class="form-control" name="txtGamuep"  ng-if="inS=='GAM'">
+                                                        <option value="CBB">COCHABAMBA</option>
+                                                        <option value="COB">COBIJA</option>
+                                                        <option value="EAL">EL ALTO</option>
+                                                        <option value="TOR">EL TORNO</option>
+                                                        <option value="ORU">ORURO</option>
+                                                        <option value="POT">POTOSI</option>
+                                                        <option value="SAC">SACABA</option>
+                                                        <option value="SRE">SUCRE</option>
+                                                        <option value="TAR">TARIJA</option>
+                                                        <option value="TDD">TRINIDAD</option>
+                                                        <option value="VIA">VIACHA</option>
+                                                        <option value="SCZ">SANTA CRUZ</option>
+                                                    </select>
                                                 <label for='cite_original'>GAM / UEP</label>
                                             </div>
                                         </div>
@@ -283,3 +286,4 @@
 
                                   </form>
                             </div>
+

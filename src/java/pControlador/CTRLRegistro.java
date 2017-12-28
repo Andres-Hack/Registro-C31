@@ -27,47 +27,8 @@ public class CTRLRegistro extends HttpServlet {
         DBRegistro.adicion(R);
     }
     
-    public void adicion2(String nu, String sub) throws SQLException{
-        String consulta = null;        
-        double a1=0, a2=0, a3=0, a4=0, a5=0, a6=0, a7=0, a8=0, a9=0, a10=0, a11=0, a12=0;
-                                        
-        if (nu == null) {
-            nu = "0";
-        }
-        
-        float numero = Float.parseFloat(nu);
-        a1 = Math.rint((numero*0.05)*100)/100;
-        a2 = Math.rint((numero*0.1)*100)/100;
-        a3 = Math.rint((numero*0.025)*100)/100;
-        a4 = Math.rint((numero*0.05)*100)/100;
-        a5 = Math.rint((numero*0.025)*100)/100;
-        a6 = Math.rint((numero*0.1)*100)/100;
-        a7 = Math.rint((numero*0.05)*100)/100;
-        a8 = Math.rint((numero*0.05)*100)/100;
-        a9 = Math.rint((numero*0.05)*100)/100;
-        a10 = Math.rint((numero*0.02)*100)/100;
-        a11 = Math.rint((numero*0.1)*100)/100;
-        a12 = Math.rint((numero*0.2)*100)/100;
-        
-        Connection con = DBConexion.IniciarSesion();
-
-        PreparedStatement pst = null;
-            switch (sub){
-                case "2,3": 
-                    consulta = "insert into tabla_2_3 (id, cochabamba, cobija, el_alto, el_torno, oruro, potosi, sucre, sacaba, santa_cruz, tarija, trinidad, viacha, fecha, hora) values (null, '"+a1+"','"+a2+"','"+a3+"','"+a4+"','"+a5+"','"+a6+"','"+a7+"','"+a8+"','"+a9+"','"+a10+"', '"+a11+"', '"+a12+"', curdate(), current_time())";
-                    pst = con.prepareStatement(consulta);
-                    pst.executeUpdate();
-                    pst.close();       
-                    break;
-                case "2,4": 
-                    consulta = "insert into tabla_2_4 (id, cochabamba, cobija, el_alto, el_torno, oruro, potosi, sucre, sacaba, santa_cruz, tarija, trinidad, viacha, fecha, hora) values (null, '"+a1+"','"+a2+"','"+a3+"','"+a4+"','"+a5+"','"+a6+"','"+a7+"','"+a8+"','"+a9+"','"+a10+"', '"+a11+"', '"+a12+"', curdate(), current_time())";
-                    pst = con.prepareStatement(consulta);
-                    pst.executeUpdate();
-                    pst.close();    
-                    break;
-                default: ;
-            }
-                                        
+    protected void adicion2(Registro R) throws SQLException{
+        DBRegistro.adicion2(R);                                        
     }
     
     protected void modificar(Registro R, String xx) throws SQLException            
@@ -111,6 +72,10 @@ public class CTRLRegistro extends HttpServlet {
             throws ServletException, IOException {
         try {
             Registro R = new Registro();
+            Registro R2 = new Registro();
+            float a=Float.parseFloat(request.getParameter("txtImporte"));
+            float usd = (float) (a/6.86);
+            String usd2 = Float.toString(usd);
             R.setGestion(request.getParameter("txtGestion"));
             R.setFech_emision(request.getParameter("txtFechaE"));
             R.setFech_pago(request.getParameter("txtFechaP"));
@@ -136,27 +101,39 @@ public class CTRLRegistro extends HttpServlet {
             R.setConcepto(request.getParameter("txtConcepto"));
             R.setImporte(request.getParameter("txtImporte"));
             R.setTc(request.getParameter("txtTc"));
-            R.setImporte_usd(request.getParameter("txtImporteUSD"));
+            R.setImporte_usd(usd2);
             R.setObservaciones(request.getParameter("txtObservaciones"));
             R.setHr(request.getParameter("txtHR"));
             R.setNro_factura(request.getParameter("txtFactura"));
+            R2 = R;
+            
+            System.out.println("Este es la sub actividad "+R.getSubact());
             
             String ls_isbn = request.getParameter("txtId");
             
             int op=Integer.parseInt(request.getParameter("op"));
-            String importe = request.getParameter("txtImporte");
-            String subactiv = request.getParameter("txtSubc");
-           
+            if ("UEP".equals(request.getParameter("txtInst"))) {
+                op = 4;
+            }
             
             switch(op)
             {
                 case 1: 
-                        adicion(R);
-                        adicion2(importe, subactiv);
-                        response.sendRedirect("inicio.jsp");
-                        break;                
-                case 2: eliminar(ls_isbn); response.sendRedirect("modificar.jsp"); break;
-                case 3: modificar(R, ls_isbn); response.sendRedirect("modificar.jsp"); break;
+                    adicion(R);
+                    response.sendRedirect("inicio.jsp");
+                    break;                
+                case 2: 
+                    eliminar(ls_isbn); 
+                    response.sendRedirect("modificar.jsp"); 
+                    break;
+                case 3: 
+                    modificar(R, ls_isbn); 
+                    response.sendRedirect("modificar.jsp"); 
+                    break;
+                case 4: 
+                    adicion2(R);
+                    response.sendRedirect("inicio.jsp");
+                    break; 
             }
         } catch (SQLException ex) {
             Logger.getLogger(CTRLRegistro.class.getName()).log(Level.SEVERE, null, ex);

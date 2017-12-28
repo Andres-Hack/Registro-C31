@@ -18,25 +18,23 @@ public class CTRLUsuario extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
           HttpSession sesion = request.getSession();
+          
           String us=request.getParameter("txtusuario");
           String pwd=request.getParameter("txtcontra");
-          int n1 = 0, n2 = 0 ;
-          String n3 = "";
+          //String dato = "";
           
-          boolean sw=DBUsuario.Login(us, pwd);
-          n1 = DBUsuario.Level(us, pwd);
-          n2 = DBUsuario.Unico(us, pwd);
-          n3 = DBUsuario.Log(us, pwd);
+          boolean sw = DBUsuario.Login(us, pwd);
+          //System.out.println("Este es el ususario "+us+" y esta es la contraseña "+pwd+" y este es el resultado "+sw);
+          //dato = DBUsuario.Log(us, pwd);
           
-          if(sw)
-          {  
-              sesion.setAttribute("usuario", us);
-              response.sendRedirect("caratula.jsp?id="+n1+"&id2="+n2+"&log="+n3+"");
-          }
-          else
-          {  
-              response.sendRedirect("error.jsp");
-          }    
+          if(sw==true && sesion.getAttribute("usuario") == null){
+            //si coincide usuario y password y además no hay sesión iniciada
+            sesion.setAttribute("usuario", us);
+            //redirijo a página con información de login exitoso
+            response.sendRedirect("inicio.jsp");
+          }else{
+                response.sendRedirect("error.jsp");
+          } 
     }
     
 

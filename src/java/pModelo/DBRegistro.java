@@ -4,8 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pClases.Registro;
+import pDistribucion.DTRmunicipios;
 
 public abstract class DBRegistro {
     
@@ -38,11 +44,25 @@ public abstract class DBRegistro {
     public static void adicion(Registro R) throws SQLException {
         
         Connection cnn = DBConexion.IniciarSesion();
+        
+        // FORMATEAR A UN FORMATO LA FECHA ////////////
+        SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+        Date date1 = null, date2 = null;
+        try {
+            date1 = parseador.parse(R.getFech_emision());
+            date2 = parseador.parse(R.getFech_pago());
+        } catch (ParseException ex) {
+            Logger.getLogger(DBRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //////////////////////////////////////
+        
         cnn.setAutoCommit(false);
         try {
-            PreparedStatement ps = cnn.prepareStatement("insert into tabla_c31(id, gestion,fech_emision,fech_pago,mes_c31,mes_pago,nro_c31,bid_ctr,ff,of,descripcion,subc,act,subact,cat_gast,tg,partida,inst,gam_uep,beneficiario,tipo,producto,actividad2,concepto,importe,tc,importe_usd,observaciones, hr, nro_factura) values(null,Date_format(now(),'%Y',?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-            ps.setString(1, R.getFech_emision());
-            ps.setString(2, R.getFech_pago());
+            PreparedStatement ps = cnn.prepareStatement("insert into tabla_c31(id, gestion,fech_emision,fech_pago,mes_c31,mes_pago,nro_c31,bid_ctr,ff,of,descripcion,subc,act,subact,cat_gast,tg,partida,inst,gam_uep,beneficiario,tipo,producto,actividad2,concepto,importe,tc,importe_usd,observaciones, hr, nro_factura) values "
+                    + "                                 (null,YEAR(NOW()),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+            ps.setString(1, formateador.format(date1));
+            ps.setString(2, formateador.format(date2));
             ps.setString(3, R.getMes_c31());
             ps.setString(4, R.getMes_pago());
             ps.setString(5, R.getNro_c31());
@@ -76,12 +96,35 @@ public abstract class DBRegistro {
             cnn.close();
             ps.close();
             
-            
         } catch (SQLException e) {
             cnn.rollback();
-        }
-        
+            System.out.println("ESTE ES EL ERROR : "+e);
+        }       
     }
     
-    
+    public static void adicion2(Registro R) throws SQLException {      
+        // FORMATEAR A UN FORMATO LA FECHA ////////////
+        SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
+        Date date1 = null, date2 = null;
+        try {
+            date1 = parseador.parse(R.getFech_emision());
+            date2 = parseador.parse(R.getFech_pago());
+        } catch (ParseException ex) {
+            Logger.getLogger(DBRegistro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //////////////////////////////////////
+        
+        R.setFech_emision(formateador.format(date1));
+        R.setFech_pago(formateador.format(date2));
+
+        switch (R.getSubc()){
+            case "2,3": 
+                pDistribucion.DTRmunicipios.distribucionA(R);
+                break;
+            case "2,4":
+                pDistribucion.DTRmunicipios.distribucionB(R);
+                break;
+        }               
+    }
 }

@@ -79,17 +79,24 @@ public class CTRLProgramado extends HttpServlet {
         
 
         if (gamuep!=null) {
-            consulta = consulta+" and gam='"+gamuep+"' ";
-            consulta1 = consulta1+" and gam_uep='"+gamuep+"' ";
-            consulta2 = consulta2+" and gam_uep='"+gamuep+"'";
-            consulta3 = consulta3+" and gam_uep='"+gamuep+"' ";
-            consulta4 = consulta4+" and gam_uep='"+gamuep+"' ";
-            consulta5 = consulta5+" and gam_uep='"+gamuep+"' "; 
-            consulta6 = consulta6+" and gam_uep='"+gamuep+"' ";
-            consulta7 = consulta7+" and gam_uep='"+gamuep+"' ";
-            consulta8 = consulta8+" and gam_uep='"+gamuep+"' ";
-            consulta9 = consulta9+" and gam_uep='"+gamuep+"' ";
+            if (gamuep=="TODO") {
+                consulta = consulta+" and gam='"+gamuep+"' ";
+                consulta1 = consulta1+" and gam_uep='"+gamuep+"' ";
+                consulta2 = consulta2+" and gam_uep='"+gamuep+"'";
+                consulta3 = consulta3+" and gam_uep='"+gamuep+"' ";
+                consulta4 = consulta4+" and gam_uep='"+gamuep+"' ";
+                consulta5 = consulta5+" and gam_uep='"+gamuep+"' "; 
+                consulta6 = consulta6+" and gam_uep='"+gamuep+"' ";
+                consulta7 = consulta7+" and gam_uep='"+gamuep+"' ";
+                consulta8 = consulta8+" and gam_uep='"+gamuep+"' ";
+                consulta9 = consulta9+" and gam_uep='"+gamuep+"' ";
+            } else {
+                consulta = consulta+" and gam='TOTAL' ";
+                
+            }
         }
+        System.out.println("PRIMERA CONSULTA : "+consulta);
+        System.out.println("SEGUNDA CONSULTA : "+consulta1);
                                        
         try {
             statement = con.createStatement();
@@ -128,7 +135,7 @@ public class CTRLProgramado extends HttpServlet {
             while (rs7.next()) {datos3.add(rs7.getString(1));}
             while (rs8.next()) {datos3.add(rs8.getString(1));}
             while (rs9.next()) {datos3.add(rs9.getString(1));}
-            while (rs1.next()) {datos3.add(rs1.getString(1)); System.out.println("DATOOO : "+rs1.getFloat(1));}
+            while (rs1.next()) {datos3.add(rs1.getString(1));}
             
             while (rs.next()) {
                 datos.add(rs.getString(1));
