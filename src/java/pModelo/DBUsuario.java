@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class DBUsuario {                        
-       public  static boolean  Login(String usuario,String password) throws SQLException{
+       public  static boolean  Login(String usuario,String password, String log) throws SQLException{
            PreparedStatement ps;
            boolean sw;
            try (Connection cn = DBConexion.IniciarSesion() //Conexion a la base de datos
@@ -14,11 +14,12 @@ public abstract class DBUsuario {
                ps = null; //Herramienta para vincular la conexion
                ResultSet rs=null; //Para recibir los resultados            
                sw = false; //para validar si existe el usuario
-               String SQL="select * from personal where usuario=? and clave=?";
+               String SQL="select * from personal where usuario=? and clave=? and (log=? or log='0')";
                
                ps=cn.prepareStatement(SQL);
                ps.setString(1,usuario); //Para enviar datos al parametro
                ps.setString(2,password); //Para enviar datos al parametro
+               ps.setString(3,log);
                rs=ps.executeQuery(); //Ejecuta la consulta
                if (rs.next()) sw=true; // Verifica si existe resultados
            } //Herramienta para vincular la conexion

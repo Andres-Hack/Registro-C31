@@ -81,8 +81,8 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <select class="form-control" name="txtBidctr">
-                                                    <option value="1">BID</option>
-                                                    <option value="2">CTR</option>
+                                                    <option value="BID">BID</option>
+                                                    <option value="CTR">CTR</option>
                                                 </select>
                                                 <label for='cite_original'>Recursos</label>
                                             </div>

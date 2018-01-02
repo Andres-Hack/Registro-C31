@@ -17,24 +17,7 @@ public class CTRLUsuario extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-          HttpSession sesion = request.getSession();
           
-          String us=request.getParameter("txtusuario");
-          String pwd=request.getParameter("txtcontra");
-          //String dato = "";
-          
-          boolean sw = DBUsuario.Login(us, pwd);
-          //System.out.println("Este es el ususario "+us+" y esta es la contraseña "+pwd+" y este es el resultado "+sw);
-          //dato = DBUsuario.Log(us, pwd);
-          
-          if(sw==true && sesion.getAttribute("usuario") == null){
-            //si coincide usuario y password y además no hay sesión iniciada
-            sesion.setAttribute("usuario", us);
-            //redirijo a página con información de login exitoso
-            response.sendRedirect("inicio.jsp");
-          }else{
-                response.sendRedirect("error.jsp");
-          } 
     }
     
 
@@ -51,7 +34,24 @@ public class CTRLUsuario extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            processRequest(request, response);
+            HttpSession sesion = request.getSession();
+            
+            String us=request.getParameter("txtusuario");
+            String pwd=request.getParameter("txtcontra");
+            //String dato = "";
+            
+            boolean sw = DBUsuario.Login(us, pwd, "1");
+            //System.out.println("Este es el ususario "+us+" y esta es la contraseña "+pwd+" y este es el resultado "+sw);
+            //dato = DBUsuario.Log(us, pwd);
+            
+            if(sw==true && sesion.getAttribute("usuario") == null){
+                //si coincide usuario y password y además no hay sesión iniciada
+                sesion.setAttribute("usuario", us);
+                //redirijo a página con información de login exitoso
+                response.sendRedirect("inicio.jsp");
+            }else{
+                response.sendRedirect("error.jsp");
+            } 
         } catch (SQLException ex) {
             Logger.getLogger(CTRLUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }

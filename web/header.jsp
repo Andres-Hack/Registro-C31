@@ -37,7 +37,7 @@
                         <li class="dropdown-header">Opciones de usuario</li>
                         <li><a href=""><span class="glyphicon glyphicon-leaf"></span> Perfil</a></li>
                         <li><a href=""><span class="glyphicon glyphicon-pencil"></span> Cambiar Contraseña</a></li>
-                        <li><a href="http://10.0.6.183:8084/registroC31/CTRLSalir"><span class="glyphicon glyphicon-log-out danger"></span> Salir</a></li>
+                        <li><a href="/registroC31/CTRLSalir"><span class="glyphicon glyphicon-log-out danger"></span> Salir</a></li>
                     </ul>
                 </li>
             </ul>

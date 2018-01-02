@@ -3,9 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/andres/NetBeansProjects/registroC31/web/programado.jsp</file>
-            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pControlador/CTRLProgramado.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pControlador/CTRLUsuario.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pControlador/CTRLSalir.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/web/inicio2.jsp</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/web/header.jsp</file>
             <file>file:/home/andres/NetBeansProjects/registroC31/web/index.jsp</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pModelo/DBUsuario.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pControlador/CTRLUsuario2.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/web/css/style4.css</file>
         </group>
     </open-files>
 </project-private>
