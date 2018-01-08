@@ -118,13 +118,7 @@ public abstract class DBRegistro {
         R.setFech_emision(formateador.format(date1));
         R.setFech_pago(formateador.format(date2));
 
-        switch (R.getSubc()){
-            case "2,3": 
-                pDistribucion.DTRmunicipios.distribucionA(R);
-                break;
-            case "2,4":
-                pDistribucion.DTRmunicipios.distribucionB(R);
-                break;
-        }               
+        pDistribucion.DTRmunicipios.distribucion(R);
+               
     }
 }

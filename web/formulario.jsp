@@ -210,7 +210,7 @@
                                                         <option value="ORU">ORURO</option>
                                                         <option value="POT">POTOSI</option>
                                                         <option value="SAC">SACABA</option>
-                                                        <option value="SRE">SUCRE</option>
+                                                        <option value="SER">SUCRE</option>
                                                         <option value="TAR">TARIJA</option>
                                                         <option value="TDD">TRINIDAD</option>
                                                         <option value="VIA">VIACHA</option>

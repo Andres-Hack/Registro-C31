@@ -4,6 +4,7 @@
     Author     : andres
 --%>
 
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="pModelo.DBConexion"%>
@@ -21,15 +22,14 @@
     </head>
     <body class="menubar-pin header-fixed " ng-app="myApp">
 
-                    <%@ include file="/header.jsp"  %> 
+        <%@ include file="/header.jsp"  %> 
 
-                    <div id="base">
-                        <div id="content">
-                            <section class="bg1">
-                                <div class="section-body">
-
-                                    <div class="row">
-                                        <div class="col-md-12">
+        <div id="base">
+            <div id="content">
+                <section class="bg1">
+                    <div class="section-body">
+                        <div class="row">
+                          <div class="col-md-12">
                             <div class="card card-underline">
                                 <div class="card-head">
                                     <header><span class="glyphicon glyphicon-search"></span> Busqueda y Reportes</header>
@@ -50,7 +50,7 @@
                                                         <option value="ORU">ORURO</option>
                                                         <option value="POT">POTOSI</option>
                                                         <option value="SAC">SACABA</option>
-                                                        <option value="SRE">SUCRE</option>
+                                                        <option value="SER">SUCRE</option>
                                                         <option value="TAR">TARIJA</option>
                                                         <option value="TDD">TRINIDAD</option>
                                                         <option value="VIA">VIACHA</option>
@@ -135,7 +135,7 @@
                                         </div>
                                     </form>
                                     <%
-                                        String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="", v23="", v22="";
+                                        String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="", num1="0.0", num2="0.0", numXX="", numYY="";
                                         String consulta = null, consulta2 = null, consulta3 = null;
                                         partida = request.getParameter("partida");
                                         subc = request.getParameter("subc");
@@ -192,6 +192,12 @@
                                         rs2 = pst2.executeQuery();             
                                         rs3 = pst3.executeQuery();
                                         
+                                        while (rs2.next()) { num1 = rs2.getString("total"); }
+                                        while (rs3.next()) { num2 = rs3.getString("total"); }
+                                        
+                                        DecimalFormat formateador = new DecimalFormat("###,###.##");
+                                        //numXX = formateador.format(Float.parseFloat(num1));
+                                        //numYY = formateador.format(Float.parseFloat(num2));
                                         
                                     %>
                                 </div>
@@ -262,9 +268,12 @@
                                                 <td><%= rs.getString("importe_usd") %></td>
                                                 <td><%= rs.getString("bid_ctr") %></td>
                                             </tr>
-                                        <% } %>
+                                        <% } 
+                                        //formateador.format(Float.parseFloat(rs.getString("importe")))
+                                        //formateador.format(Float.parseFloat(rs.getString("importe_usd")))
+                                        %>
                                     </tbody>
-                                        <h4><i>TOTAL : <%while (rs2.next()) {%><%= rs2.getString("total") %><%}%> Bs,&nbsp;&nbsp;&nbsp;<%while (rs3.next()) {%><%= rs3.getString("total") %><%}%> $us</i></h3><br />
+                                        <h4><i>TOTAL : <%= num1 %> Bs,&nbsp;&nbsp;&nbsp;<%= num2 %> $us</i></h3><br />
                                 </table>
                             </div>
                         </div>

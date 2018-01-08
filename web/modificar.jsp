@@ -24,6 +24,82 @@
                                             <center>
                                                 <p class="bg-danger">La Pagina esta en producción ......</p>
                                                 <img src="./img/pc.gif" height="400" width="500" >
+                                                    <% 
+                                                        String consulta = null, consulta1 = null, consulta2 = null, porcentaje = "", gestion="", fuente="";
+                                                        String municipios[] = {"COB","CBB","EAL","ORU","POT","SAC","SCZ","SER","TAR","TOR","TDD","VIA"};
+
+                                                        Connection con = DBConexion.IniciarSesion();
+
+                                                        ResultSet rs = null, rs1 = null;
+                                                        PreparedStatement pst = null, pst1 = null, pst2 = null;
+                                                        
+                                                        consulta1 = "select id, importe, importe_usd, subc, fech_pago, gestion, bid_ctr from tabla_c31 where inst='UEP' and gam_uep='UEP' and subc='2,4'";
+                                                        pst1 = con.prepareStatement(consulta1);
+                                                        rs1 = pst1.executeQuery();
+                                                        Integer conteo1 = 0, conteo2 =0;
+                                                        
+                                                        while (rs1.next()) {
+                                                            rs1.getString("id");
+                                                            rs1.getString("importe");
+                                                            rs1.getString("importe_usd");
+                                                            rs1.getString("subc");
+                                                            rs1.getString("fech_pago");
+                                                            gestion = rs1.getString("gestion");
+                                                            fuente = rs1.getString("bid_ctr");
+                                                            
+                                                            conteo1=conteo1+1;
+                                                            if (gestion.equals("2016")) {
+                                                                String fecha = rs1.getString("fech_pago");
+                                                                String[] parts = fecha.split("/");
+                                                                String part1 = parts[0];
+                                                                String part2 = parts[1];
+                                                                String part3 = parts[2];
+                                                                int numero = 0;
+                                                                numero = Integer.parseInt(part1+part2+part3);
+                                                                if (numero>=1012016 && numero<=29082016 ){
+                                                                    gestion = "2016i";  
+                                                                }else{
+                                                                    gestion = "2016ii";
+                                                                }    
+                                                            }      
+                                                            
+                                                            for (int j = 0; j <= 11; j++) {          
+                                                                consulta = "select porcentaje from porcentaje_dist where gam='"+municipios[j]+"' and gestion='"+gestion+"' and subc='"+rs1.getString("subc")+"'";
+                                                                pst = con.prepareStatement(consulta);
+                                                                rs = pst.executeQuery();
+                                                                while (rs.next()) { porcentaje = rs.getString("porcentaje"); }
+                                                                Double porcentajeF = Double.parseDouble(porcentaje);
+                                                                Double importeF = Double.parseDouble(rs1.getString("importe"));
+                                                                Double importe_usdF = Double.parseDouble(rs1.getString("importe_usd"));
+                                                                Double resultado1 = importeF*porcentajeF;
+                                                                Double resultado2 = importe_usdF*porcentajeF;
+                                                                conteo2=conteo2+1;
+                                                                System.out.println("multiplica esto : "+importeF+" con esto : "+porcentajeF+" resulta esto : "+resultado1+" de la gestion : "+gestion+" con fuente : "+fuente);
+                                                                if (fuente.equals("BID")) {
+                                                                    consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,?,?,null,null)";
+                                                                } else {
+                                                                    consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,null,null,?,?)";
+                                                                }
+                                                                pst2 = con.prepareStatement(consulta2);
+                                                                pst2.setString(1,rs1.getString("id"));
+                                                                pst2.setString(2,rs1.getString("gestion"));
+                                                                pst2.setString(3,municipios[j]);
+                                                                pst2.setString(4,porcentaje);
+                                                                pst2.setString(5,Double.toString(resultado1));
+                                                                pst2.setString(6,Double.toString(resultado2));
+                                                                pst2.executeUpdate();
+                                                            }
+
+                                                            //System.out.println("--------------------------"); 
+                                                            //System.out.println("Esta es la consulta : "+consulta+" y porsentaje : "+porcentaje);
+                                                        }
+
+                                                        System.out.println("** conteo1 = "+conteo1+" , conteo2 = "+conteo2);
+                                                        System.out.println("** FELICIDADES SE INGRESO LOS DATOS MUY BIEN :D ..!!! ");
+                                                        //while (rs2.next()) { num1 = rs2.getString("total"); }
+                                                        
+                                                        
+                                                    %>
                                             </center>
                                             </div>
                                         </div>    

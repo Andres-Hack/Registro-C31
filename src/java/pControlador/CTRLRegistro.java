@@ -90,7 +90,7 @@ public class CTRLRegistro extends HttpServlet {
             R.setAct(request.getParameter("txtAct"));
             R.setSubact(request.getParameter("txtSubAct"));
             R.setCat_gast(request.getParameter("txtGast"));
-            R.setTg(request.getParameter("txtTg"));
+            R.setTg(request.getParameter("txtTipo"));
             R.setPartida(request.getParameter("txtPartida"));
             R.setInst(request.getParameter("txtInst"));
             R.setGam_uep(request.getParameter("txtGamuep"));
@@ -106,8 +106,6 @@ public class CTRLRegistro extends HttpServlet {
             R.setHr(request.getParameter("txtHR"));
             R.setNro_factura(request.getParameter("txtFactura"));
             R2 = R;
-            
-            System.out.println("Este es la sub actividad "+R.getSubact());
             
             String ls_isbn = request.getParameter("txtId");
             
