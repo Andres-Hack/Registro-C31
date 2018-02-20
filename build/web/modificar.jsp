@@ -22,9 +22,10 @@
                                        <div class="col-md-12">
                                         <div class="card card-underline">
                                             <center>
-                                                <p class="bg-danger">La Pagina esta en producción ......</p>
+                                                <p class="bg-danger">La Pagina esta en Mantenimiento ......</p>
                                                 <img src="./img/pc.gif" height="400" width="500" >
                                                     <% 
+                                                        /*
                                                         String consulta = null, consulta1 = null, consulta2 = null, porcentaje = "", gestion="", fuente="";
                                                         String municipios[] = {"COB","CBB","EAL","ORU","POT","SAC","SCZ","SER","TAR","TOR","TDD","VIA"};
 
@@ -33,7 +34,7 @@
                                                         ResultSet rs = null, rs1 = null;
                                                         PreparedStatement pst = null, pst1 = null, pst2 = null;
                                                         
-                                                        consulta1 = "select id, importe, importe_usd, subc, fech_pago, gestion, bid_ctr from tabla_c31 where inst='UEP' and gam_uep='UEP' and subc='2,4'";
+                                                        consulta1 = "select id, importe, importe_usd, subc, fech_pago, gestion, bid_ctr from tabla_c31 where inst='UEP' and gam_uep='UEP'";
                                                         pst1 = con.prepareStatement(consulta1);
                                                         rs1 = pst1.executeQuery();
                                                         Integer conteo1 = 0, conteo2 =0;
@@ -97,8 +98,8 @@
                                                         System.out.println("** conteo1 = "+conteo1+" , conteo2 = "+conteo2);
                                                         System.out.println("** FELICIDADES SE INGRESO LOS DATOS MUY BIEN :D ..!!! ");
                                                         //while (rs2.next()) { num1 = rs2.getString("total"); }
-                                                        
-                                                        
+                                                       
+                                                        */
                                                     %>
                                             </center>
                                             </div>

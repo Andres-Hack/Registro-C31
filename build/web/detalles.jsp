@@ -25,7 +25,7 @@
     
                     <%
 
-                                        String consultaX = null, consulta = null, consulta1 = null, consulta2 = null, consulta3 = null, consulta4 = null, consulta5 = null, consulta6 = null
+                                        String consulta = null, consulta1 = null, consulta2 = null, consulta3 = null, consulta4 = null, consulta5 = null, consulta6 = null
                                              , consulta7 = null, consulta8 = null, consulta9 = null, consulta10 = null, consulta11 = null, consulta12 = null,
                                                consulta13 = null, consulta14 = null;
                                         String gestion = request.getParameter("gestion");
@@ -46,21 +46,32 @@
                                             estado = "importe";
                                             valor1 = "Bs";
                                         }
-                                        
+                                        String consulta01="select ROUND(sum(monto_bs_bid), 2) as total where id >= 1 ";
+                                        String consulta02="select ROUND(sum(monto_bs_ctr), 2) as total where id >= 1 ";
+                                        String consulta03="select ROUND(sum(monto_bs_bid)+sum(monto_bs_ctr), 2)  as total where id >= 1 ";
                                         consulta = "SELECT SUM("+estado+") as total FROM tabla_c31 where id >= 1 ";
                                         
                                         
                                         if (gestion != "") {                                                    
-                                            consulta += " and gestion='"+gestion+"' ";     
+                                            consulta += " and gestion='"+gestion+"' ";   
+                                            consulta01 += " and gestion='"+gestion+"' ";
+                                            consulta02 += " and gestion='"+gestion+"' ";
+                                            consulta03 += " and gestion='"+gestion+"' ";
                                         }
                                         if (gamuep != "") {
                                            consulta += " and gam_uep='"+gamuep+"' ";
+                                           consulta01 += " and gam='"+gamuep+"' ";
+                                           consulta02 += " and gam='"+gamuep+"' ";
+                                           consulta03 += " and gam='"+gamuep+"' ";                                           
                                         }
                                         
                                         ResultSet rs = null, rs1 = null, rs2 = null, rs3 = null, rs4 = null, rs5 = null, rs6 = null,
-                                                  rs7 = null, rs8 = null, rs9 = null, rs10 = null, rs11 = null, rs12 = null, rs13 = null, rs14 = null;
+                                                  rs7 = null, rs8 = null, rs9 = null, rs10 = null, rs11 = null, rs12 = null, rs13 = null, rs14 = null,
+                                                    rs01=null,rs02=null,rs03=null;
                                         PreparedStatement pst = null, pst1 = null, pst2 = null, pst3 = null, pst4 = null, pst5 = null, pst6 = null,
-                                                          pst7 = null, pst8 = null, pst9 = null, pst10 = null, pst11 = null, pst12 = null, pst13 = null, pst14 = null;
+                                                          pst7 = null, pst8 = null, pst9 = null, pst10 = null, pst11 = null, pst12 = null, pst13 = null,
+                                                pst14 = null, pst01 = null, pst02 = null, pst03 = null;
+                                        
                                         pst = con.prepareStatement(consulta);
                                         rs = pst.executeQuery();                                             
                                         

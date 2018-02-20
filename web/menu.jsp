@@ -18,6 +18,12 @@
                     </a>
               </li>
               <li>
+                    <a href="reportePdf.jsp" class="">
+                      <div class="gui-icon"><span class="glyphicon glyphicon-send"></span></div>
+                      <span class="title">Reporte Rápido</span>
+                    </a>
+              </li>
+              <li>
                     <a href="http://10.0.6.183:8084/registroC31/detalles.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-signal"></span></div>
                       <span class="title">Estadistics a Detalle</span>
@@ -27,6 +33,12 @@
                     <a href="http://10.0.6.183:8084/registroC31/programado.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-stats"></span></div>
                       <span class="title">Programado</span>
+                    </a>
+              </li>
+              <li>
+                    <a href="CTRLPorcentajes" class="">
+                      <div class="gui-icon"><span class="glyphicon glyphicon-edit"></span></div>
+                      <span class="title">Distribución Porcentajes</span>
                     </a>
               </li>
               <li>

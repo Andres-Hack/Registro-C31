@@ -98,7 +98,7 @@ public class CTRLProgramado extends HttpServlet {
         System.out.println("PRIMERA CONSULTA : "+consulta);
         System.out.println("SEGUNDA CONSULTA : "+consulta1);
                                        
-        try {
+        try {    
             statement = con.createStatement();
             statement1 = con.createStatement();
             statement2 = con.createStatement();
@@ -110,10 +110,6 @@ public class CTRLProgramado extends HttpServlet {
             statement8 = con.createStatement();
             statement9 = con.createStatement();
             
-        } catch (SQLException ex) {
-            Logger.getLogger(CTRLProgramado.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {    
             ResultSet rs = statement.executeQuery(consulta);
             ResultSet rs1 = statement1.executeQuery(consulta1);
             ResultSet rs2 = statement2.executeQuery(consulta2);
@@ -192,7 +188,6 @@ public class CTRLProgramado extends HttpServlet {
         request.setAttribute("datos", datos);
         request.setAttribute("datos3", datos3);
         request.getRequestDispatcher("programado.jsp").forward(request, response);
-        //response.sendRedirect("http://10.0.6.183:8084/registroC31/programado.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

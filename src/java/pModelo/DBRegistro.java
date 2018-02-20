@@ -15,8 +15,6 @@ import pDistribucion.DTRmunicipios;
 
 public abstract class DBRegistro {
     
-
-    
     public static ArrayList<Registro> lista_persona() throws SQLException {
         Connection cnn = DBConexion.IniciarSesion();
         ArrayList<Registro> lista = new ArrayList<Registro>();

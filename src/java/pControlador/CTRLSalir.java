@@ -17,7 +17,7 @@ public class CTRLSalir extends HttpServlet {
          
         HttpSession sesion = request.getSession();
         sesion.invalidate();
-        response.sendRedirect("http://localhost:8084/registroC31/");
+        response.sendRedirect("http://10.0.6.183:8084/registroC31/");
     }
 
     @Override

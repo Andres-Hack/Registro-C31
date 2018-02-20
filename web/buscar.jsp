@@ -4,11 +4,13 @@
     Author     : andres
 --%>
 
+<%@page import="pReporte.Consultas"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="pModelo.DBConexion"%>
 <%@page import="java.sql.Connection"%>
+<%@page import="pControlador.ListaPorcentaje"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <% HttpSession sesion = request.getSession(); %>
@@ -135,8 +137,10 @@
                                         </div>
                                     </form>
                                     <%
-                                        String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="", num1="0.0", num2="0.0", numXX="", numYY="";
-                                        String consulta = null, consulta2 = null, consulta3 = null;
+                                        String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="";
+                                        String subcomponente = "", actividadCom = "", bidCtr="";
+                                        double num1=0, xh=0, hg = 0;
+                                        String consulta = null, consulta3 = null;
                                         partida = request.getParameter("partida");
                                         subc = request.getParameter("subc");
                                         gamuep = request.getParameter("txtGamuep");
@@ -145,60 +149,73 @@
                                         actividad = request.getParameter("txtAct");
 
                                         Connection con = DBConexion.IniciarSesion();
+                                        Consultas dato2 = new Consultas();
 
                                         consulta = "select * from tabla_c31 where id >= '1'";
-                                        consulta2 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= '1'";
-                                        consulta3 = "select ROUND(SUM(importe_usd), 2) total from tabla_c31 where id >= '1'";
+                                        consulta3 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= '1'";
                                         
                                         
+                                        if (bid_ctr != "") {
+                                            if ("BID".equals(bid_ctr)) {
+                                                bidCtr = "BID";
+                                            } else {
+                                                bidCtr = "CTR";
+                                            }
+                                            consulta += " and bid_ctr = '"+bid_ctr+"' ";
+                                            consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
+                                        }
+                                        else{
+                                            bidCtr = "TODO";
+                                            
+                                        }
                                         if (partida != "") {
                                            consulta += " and partida = '"+partida+"'";
-                                           consulta2 += " and partida = '"+partida+"'";
                                            consulta3 += " and partida = '"+partida+"'";
                                         }
                                         if (subc != "") {
                                            consulta += " and subc = '"+subc+"'";
-                                           consulta2 += " and subc = '"+subc+"'";
                                            consulta3 += " and subc = '"+subc+"'";
+                                           subcomponente = subc;
+                                        }
+                                        else{
+                                           subcomponente = "TODO";
                                         }
                                         if (gamuep != "") {
                                            consulta += " and gam_uep = '"+gamuep+"'";
-                                           consulta2 += " and gam_uep = '"+gamuep+"'";
                                            consulta3 += " and gam_uep = '"+gamuep+"'";
                                         }
                                         if (suba != "") {
                                            consulta += " and subact = '"+suba+"' ";
-                                           consulta2 += " and subact = '"+suba+"' ";
                                            consulta3 += " and subact = '"+suba+"' ";
-                                        }
-                                        if (bid_ctr != "") {
-                                           consulta += " and bid_ctr = '"+bid_ctr+"' ";
-                                           consulta2 += " and bid_ctr = '"+bid_ctr+"' ";
-                                           consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
                                         }
                                         if (actividad != "") {
                                            consulta += " and act = '"+actividad+"' ";
-                                           consulta2 += " and act = '"+actividad+"' ";
                                            consulta3 += " and act = '"+actividad+"' ";
+                                           actividadCom = actividad;
                                         }
+                                        else{ actividadCom = "TODO"; }
+                                        
+                                        ListaPorcentaje dato1 = new ListaPorcentaje();
+                                        String gam=dato1.municipio(gamuep);
+                                        xh = dato2.MontoCompartidoSubc(gamuep, subcomponente, bidCtr);
+                                        hg = dato2.MontoCompartidoAct(subcomponente, actividadCom, gamuep, bidCtr);
 
-
-                                        ResultSet rs = null, rs2 = null, rs3 = null;
-                                        PreparedStatement pst = null, pst2 = null, pst3 = null;
+                                        ResultSet rs = null, rs3 = null;
+                                        PreparedStatement pst = null, pst3 = null;
                                         pst = con.prepareStatement(consulta);
-                                        pst2 = con.prepareStatement(consulta2);
                                         pst3 = con.prepareStatement(consulta3);
-                                        rs = pst.executeQuery();             
-                                        rs2 = pst2.executeQuery();             
+                                        rs = pst.executeQuery();                         
                                         rs3 = pst3.executeQuery();
                                         
-                                        while (rs2.next()) { num1 = rs2.getString("total"); }
-                                        while (rs3.next()) { num2 = rs3.getString("total"); }
+                                        while (rs3.next()) { num1 = rs3.getDouble("total"); }
                                         
-                                        DecimalFormat formateador = new DecimalFormat("###,###.##");
-                                        //numXX = formateador.format(Float.parseFloat(num1));
-                                        //numYY = formateador.format(Float.parseFloat(num2));
-                                        
+                                        DecimalFormat formateador = new DecimalFormat("#,###.##");     
+                                        String cadena1 = String.valueOf(formateador.format (num1));
+                                        String cadena2 = String.valueOf(formateador.format (num1/6.86));
+                                        String cadena3 = String.valueOf(formateador.format (xh));
+                                        String cadena4 = String.valueOf(formateador.format (xh/6.86));
+                                        String cadena5 = String.valueOf(formateador.format (num1+xh));
+                                        String cadena6 = String.valueOf(formateador.format ((num1+xh)/6.86));
                                     %>
                                 </div>
                             </div>    
@@ -212,7 +229,7 @@
                                         <tbody>
                                           <tr>
                                             <td>GAM / UEP :</td>
-                                            <td>&nbsp;&nbsp;&nbsp;<%= gamuep %></td>
+                                            <td>&nbsp;&nbsp;&nbsp;<%= gam %></td>
                                             <td WIDTH="200"></td>
                                             <td>SUB-ACTIVIDAD :</td>
                                             <td>&nbsp;&nbsp;&nbsp;<%= suba %></td>
@@ -235,6 +252,23 @@
                                 </div>
                         </div>
                             <div class="card" id="dvData">
+                                <table class="egt">
+                                        <tr>
+                                          <td WIDTH="180">GATOS ESPECIFICO : </td>
+                                          <td WIDTH="150"><%= cadena1 %> Bs</td>
+                                          <td WIDTH="150"><%= cadena2 %> $us</td>
+                                        </tr>
+                                        <tr>
+                                          <td>GASTOS COMUNES: </td>
+                                          <td><%= cadena3 %> Bs</td>
+                                          <td><%= cadena4 %> $us</td>
+                                        </tr>
+                                        <tr style="color: green">
+                                          <td>GASTO TOTAL : </td>
+                                          <td><%= cadena5 %> Bs</td>
+                                          <td><%= cadena6 %> $us</td>
+                                        </tr>
+                                </table>
                                 <table id="grid" class="table table-bordered no-padding table-striped text-sm table-hover" data-selection="true" data-multi-select="true" data-row-select="true" data-keep-selection="true">
                                     <thead>
                                         <tr>
@@ -253,7 +287,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% while(rs.next()) { %>
+                                        <% while(rs.next()) { 
+                                            String cadenaX = String.valueOf(formateador.format (rs.getDouble("importe")));
+                                            String cadenaX2 = String.valueOf(formateador.format (rs.getDouble("importe")/6.86));
+                                        %>
                                             <tr>
                                                 <td><%= rs.getString("gestion") %></td>
                                                 <td><%= rs.getString("fech_emision") %></td>
@@ -264,16 +301,12 @@
                                                 <td><%= rs.getString("beneficiario") %></td>
                                                 <td><%= rs.getString("producto") %></td>
                                                 <td><%= rs.getString("descripcion") %></td>
-                                                <td><%= rs.getString("importe") %></td>
-                                                <td><%= rs.getString("importe_usd") %></td>
+                                                <td><%= cadenaX %></td>
+                                                <td><%= cadenaX2 %></td>
                                                 <td><%= rs.getString("bid_ctr") %></td>
                                             </tr>
-                                        <% } 
-                                        //formateador.format(Float.parseFloat(rs.getString("importe")))
-                                        //formateador.format(Float.parseFloat(rs.getString("importe_usd")))
-                                        %>
+                                        <% }%>
                                     </tbody>
-                                        <h4><i>TOTAL : <%= num1 %> Bs,&nbsp;&nbsp;&nbsp;<%= num2 %> $us</i></h3><br />
                                 </table>
                             </div>
                         </div>

@@ -1,7 +1,6 @@
 package pControlador;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -72,7 +71,6 @@ public class CTRLRegistro extends HttpServlet {
             throws ServletException, IOException {
         try {
             Registro R = new Registro();
-            Registro R2 = new Registro();
             float a=Float.parseFloat(request.getParameter("txtImporte"));
             float usd = (float) (a/6.86);
             String usd2 = Float.toString(usd);
@@ -105,7 +103,6 @@ public class CTRLRegistro extends HttpServlet {
             R.setObservaciones(request.getParameter("txtObservaciones"));
             R.setHr(request.getParameter("txtHR"));
             R.setNro_factura(request.getParameter("txtFactura"));
-            R2 = R;
             
             String ls_isbn = request.getParameter("txtId");
             
