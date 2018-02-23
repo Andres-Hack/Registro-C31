@@ -190,22 +190,32 @@ public class Consultas {
         Statement statement1;
         ResultSet rs1;
         Connection con = DBConexion.IniciarSesion();
-        String monto ="", dato1="";
+        String monto ="", dato1="", subcomponente="";
         double importe = 0, suma=0;
         try {
             statement1 = con.createStatement();
-            rs1 = statement1.executeQuery("select id from tabla_c31 where inst='UEP' and subc='"+subc+"'");
+            if (subc.equals("TODO")) {
+                subcomponente= "";
+            } else {
+                subcomponente= " and subc='"+subc+"'";
+            }
+            rs1 = statement1.executeQuery("select id from tabla_c31 where inst='UEP' "+subcomponente);
             while (rs1.next()) {
                 monto = rs1.getString("id");
                 Statement statement2;
                 ResultSet rs2;
-                if ("BID".equals(bid_ctr)) {
-                    dato1 = "monto_bs_bid";
+                if (bid_ctr.equals("TODO")) {
+                    dato1 = "sum(monto_bs_bid)+sum(monto_bs_ctr)";
                 } else {
-                    dato1 = "monto_bs_ctr";
+                    if ("BID".equals(bid_ctr)) {
+                        dato1 = "sum(monto_bs_bid)";
+                    } else{
+                        dato1 = "sum(monto_bs_ctr)";
+                    }
                 }
+                
                 statement2 = con.createStatement();
-                rs2 = statement2.executeQuery("select sum("+dato1+") as total from detalle_c31 where gam='"+municipio+"' and id_c31='"+monto+"'");
+                rs2 = statement2.executeQuery("select "+dato1+" as total from detalle_c31 where gam='"+municipio+"' and id_c31='"+monto+"'");
                 while (rs2.next()) {
                     importe = rs2.getDouble("total");
                 }
@@ -221,22 +231,31 @@ public class Consultas {
         Connection con = DBConexion.IniciarSesion();
         Statement statement1;
         ResultSet rs1;
-        String monto ="", dato1="";
+        String monto ="", dato1="", actividad="";
         double importe = 0, suma=0;
         try {
             statement1 = con.createStatement();
-            rs1 = statement1.executeQuery("select id from tabla_c31 where inst='UEP' and subc='"+subc+"' and act='"+act+"'");
+            if (subc.equals("TODO")) {
+                actividad= "";
+            } else {
+                actividad= " and subc='"+subc+"' and act='"+act+"'";
+            }
+            rs1 = statement1.executeQuery("select id from tabla_c31 where inst='UEP' "+actividad);
             while (rs1.next()) {
                 monto = rs1.getString("id");
                 Statement statement2;
                 ResultSet rs2;
-                if ("BID".equals(bid_ctr)) {
-                    dato1 = "monto_bs_bid";
+                if (bid_ctr.equals("TODO")) {
+                    dato1 = "sum(monto_bs_bid)+sum(monto_bs_ctr)";
                 } else {
-                    dato1 = "monto_bs_ctr";
+                    if ("BID".equals(bid_ctr)) {
+                        dato1 = "sum(monto_bs_bid)";
+                    } else{
+                        dato1 = "sum(monto_bs_ctr)";
+                    }
                 }
                 statement2 = con.createStatement();
-                rs2 = statement2.executeQuery("select sum("+dato1+") as total from detalle_c31 where gam='"+gam+"' and id_c31='"+monto+"'");
+                rs2 = statement2.executeQuery("select "+dato1+" as total from detalle_c31 where gam='"+gam+"' and id_c31='"+monto+"'");
                 while (rs2.next()) {
                     importe = rs2.getDouble("total");
                 }

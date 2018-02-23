@@ -115,7 +115,9 @@ public class CTRLRegistro extends HttpServlet {
             {
                 case 1: 
                     adicion(R);
-                    response.sendRedirect("inicio.jsp");
+                    request.setAttribute("dato", "1");
+                    request.getRequestDispatcher("inicio.jsp").forward(request, response);
+                    //response.sendRedirect("inicio.jsp");
                     break;                
                 case 2: 
                     eliminar(ls_isbn); 
@@ -127,7 +129,9 @@ public class CTRLRegistro extends HttpServlet {
                     break;
                 case 4: 
                     adicion2(R);
-                    response.sendRedirect("inicio.jsp");
+                    request.setAttribute("dato", "4");
+                    request.getRequestDispatcher("inicio.jsp").forward(request, response);
+                    //response.sendRedirect("inicio.jsp");
                     break; 
             }
         } catch (SQLException ex) {

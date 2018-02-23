@@ -6,6 +6,15 @@ public class Actividad {
     private String codigo;
     private String detalle;
     private String fecha_creacion;
+    private String actividad;
+
+    public String getActividad() {
+        return actividad;
+    }
+
+    public void setActividad(String actividad) {
+        this.actividad = actividad;
+    }
 
     public int getId() {
         return id;

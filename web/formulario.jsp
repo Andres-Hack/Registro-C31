@@ -1,5 +1,36 @@
+<%@page import="pClases.Actividad"%>
+<%@page import="pReporte.Codigos"%>
+<%@page import="java.util.LinkedList"%>
 <div class="col-md-10" style="height: 1120px;" ng-controller="myCtrl1" ng-init="cambio=6.86">
-                                
+    <% 
+        LinkedList<Actividad> ActividadX = Codigos.Actividad(0);  
+    %>
+                               <% if((request.getAttribute("dato")=="4") || (request.getAttribute("dato")=="1")) {%>
+                               <div class="modal fade" id="mostrarmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+                                   <div class="modal-dialog">
+                                      <div class="modal-content">
+                                         <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h3>Registro C31</h3>
+                                     </div>
+                                         <div class="modal-body">
+                                            <h4>El nuevo registro fue exitosa ....!!!</h4> 
+                                     </div>
+                                         <div class="modal-footer">
+                                        <a href="#" data-dismiss="modal" class="btn btn-danger">Cerrar</a>
+                                     </div>
+                                      </div>
+                                   </div>
+                                </div>
+                                <script>
+                                    $(document).ready(function()
+                                    {
+                                       $("#mostrarmodal").modal("show");
+                                    });
+                                 </script>
+                             <% } %>
+    
+    
                               <form class="form " action="CTRLRegistro" id="form-search" method="post">
                                     <input type="hidden" name="op" value="1" />
                                     <div class="col-md-12 col-sm-12">
@@ -131,7 +162,7 @@
                                                 </select>
                                               <label for='cite_original'>SUBC</label>  
                                             </div>
-                                        </div>  
+                                        </div>                                         
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                <select class="form-control" name="txtAct" ng-model="act">
@@ -142,7 +173,7 @@
                                                 </select>
                                               <label for='cite_original'>Actividad</label>  
                                             </div>
-                                        </div> 
+                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <select class="form-control" name="txtSubAct" ng-model="subact">

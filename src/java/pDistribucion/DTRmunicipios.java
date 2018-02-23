@@ -75,15 +75,22 @@ public class DTRmunicipios {
     
     public static void distribucionB(Registro R2, String id)  {
         Connection con = DBConexion.IniciarSesion();
-        String municipios[] = {"COB","CBB","EAL","ORU","POT","SAC","SCZ","SER","TAR","TOR","TDD","VIA"};
+        //############################################# AUTOMATIZAR
+        String municipios[] = {"COB","COB","CBB","EAL","ORU","POT","SAC","SCZ","SER","TAR","TOR","TDD","VIA"};
+        //############################################# AUTOMATIZAR
         Double porcentaje=0.0;
         String consulta="", consulta2="";
         ResultSet rs = null;
         PreparedStatement pst = null, pst2 = null;
         Calendar cal= Calendar.getInstance();
         String gestion = Integer.toString(cal.get(Calendar.YEAR));
-        String fuente = R2.getBid_ctr();                                
-        System.out.println("INGRSO AL DIST CON LA GESTION : "+gestion);                                      
+        String fuente = R2.getBid_ctr();
+        System.out.println("INGRESO AL DIST CON LA GESTION : "+gestion);
+        //############################################# AUTOMATIZAR
+        if(gestion.equals("2018")){
+            gestion="2017";
+        }
+        //#############################################
         for (int j = 0; j <= 11; j++) {          
                                                                 
             consulta = "select porcentaje from porcentaje_dist where gam='"+municipios[j]+"' and gestion='"+gestion+"' and subc='"+R2.getSubc()+"'";
@@ -103,9 +110,9 @@ public class DTRmunicipios {
             Double resultado2 = importe_usdF*porcentaje;
             System.out.println("multiplica esto : "+importeF+" con esto : "+porcentaje+" resulta esto : "+resultado1+" de la gestion : "+gestion+" con fuente : "+fuente);
             if (fuente.equals("BID")) {
-                consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,?,?,null,null)";
+                consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,?,?,0.0,0.0)";
             } else {
-                consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,null,null,?,?)";
+                consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,0.0,0.0,?,?)";
             }
             try {
                 pst2 = con.prepareStatement(consulta2);
@@ -118,8 +125,7 @@ public class DTRmunicipios {
                 pst2.executeUpdate();
             } catch (SQLException ex) {
                 Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+            }            
         }
     }
     

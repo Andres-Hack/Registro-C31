@@ -73,52 +73,8 @@
                                               <label for='cite_original'>SUB-COMPONENTE</label>  
                                             </div>
                                         </div>  
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                               <select class="form-control" name="txtAct" ng-model="act">
-                                                    <option value="" ></option>
-                                                    <option value="" >------</option>
-                                                    <option value="{{x.a2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.a" ng-if=" subc == '2,1'"></option>
-                                                    <option value="{{x.b2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.b" ng-if=" subc == '2,2'"></option>
-                                                    <option value="{{x.c2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.c" ng-if=" subc == '2,3'"></option>
-                                                    <option value="{{x.d2}}" ng-repeat="x in actividad.integrantes" ng-bind="x.d" ng-if=" subc == '2,4'"></option>
-                                                </select>
-                                              <label for='cite_original'>ACTIVIDAD</label>  
-                                            </div>
-                                        </div> 
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <select class="form-control" name="suba" >
-                                                    <option value="" ></option>
-                                                    <option value="" >------</option>
-                                                    <option value="{{y.aa2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.aa" ng-if=" act == '2,1,1'"></option>
-                                                    <option value="{{y.bb2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.bb" ng-if=" act == '2,1,2'"></option>
-                                                    <option value="{{y.cc2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.cc" ng-if=" act == '2,1,3'"></option>
-                                                    <option value="{{y.dd2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.dd" ng-if=" act == '2,1,4'"></option>
-                                                    <option value="{{y.ee2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ee" ng-if=" act == '2,1,6'"></option>
-                                                    <option value="{{y.ff2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ff" ng-if=" act == '2,1,7'"></option>
-                                                    <option value="{{y.gg2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.gg" ng-if=" act == '2,1,8'"></option>
-                                                    <option value="{{y.hh2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.hh" ng-if=" act == '2,2,1'"></option>
-                                                    <option value="{{y.ii2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ii" ng-if=" act == '2,3,1'"></option>
-                                                    <option value="{{y.jj2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.jj" ng-if=" act == '2,4,1'"></option>
-                                                    <option value="{{y.kk2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.kk" ng-if=" act == '2,4,2'"></option>
-                                                    <option value="{{y.ll2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.ll" ng-if=" act == '2,4,3'"></option>
-                                                    <option value="{{y.mm2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.mm" ng-if=" act == '2,4,4'"></option>
-                                                    <option value="{{y.nn2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.nn" ng-if=" act == '2,4,5'"></option>
-                                                    <option value="{{y.oo2}}" ng-repeat="y in actividad.integrantes2" ng-bind="y.oo" ng-if=" act == '2,4,6'"></option>
-                                                </select>
-                                              <label for='cite_original'>SUB-ACTIVIDAD</label>  
-                                            </div>
-                                        </div>
-
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <input type="number" class="form-control" name="partida" />
-                                                    <label for='nur'>PARTIDA</label>
-                                                </div>
-                                            </div>
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <select class="form-control" name="bid_ctr">
@@ -139,21 +95,21 @@
                                     <%
                                         String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="";
                                         String subcomponente = "", actividadCom = "", bidCtr="";
+                                        String gam="";
                                         double num1=0, xh=0, hg = 0;
                                         String consulta = null, consulta3 = null;
                                         partida = request.getParameter("partida");
                                         subc = request.getParameter("subc");
                                         gamuep = request.getParameter("txtGamuep");
+                                                                                   
                                         suba = request.getParameter("suba");
                                         bid_ctr = request.getParameter("bid_ctr");
                                         actividad = request.getParameter("txtAct");
 
                                         Connection con = DBConexion.IniciarSesion();
                                         Consultas dato2 = new Consultas();
-
-                                        consulta = "select * from tabla_c31 where id >= '1'";
-                                        consulta3 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= '1'";
-                                        
+                                        consulta = "select * from tabla_c31 where id >= 1 ";
+                                        consulta3 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= 1 ";
                                         
                                         if (bid_ctr != "") {
                                             if ("BID".equals(bid_ctr)) {
@@ -168,10 +124,6 @@
                                             bidCtr = "TODO";
                                             
                                         }
-                                        if (partida != "") {
-                                           consulta += " and partida = '"+partida+"'";
-                                           consulta3 += " and partida = '"+partida+"'";
-                                        }
                                         if (subc != "") {
                                            consulta += " and subc = '"+subc+"'";
                                            consulta3 += " and subc = '"+subc+"'";
@@ -184,19 +136,15 @@
                                            consulta += " and gam_uep = '"+gamuep+"'";
                                            consulta3 += " and gam_uep = '"+gamuep+"'";
                                         }
-                                        if (suba != "") {
-                                           consulta += " and subact = '"+suba+"' ";
-                                           consulta3 += " and subact = '"+suba+"' ";
-                                        }
-                                        if (actividad != "") {
-                                           consulta += " and act = '"+actividad+"' ";
-                                           consulta3 += " and act = '"+actividad+"' ";
-                                           actividadCom = actividad;
-                                        }
                                         else{ actividadCom = "TODO"; }
-                                        
+                                        if (gamuep == null) {
+                                           gamuep="";
+                                           subcomponente="";
+                                           bidCtr="";
+                                           actividadCom="";
+                                        }
                                         ListaPorcentaje dato1 = new ListaPorcentaje();
-                                        String gam=dato1.municipio(gamuep);
+                                        gam=dato1.municipio(gamuep);
                                         xh = dato2.MontoCompartidoSubc(gamuep, subcomponente, bidCtr);
                                         hg = dato2.MontoCompartidoAct(subcomponente, actividadCom, gamuep, bidCtr);
 
