@@ -4,14 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import pClases.Registro;
-import pDistribucion.DTRmunicipios;
 
 public abstract class DBRegistro {
     
@@ -22,16 +16,16 @@ public abstract class DBRegistro {
         ResultSet rs = cs.executeQuery();
         while (rs.next()) {
             Registro obj = new Registro() {}; 
-            obj.setId(rs.getInt("id"));
-            obj.setGestion(rs.getString("gestion"));
-            obj.setFech_emision(rs.getString("fech_emision"));
-            obj.setFech_pago(rs.getString("fech_pago"));
-            obj.setMes_c31(rs.getString("mes_c31"));
-            obj.setMes_pago(rs.getString("mes_pago"));
-            obj.setNro_c31(rs.getString("nro_c31"));
+            obj.setC_C31(rs.getInt("id"));
+            obj.setAnio_Pago(rs.getString("gestion"));
+            obj.setFecha_Emision(rs.getString("fech_emision"));
+            obj.setFecha_Pago(rs.getString("fech_pago"));
+            obj.setMes_Dev(rs.getString("mes_c31"));
+            obj.setMes_Pago(rs.getString("mes_pago"));
+            obj.setC31(rs.getString("nro_c31"));
             obj.setBeneficiario(rs.getString("beneficiario"));
             obj.setProducto(rs.getString("producto"));
-            obj.setImporte(rs.getString("importe"));
+            obj.setImporte_Bs(rs.getString("importe"));
             lista.add(obj);
         }
         cnn.close();
@@ -41,82 +35,48 @@ public abstract class DBRegistro {
     
     public static void adicion(Registro R) throws SQLException {
         
-        Connection cnn = DBConexion.IniciarSesion();
-        
-        // FORMATEAR A UN FORMATO LA FECHA ////////////
-        SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-        Date date1 = null, date2 = null;
-        try {
-            date1 = parseador.parse(R.getFech_emision());
-            date2 = parseador.parse(R.getFech_pago());
-        } catch (ParseException ex) {
-            Logger.getLogger(DBRegistro.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //////////////////////////////////////
-        
+        Connection cnn = DBConexion.IniciarSesion();        
         cnn.setAutoCommit(false);
+        
         try {
-            PreparedStatement ps = cnn.prepareStatement("insert into tabla_c31(id, gestion,fech_emision,fech_pago,mes_c31,mes_pago,nro_c31,bid_ctr,ff,of,descripcion,subc,act,subact,cat_gast,tg,partida,inst,gam_uep,beneficiario,tipo,producto,actividad2,concepto,importe,tc,importe_usd,observaciones, hr, nro_factura) values "
-                    + "                                 (null,YEAR(NOW()),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-            ps.setString(1, formateador.format(date1));
-            ps.setString(2, formateador.format(date2));
-            ps.setString(3, R.getMes_c31());
-            ps.setString(4, R.getMes_pago());
-            ps.setString(5, R.getNro_c31());
-            ps.setString(6, R.getBid_ctr());
-            ps.setString(7, R.getFf());
-            ps.setString(8, R.getOf());
-            ps.setString(9, R.getDescripcion());
-            ps.setString(10, R.getSubc());
-            ps.setString(11, R.getAct());
-            ps.setString(12, R.getSubact());
-            ps.setString(13, R.getCat_gast());
-            ps.setString(14, R.getTg());
-            ps.setString(15, R.getPartida());
-            ps.setString(16, R.getInst());
-            ps.setString(17, R.getGam_uep());
-            ps.setString(18, R.getBeneficiario());
-            ps.setString(19, R.getTipo());
-            ps.setString(20, R.getProducto());
-            ps.setString(21, R.getActividad2());
-            ps.setString(22, R.getConcepto());
-            ps.setString(23, R.getImporte());
-            ps.setString(24, R.getTc());
-            ps.setString(25, R.getImporte_usd());
-            ps.setString(26, R.getObservaciones());
-            ps.setString(27, R.getHr());
-            ps.setString(28, R.getNro_factura());
-            
+            PreparedStatement ps = cnn.prepareStatement("insert into C31(Anio, Anio_Pago, Fecha_Emision, Fecha_Pago, Mes_Dev, Mes_Pago, C31, BID_CTR, F_F, O_F, SubComp, Descripcion, Actividad, Descripcion_Actividad, Subactividad, Descripcion_Subactividad, C_G, T_G, Partida, Inst, GAM_UEP, Beneficiario, Tipo, Producto, Concepto, Importe_Bs, TC, Importe_Us) values "
+                    + "                                 (YEAR(NOW()),YEAR(NOW()),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            ps.setString(1, R.getFecha_Emision());
+            ps.setString(2, R.getFecha_Pago());
+            ps.setString(3, R.getMes_Dev());
+            ps.setString(4, R.getMes_Pago());
+            ps.setString(5, R.getC31());
+            ps.setString(6, R.getBID_CTR());
+            ps.setString(7, R.getF_F());
+            ps.setString(8, R.getO_F());
+            ps.setString(9, R.getSubComp());
+            ps.setString(10, R.getDescripcion());            
+            ps.setString(11, R.getActividad());
+            ps.setString(12, R.getDescripcion_Actividad());
+            ps.setString(13, R.getSubactividad());
+            ps.setString(14, "ninguno");
+            ps.setString(15, R.getC_G());
+            ps.setString(16, R.getT_G());
+            ps.setString(17, R.getPartida());
+            ps.setString(18, R.getInst());
+            ps.setString(19, R.getGAM_UEP());
+            ps.setString(20, R.getBeneficiario());
+            ps.setString(21, R.getTipo());
+            ps.setString(22, R.getProducto());            
+            ps.setString(23, R.getConcepto());
+            ps.setString(24, R.getImporte_Bs());
+            ps.setString(25, R.getTC());
+            ps.setString(26, R.getImporte_Us());
             ps.executeUpdate();
             
             cnn.commit();
             cnn.close();
             ps.close();
+            System.out.println("SE REGISTRO SATISFACTORIAMENTE ..!!!!!!!!!");
             
         } catch (SQLException e) {
             cnn.rollback();
             System.out.println("ESTE ES EL ERROR : "+e);
         }       
-    }
-    
-    public static void adicion2(Registro R) throws SQLException {      
-        // FORMATEAR A UN FORMATO LA FECHA ////////////
-        SimpleDateFormat parseador = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat formateador = new SimpleDateFormat("dd/MM/yyyy");
-        Date date1 = null, date2 = null;
-        try {
-            date1 = parseador.parse(R.getFech_emision());
-            date2 = parseador.parse(R.getFech_pago());
-        } catch (ParseException ex) {
-            Logger.getLogger(DBRegistro.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //////////////////////////////////////
-        
-        R.setFech_emision(formateador.format(date1));
-        R.setFech_pago(formateador.format(date2));
-
-        pDistribucion.DTRmunicipios.distribucion(R);
-               
     }
 }

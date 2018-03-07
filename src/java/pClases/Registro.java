@@ -6,275 +6,288 @@
 package pClases;
 
 public class Registro {
-    private int id;
-    private String gestion;
-    private String fech_emision;
-    private String fech_pago;
-    private String mes_c31;
-    private String mes_pago;
-    private String nro_c31;
-    private String bid_ctr;
-    private String ff;
-    private String of;
-    private String descripcion;
-    private String subc;
-    private String act;
-    private String subact;
-    private String cat_gast;
-    private String tg;
-    private String partida;
-    private String inst;
-    private String gam_uep;
-    private String beneficiario;
-    private String tipo;
-    private String producto;
-    private String actividad2;
-    private String concepto;
-    private String importe;
-    private String tc;
-    private String importe_usd;
-    private String observaciones;
-    private String hr;
-    private String nro_factura;
+    private int c_C31;
+    private String Anio;
+    private String Anio_Pago;
+    private String Fecha_Emision;
+    private String Fecha_Pago;
+    private String Mes_Dev;
+    private String Mes_Pago;
+    private String C31;
+    private String BID_CTR;
+    private String F_F;
+    private String O_F;
+    private String SubComp;
+    private String Descripcion;
+    private String Actividad;
+    private String Descripcion_Actividad;
+    private String Subactividad;
+    private String Descripcion_Subactividad;
+    private String C_G;
+    private String T_G;
+    private String Partida;
+    private String Inst;
+    private String GAM_UEP;
+    private String Beneficiario;
+    private String Tipo;
+    private String Producto;
+    private String Concepto;
+    private String Importe_Bs;
+    private String TC;
+    private String Importe_Us;
+    private int Periodo ;
+    private int Distribuible;
 
-    public int getId() {
-        return id;
+    public int getC_C31() {
+        return c_C31;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setC_C31(int c_C31) {
+        this.c_C31 = c_C31;
     }
 
-    public String getGestion() {
-        return gestion;
+    public String getAnio() {
+        return Anio;
     }
 
-    public void setGestion(String gestion) {
-        this.gestion = gestion;
+    public void setAnio(String Anio) {
+        this.Anio = Anio;
     }
 
-    public String getFech_emision() {
-        return fech_emision;
+    public String getAnio_Pago() {
+        return Anio_Pago;
     }
 
-    public void setFech_emision(String fech_emision) {
-        this.fech_emision = fech_emision;
+    public void setAnio_Pago(String Anio_Pago) {
+        this.Anio_Pago = Anio_Pago;
     }
 
-    public String getFech_pago() {
-        return fech_pago;
+    public String getFecha_Emision() {
+        return Fecha_Emision;
     }
 
-    public void setFech_pago(String fech_pago) {
-        this.fech_pago = fech_pago;
+    public void setFecha_Emision(String Fecha_Emision) {
+        this.Fecha_Emision = Fecha_Emision;
     }
 
-    public String getMes_c31() {
-        return mes_c31;
+    public String getFecha_Pago() {
+        return Fecha_Pago;
     }
 
-    public void setMes_c31(String mes_c31) {
-        this.mes_c31 = mes_c31;
+    public void setFecha_Pago(String Fecha_Pago) {
+        this.Fecha_Pago = Fecha_Pago;
     }
 
-    public String getMes_pago() {
-        return mes_pago;
+    public String getMes_Dev() {
+        return Mes_Dev;
     }
 
-    public void setMes_pago(String mes_pago) {
-        this.mes_pago = mes_pago;
+    public void setMes_Dev(String Mes_Dev) {
+        this.Mes_Dev = Mes_Dev;
     }
 
-    public String getNro_c31() {
-        return nro_c31;
+    public String getMes_Pago() {
+        return Mes_Pago;
     }
 
-    public void setNro_c31(String nro_c31) {
-        this.nro_c31 = nro_c31;
+    public void setMes_Pago(String Mes_Pago) {
+        this.Mes_Pago = Mes_Pago;
     }
 
-    public String getBid_ctr() {
-        return bid_ctr;
+    public String getC31() {
+        return C31;
     }
 
-    public void setBid_ctr(String bid_ctr) {
-        this.bid_ctr = bid_ctr;
+    public void setC31(String C31) {
+        this.C31 = C31;
     }
 
-    public String getFf() {
-        return ff;
+    public String getBID_CTR() {
+        return BID_CTR;
     }
 
-    public void setFf(String ff) {
-        this.ff = ff;
+    public void setBID_CTR(String BID_CTR) {
+        this.BID_CTR = BID_CTR;
     }
 
-    public String getOf() {
-        return of;
+    public String getF_F() {
+        return F_F;
     }
 
-    public void setOf(String of) {
-        this.of = of;
+    public void setF_F(String F_F) {
+        this.F_F = F_F;
+    }
+
+    public String getO_F() {
+        return O_F;
+    }
+
+    public void setO_F(String O_F) {
+        this.O_F = O_F;
+    }
+
+    public String getSubComp() {
+        return SubComp;
+    }
+
+    public void setSubComp(String SubComp) {
+        this.SubComp = SubComp;
     }
 
     public String getDescripcion() {
-        return descripcion;
+        return Descripcion;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescripcion(String Descripcion) {
+        this.Descripcion = Descripcion;
     }
 
-    public String getSubc() {
-        return subc;
+    public String getActividad() {
+        return Actividad;
     }
 
-    public void setSubc(String subc) {
-        this.subc = subc;
+    public void setActividad(String Actividad) {
+        this.Actividad = Actividad;
     }
 
-    public String getAct() {
-        return act;
+    public String getDescripcion_Actividad() {
+        return Descripcion_Actividad;
     }
 
-    public void setAct(String act) {
-        this.act = act;
+    public void setDescripcion_Actividad(String Descripcion_Actividad) {
+        this.Descripcion_Actividad = Descripcion_Actividad;
     }
 
-    public String getSubact() {
-        return subact;
+    public String getSubactividad() {
+        return Subactividad;
     }
 
-    public void setSubact(String subact) {
-        this.subact = subact;
+    public void setSubactividad(String Subactividad) {
+        this.Subactividad = Subactividad;
     }
 
-    public String getCat_gast() {
-        return cat_gast;
+    public String getDescripcion_Subactividad() {
+        return Descripcion_Subactividad;
     }
 
-    public void setCat_gast(String cat_gast) {
-        this.cat_gast = cat_gast;
+    public void setDescripcion_Subactividad(String Descripcion_Subactividad) {
+        this.Descripcion_Subactividad = Descripcion_Subactividad;
     }
 
-    public String getTg() {
-        return tg;
+    public String getC_G() {
+        return C_G;
     }
 
-    public void setTg(String tg) {
-        this.tg = tg;
+    public void setC_G(String C_G) {
+        this.C_G = C_G;
+    }
+
+    public String getT_G() {
+        return T_G;
+    }
+
+    public void setT_G(String T_G) {
+        this.T_G = T_G;
     }
 
     public String getPartida() {
-        return partida;
+        return Partida;
     }
 
-    public void setPartida(String partida) {
-        this.partida = partida;
+    public void setPartida(String Partida) {
+        this.Partida = Partida;
     }
 
     public String getInst() {
-        return inst;
+        return Inst;
     }
 
-    public void setInst(String inst) {
-        this.inst = inst;
+    public void setInst(String Inst) {
+        this.Inst = Inst;
     }
 
-    public String getGam_uep() {
-        return gam_uep;
+    public String getGAM_UEP() {
+        return GAM_UEP;
     }
 
-    public void setGam_uep(String gam_uep) {
-        this.gam_uep = gam_uep;
+    public void setGAM_UEP(String GAM_UEP) {
+        this.GAM_UEP = GAM_UEP;
     }
 
     public String getBeneficiario() {
-        return beneficiario;
+        return Beneficiario;
     }
 
-    public void setBeneficiario(String beneficiario) {
-        this.beneficiario = beneficiario;
+    public void setBeneficiario(String Beneficiario) {
+        this.Beneficiario = Beneficiario;
     }
 
     public String getTipo() {
-        return tipo;
+        return Tipo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setTipo(String Tipo) {
+        this.Tipo = Tipo;
     }
 
     public String getProducto() {
-        return producto;
+        return Producto;
     }
 
-    public void setProducto(String producto) {
-        this.producto = producto;
-    }
-
-    public String getActividad2() {
-        return actividad2;
-    }
-
-    public void setActividad2(String actividad2) {
-        this.actividad2 = actividad2;
+    public void setProducto(String Producto) {
+        this.Producto = Producto;
     }
 
     public String getConcepto() {
-        return concepto;
+        return Concepto;
     }
 
-    public void setConcepto(String concepto) {
-        this.concepto = concepto;
+    public void setConcepto(String Concepto) {
+        this.Concepto = Concepto;
     }
 
-    public String getImporte() {
-        return importe;
+    public String getImporte_Bs() {
+        return Importe_Bs;
     }
 
-    public void setImporte(String importe) {
-        this.importe = importe;
+    public void setImporte_Bs(String Importe_Bs) {
+        this.Importe_Bs = Importe_Bs;
     }
 
-    public String getTc() {
-        return tc;
+    public String getTC() {
+        return TC;
     }
 
-    public void setTc(String tc) {
-        this.tc = tc;
+    public void setTC(String TC) {
+        this.TC = TC;
     }
 
-    public String getImporte_usd() {
-        return importe_usd;
+    public String getImporte_Us() {
+        return Importe_Us;
     }
 
-    public void setImporte_usd(String importe_usd) {
-        this.importe_usd = importe_usd;
+    public void setImporte_Us(String Importe_Us) {
+        this.Importe_Us = Importe_Us;
     }
 
-    public String getObservaciones() {
-        return observaciones;
+    
+
+    public int getPeriodo() {
+        return Periodo;
     }
 
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+    public void setPeriodo(int Periodo) {
+        this.Periodo = Periodo;
     }
 
-    public String getHr() {
-        return hr;
+    public int getDistribuible() {
+        return Distribuible;
     }
 
-    public void setHr(String hr) {
-        this.hr = hr;
+    public void setDistribuible(int Distribuible) {
+        this.Distribuible = Distribuible;
     }
-
-    public String getNro_factura() {
-        return nro_factura;
-    }
-
-    public void setNro_factura(String nro_factura) {
-        this.nro_factura = nro_factura;
-    }
+    
+    
     
 }

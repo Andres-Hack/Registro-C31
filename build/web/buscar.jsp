@@ -94,9 +94,7 @@
                                     </form>
                                     <%
                                         String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="";
-                                        String subcomponente = "", actividadCom = "", bidCtr="";
                                         String gam="";
-                                        double num1=0, xh=0, hg = 0;
                                         String consulta = null, consulta3 = null;
                                         partida = request.getParameter("partida");
                                         subc = request.getParameter("subc");
@@ -107,46 +105,26 @@
                                         actividad = request.getParameter("txtAct");
 
                                         Connection con = DBConexion.IniciarSesion();
-                                        Consultas dato2 = new Consultas();
                                         consulta = "select * from tabla_c31 where id >= 1 ";
                                         consulta3 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= 1 ";
                                         
                                         if (bid_ctr != "") {
-                                            if ("BID".equals(bid_ctr)) {
-                                                bidCtr = "BID";
-                                            } else {
-                                                bidCtr = "CTR";
-                                            }
                                             consulta += " and bid_ctr = '"+bid_ctr+"' ";
                                             consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
-                                        }
-                                        else{
-                                            bidCtr = "TODO";
-                                            
                                         }
                                         if (subc != "") {
                                            consulta += " and subc = '"+subc+"'";
                                            consulta3 += " and subc = '"+subc+"'";
-                                           subcomponente = subc;
-                                        }
-                                        else{
-                                           subcomponente = "TODO";
                                         }
                                         if (gamuep != "") {
                                            consulta += " and gam_uep = '"+gamuep+"'";
                                            consulta3 += " and gam_uep = '"+gamuep+"'";
                                         }
-                                        else{ actividadCom = "TODO"; }
                                         if (gamuep == null) {
                                            gamuep="";
-                                           subcomponente="";
-                                           bidCtr="";
-                                           actividadCom="";
                                         }
                                         ListaPorcentaje dato1 = new ListaPorcentaje();
                                         gam=dato1.municipio(gamuep);
-                                        xh = dato2.MontoCompartidoSubc(gamuep, subcomponente, bidCtr);
-                                        hg = dato2.MontoCompartidoAct(subcomponente, actividadCom, gamuep, bidCtr);
 
                                         ResultSet rs = null, rs3 = null;
                                         PreparedStatement pst = null, pst3 = null;
@@ -155,15 +133,7 @@
                                         rs = pst.executeQuery();                         
                                         rs3 = pst3.executeQuery();
                                         
-                                        while (rs3.next()) { num1 = rs3.getDouble("total"); }
-                                        
                                         DecimalFormat formateador = new DecimalFormat("#,###.##");     
-                                        String cadena1 = String.valueOf(formateador.format (num1));
-                                        String cadena2 = String.valueOf(formateador.format (num1/6.86));
-                                        String cadena3 = String.valueOf(formateador.format (xh));
-                                        String cadena4 = String.valueOf(formateador.format (xh/6.86));
-                                        String cadena5 = String.valueOf(formateador.format (num1+xh));
-                                        String cadena6 = String.valueOf(formateador.format ((num1+xh)/6.86));
                                     %>
                                 </div>
                             </div>    
@@ -200,23 +170,6 @@
                                 </div>
                         </div>
                             <div class="card" id="dvData">
-                                <table class="egt">
-                                        <tr>
-                                          <td WIDTH="180">GATOS ESPECIFICO : </td>
-                                          <td WIDTH="150"><%= cadena1 %> Bs</td>
-                                          <td WIDTH="150"><%= cadena2 %> $us</td>
-                                        </tr>
-                                        <tr>
-                                          <td>GASTOS COMUNES: </td>
-                                          <td><%= cadena3 %> Bs</td>
-                                          <td><%= cadena4 %> $us</td>
-                                        </tr>
-                                        <tr style="color: green">
-                                          <td>GASTO TOTAL : </td>
-                                          <td><%= cadena5 %> Bs</td>
-                                          <td><%= cadena6 %> $us</td>
-                                        </tr>
-                                </table>
                                 <table id="grid" class="table table-bordered no-padding table-striped text-sm table-hover" data-selection="true" data-multi-select="true" data-row-select="true" data-keep-selection="true">
                                     <thead>
                                         <tr>

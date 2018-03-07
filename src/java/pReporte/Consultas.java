@@ -298,4 +298,88 @@ public class Consultas {
         }        
         return suma;
     }
+    /*##############################################################
+    ################################################################
+    ############## CONSULTAS DE REPORTE  #################
+    ################################################################
+    ##############################################################*/
+    public static String ActividadID(String act) {
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1;
+        ResultSet rs1;
+        String id_act ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select c_Actividad from Actividades where Codigo='"+act+"'");
+            while (rs1.next()) {
+                id_act = rs1.getString("c_Actividad");
+            }
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return id_act;
+    }
+    public static String MontoActividadBID(String muni, String idact) {
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1;
+        ResultSet rs1;
+        String monto ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select SUM(Importe * Porcentaje) / 100 AS Total_bs from Detalle where c_Municipio="+muni+" and c_Actividad="+idact+" and c_Fuente=1");
+            while (rs1.next()) {
+                monto = rs1.getString("Total_bs");
+            }
+            if(monto==null){ monto="0.0";}
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return monto;
+    }
+    public static String MontoActividadCTR(String muni, String idact) {
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1;
+        ResultSet rs1;
+        String monto ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select SUM(Importe * Porcentaje) / 100 AS Total_bs from Detalle where c_Municipio="+muni+" and c_Actividad="+idact+" and c_Fuente=2");
+            while (rs1.next()) {
+                monto = rs1.getString("Total_bs");
+            }
+            if(monto==null){ monto="0.0";}
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return monto;
+    }
+
+    public static String MontoSubActividad(String muni, String subact, String bid_ctr) {
+        Connection con = DBConexion.IniciarSesion();
+        Connection con2 = DBConexion.IniciarSesion();
+        Statement statement1=null, statement2=null;
+        ResultSet rs1=null, rs2=null;
+        double monto = 0.0;
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select c_C31 FROM C31 where Subactividad='"+subact+"'");
+            while (rs1.next()) {
+                statement2 = con2.createStatement();
+                rs2 = statement2.executeQuery("select SUM(Importe * Porcentaje) / 100 AS Total_bs from Detalle where c_Municipio="+muni+" and c_Fuente="+bid_ctr+" and c_C31="+rs1.getString("c_C31")+"");
+                
+                while (rs2.next()) {                    
+                    monto = monto+rs2.getDouble("Total_bs");
+                }                
+            }
+            if(monto==0.0){ monto=0.0;}
+            con.close();
+            con2.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return String.valueOf(monto);
+    }
 }

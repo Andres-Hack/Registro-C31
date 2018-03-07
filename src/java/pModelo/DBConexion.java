@@ -9,7 +9,7 @@ public abstract class DBConexion {
         Connection cn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");         
-            String url = "jdbc:mysql://localhost/dbinventario";
+            String url = "jdbc:mysql://localhost/c31";
             String user = "root";           
             String password = "sistema123";          
             cn= DriverManager.getConnection(url, user, password);

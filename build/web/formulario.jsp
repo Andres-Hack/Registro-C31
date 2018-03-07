@@ -2,9 +2,6 @@
 <%@page import="pReporte.Codigos"%>
 <%@page import="java.util.LinkedList"%>
 <div class="col-md-10" style="height: 1120px;" ng-controller="myCtrl1" ng-init="cambio=6.86">
-    <% 
-        LinkedList<Actividad> ActividadX = Codigos.Actividad(0);  
-    %>
                                <% if((request.getAttribute("dato")=="4") || (request.getAttribute("dato")=="1")) {%>
                                <div class="modal fade" id="mostrarmodal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
                                    <div class="modal-dialog">

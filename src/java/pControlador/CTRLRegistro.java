@@ -27,15 +27,15 @@ public class CTRLRegistro extends HttpServlet {
     }
     
     protected void adicion2(Registro R) throws SQLException{
-        DBRegistro.adicion2(R);                                        
+        pDistribucion.DTRmunicipios.distribucion(R);                                       
     }
     
     protected void modificar(Registro R, String xx) throws SQLException            
     {   
         String ls_query = "";
         ls_query = " update tabla_c31";
-        ls_query += " set fech_emision= " + "'" + R.getFech_emision() + "'";
-        ls_query += " set fech_pago= " + "'" + R.getFech_pago() + "'";
+        ls_query += " set fech_emision= " + "'" + R.getFecha_Emision()+ "'";
+        ls_query += " set fech_pago= " + "'" + R.getFecha_Pago()+ "'";
         ls_query += " where id = " + "" + xx + ";";
         try (Connection cnn = DBConexion.IniciarSesion()) {
             Statement l_statement = cnn.createStatement();
@@ -74,35 +74,32 @@ public class CTRLRegistro extends HttpServlet {
             float a=Float.parseFloat(request.getParameter("txtImporte"));
             float usd = (float) (a/6.86);
             String usd2 = Float.toString(usd);
-            R.setGestion(request.getParameter("txtGestion"));
-            R.setFech_emision(request.getParameter("txtFechaE"));
-            R.setFech_pago(request.getParameter("txtFechaP"));
-            R.setMes_c31(request.getParameter("txtMesC31"));
-            R.setMes_pago(request.getParameter("txtPago"));
-            R.setNro_c31(request.getParameter("txtNroC31"));
-            R.setBid_ctr(request.getParameter("txtBidctr"));
-            R.setFf(request.getParameter("txtFf"));
-            R.setOf(request.getParameter("txtOf"));
+            R.setAnio_Pago(request.getParameter("txtGestion"));
+            R.setFecha_Emision(request.getParameter("txtFechaE"));
+            R.setFecha_Pago(request.getParameter("txtFechaP"));
+            R.setMes_Dev(request.getParameter("txtMesC31"));
+            R.setMes_Pago(request.getParameter("txtPago"));
+            R.setC31(request.getParameter("txtNroC31"));
+            R.setBID_CTR(request.getParameter("txtBidctr"));
+            R.setF_F(request.getParameter("txtFf"));
+            R.setO_F(request.getParameter("txtOf"));
             R.setDescripcion(request.getParameter("txtDescripcion"));
-            R.setSubc(request.getParameter("txtSubc"));
-            R.setAct(request.getParameter("txtAct"));
-            R.setSubact(request.getParameter("txtSubAct"));
-            R.setCat_gast(request.getParameter("txtGast"));
-            R.setTg(request.getParameter("txtTipo"));
+            R.setSubComp(request.getParameter("txtSubc"));
+            R.setActividad(request.getParameter("txtAct"));
+            R.setSubactividad(request.getParameter("txtSubAct"));
+            R.setC_G(request.getParameter("txtGast"));
+            R.setT_G(request.getParameter("txtTipo"));
             R.setPartida(request.getParameter("txtPartida"));
             R.setInst(request.getParameter("txtInst"));
-            R.setGam_uep(request.getParameter("txtGamuep"));
+            R.setGAM_UEP(request.getParameter("txtGamuep"));
             R.setBeneficiario(request.getParameter("txtBeneficiario"));
             R.setTipo(request.getParameter("txtTipo"));
             R.setProducto(request.getParameter("txtProducto"));
-            R.setActividad2(request.getParameter("txtActividad2"));
+            R.setDescripcion_Actividad(request.getParameter("txtActividad2"));
             R.setConcepto(request.getParameter("txtConcepto"));
-            R.setImporte(request.getParameter("txtImporte"));
-            R.setTc(request.getParameter("txtTc"));
-            R.setImporte_usd(usd2);
-            R.setObservaciones(request.getParameter("txtObservaciones"));
-            R.setHr(request.getParameter("txtHR"));
-            R.setNro_factura(request.getParameter("txtFactura"));
+            R.setImporte_Bs(request.getParameter("txtImporte"));
+            R.setTC(request.getParameter("txtTc"));
+            R.setImporte_Us(usd2);
             
             String ls_isbn = request.getParameter("txtId");
             

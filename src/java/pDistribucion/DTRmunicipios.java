@@ -20,10 +20,19 @@ public class DTRmunicipios {
     public static void distribucion(Registro R2) {
         distribucionA(R2);
         System.out.println("REGISTRAMOS BIEN EN C31");
-        String id = buscarID();
-        System.out.println("BUSCAMOS BIEN EL ID : "+id);
-        distribucionB(R2, id);
+        String id_C31 = buscarID();
+        System.out.println("BUSCAMOS BIEN EL ID : "+id_C31);
+        String IDactividad = ActividadID(R2.getActividad());
+        System.out.println("BUSCAMOS BIEN EL ID DEL ACTIVIDAD : "+IDactividad+" DE LA ACTIVIDAD "+R2.getActividad());
+        Calendar fecha = Calendar.getInstance();
+        int año = fecha.get(Calendar.YEAR);
+        String IDperiodo = PeriodoID(String.valueOf(año));
+        System.out.println("BUSCAMOS BIEN EL ID DEL PERIODO : "+IDperiodo+" EN AÑO : "+año);
+        
+        /*//////////////////////////////////////*/
+        distribucionB(R2, id_C31, IDactividad, IDperiodo);        
         System.out.println("SE REGISTRO CORRECTAMENTE EL DISTRIBUCION");
+        /*//////////////////////////////////////*/
     }
     
     public static void distribucionA(Registro R2)  {
@@ -31,37 +40,34 @@ public class DTRmunicipios {
         Connection cnn = DBConexion.IniciarSesion();
         
         try {
-            PreparedStatement ps = cnn.prepareStatement("insert into tabla_c31(id, gestion,fech_emision,fech_pago,mes_c31,mes_pago,nro_c31,bid_ctr,ff,of,descripcion,subc,act,subact,cat_gast,tg,partida,inst,gam_uep,beneficiario,tipo,producto,actividad2,concepto,importe,tc,importe_usd,observaciones, hr, nro_factura) values "
-                    + "                                 (null,YEAR(NOW()),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
-            ps.setString(1, R2.getFech_emision());
-            ps.setString(2, R2.getFech_pago());
-            ps.setString(3, R2.getMes_c31());
-            ps.setString(4, R2.getMes_pago());
-            ps.setString(5, R2.getNro_c31());
-            ps.setString(6, R2.getBid_ctr());
-            ps.setString(7, R2.getFf());
-            ps.setString(8, R2.getOf());
-            ps.setString(9, R2.getDescripcion());
-            ps.setString(10, R2.getSubc());
-            ps.setString(11, R2.getAct());
-            ps.setString(12, R2.getSubact());
-            ps.setString(13, R2.getCat_gast());
-            ps.setString(14, R2.getTg());
-            ps.setString(15, R2.getPartida());
-            ps.setString(16, "UEP");
-            ps.setString(17, "UEP");
-            ps.setString(18, R2.getBeneficiario());
-            ps.setString(19, R2.getTipo());
-            ps.setString(20, R2.getProducto());
-            ps.setString(21, R2.getActividad2());
-            ps.setString(22, R2.getConcepto());
-            ps.setString(23, R2.getImporte());
-            ps.setString(24, R2.getTc());
-            ps.setString(25, R2.getImporte_usd());
-            ps.setString(26, R2.getObservaciones());
-            ps.setString(27, R2.getHr());
-            ps.setString(28, R2.getNro_factura());
-            
+            PreparedStatement ps = cnn.prepareStatement("insert into C31(Anio, Anio_Pago, Fecha_Emision, Fecha_Pago, Mes_Dev, Mes_Pago, C31, BID_CTR, F_F, O_F, SubComp, Descripcion, Actividad, Descripcion_Actividad, Subactividad, Descripcion_Subactividad, C_G, T_G, Partida, Inst, GAM_UEP, Beneficiario, Tipo, Producto, Concepto, Importe_Bs, TC, Importe_Us) values "
+                    + "                                 (YEAR(NOW()),YEAR(NOW()),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            ps.setString(1, R2.getFecha_Emision());
+            ps.setString(2, R2.getFecha_Pago());
+            ps.setString(3, R2.getMes_Dev());
+            ps.setString(4, R2.getMes_Pago());
+            ps.setString(5, R2.getC31());
+            ps.setString(6, R2.getBID_CTR());
+            ps.setString(7, R2.getF_F());
+            ps.setString(8, R2.getO_F());
+            ps.setString(9, R2.getSubComp());
+            ps.setString(10, R2.getDescripcion());            
+            ps.setString(11, R2.getActividad());
+            ps.setString(12, R2.getDescripcion_Actividad());
+            ps.setString(13, R2.getSubactividad());
+            ps.setString(14, "ninguno");
+            ps.setString(15, R2.getC_G());
+            ps.setString(16, R2.getT_G());
+            ps.setString(17, R2.getPartida());
+            ps.setString(18, "UEP");
+            ps.setString(19, "UEP");
+            ps.setString(20, R2.getBeneficiario());
+            ps.setString(21, R2.getTipo());
+            ps.setString(22, R2.getProducto());            
+            ps.setString(23, R2.getConcepto());
+            ps.setString(24, R2.getImporte_Bs());
+            ps.setString(25, R2.getTC());
+            ps.setString(26, R2.getImporte_Us());
             ps.executeUpdate();
             
             cnn.commit();
@@ -73,56 +79,55 @@ public class DTRmunicipios {
         }        
     }
     
-    public static void distribucionB(Registro R2, String id)  {
+    public static void distribucionB(Registro R2, String id_C31, String IDactividad, String IDperiodo)  {
         Connection con = DBConexion.IniciarSesion();
-        //############################################# AUTOMATIZAR
-        String municipios[] = {"COB","COB","CBB","EAL","ORU","POT","SAC","SCZ","SER","TAR","TOR","TDD","VIA"};
-        //############################################# AUTOMATIZAR
+        
         Double porcentaje=0.0;
         String consulta="", consulta2="";
         ResultSet rs = null;
         PreparedStatement pst = null, pst2 = null;
         Calendar cal= Calendar.getInstance();
         String gestion = Integer.toString(cal.get(Calendar.YEAR));
-        String fuente = R2.getBid_ctr();
-        System.out.println("INGRESO AL DIST CON LA GESTION : "+gestion);
+
         //############################################# AUTOMATIZAR
         if(gestion.equals("2018")){
             gestion="2017";
         }
         //#############################################
-        for (int j = 0; j <= 11; j++) {          
+        for (int j = 1; j <= 12; j++) {          
                                                                 
-            consulta = "select porcentaje from porcentaje_dist where gam='"+municipios[j]+"' and gestion='"+gestion+"' and subc='"+R2.getSubc()+"'";
+            consulta = "select Porcentaje from Porcentajes where c_Municipio="+j+" and c_Periodo="+IDperiodo+" and SubComp='"+R2.getSubComp()+"'";
             try {
                 pst = con.prepareStatement(consulta);
                 rs = pst.executeQuery();
                 while (rs.next()) { 
-                    porcentaje = rs.getDouble("porcentaje"); 
+                    porcentaje = rs.getDouble("Porcentaje"); 
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            Double importeF = Double.parseDouble(R2.getImporte());
-            Double importe_usdF = Double.parseDouble(R2.getImporte_usd());
-            Double resultado1 = importeF*porcentaje;
-            Double resultado2 = importe_usdF*porcentaje;
-            System.out.println("multiplica esto : "+importeF+" con esto : "+porcentaje+" resulta esto : "+resultado1+" de la gestion : "+gestion+" con fuente : "+fuente);
+            Double importeF = Double.parseDouble(R2.getImporte_Bs());
+            Double importe_usdF = Double.parseDouble(R2.getImporte_Us());
+            /*
             if (fuente.equals("BID")) {
                 consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,?,?,0.0,0.0)";
             } else {
                 consulta2="INSERT INTO detalle_c31 (id_c31, gestion, gam, porcentaje, monto_bs_bid, monto_usd_bid, monto_bs_ctr, monto_usd_ctr) VALUES (?,?,?,?,0.0,0.0,?,?)";
             }
+            */
+            consulta2="INSERT INTO Detalle (c_C31, c_Municipio, c_Actividad, c_Periodo, Porcentaje, Importe, TC) VALUES (?,?,?,?,?,?,?)";
             try {
                 pst2 = con.prepareStatement(consulta2);
-                pst2.setString(1,id);
-                pst2.setString(2,gestion);
-                pst2.setString(3,municipios[j]);
-                pst2.setString(4,String.valueOf(porcentaje));
-                pst2.setString(5,Double.toString(resultado1));
-                pst2.setString(6,Double.toString(resultado2));
+                pst2.setString(1,id_C31);
+                pst2.setString(2,String.valueOf(j));
+                pst2.setString(3,IDactividad);
+                pst2.setString(4,IDperiodo);
+                pst2.setString(5,String.valueOf(porcentaje));
+                pst2.setString(6,R2.getImporte_Bs());
+                pst2.setString(7,String.valueOf(6.86));
                 pst2.executeUpdate();
+                System.out.println("LA DISTRIBUCION SE REALIZO SATISFACTORIUAMENTE .... XD");
             } catch (SQLException ex) {
                 Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
             }            
@@ -135,15 +140,49 @@ public class DTRmunicipios {
         ResultSet rs = null;
         PreparedStatement pst = null;
         try {
-            pst = con.prepareStatement("select id from tabla_c31 order by id desc limit 1");
+            pst = con.prepareStatement("select c_C31 from C31 order by c_C31 desc limit 1");
             rs = pst.executeQuery();
             while (rs.next()) {
-                id = rs.getString("id");
+                id = rs.getString("c_C31");
             }
         } catch (SQLException ex) {
             Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
         }                                                   
         return id;
     }
-    
+    public static String ActividadID( String idactividad) {
+        String id = "";
+        Connection con = DBConexion.IniciarSesion();
+        ResultSet rs = null;
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement("select c_Actividad from Actividades where Codigo='"+idactividad+"'");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                id = rs.getString("c_Actividad");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
+        }                                                   
+        return id;
+    }
+    public static String PeriodoID( String idperiodo) {
+        String id = "";
+        Connection con = DBConexion.IniciarSesion();
+        ResultSet rs = null;
+        PreparedStatement pst = null;
+        if (idperiodo.equals("2018")) {
+            idperiodo="2017";
+        }
+        try {
+            pst = con.prepareStatement("select c_Periodo from Periodos where Gestion='"+idperiodo+"'");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                id = rs.getString("c_Periodo");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
+        }                                                   
+        return id;
+    }
 }

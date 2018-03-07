@@ -73,7 +73,25 @@ public class ListaPorcentaje {
         }
         return dato;
     }
-    
+    public static String IDmunicipio(String x1){
+        String dato = "";
+        switch (x1) {
+            case "CBB": dato="2"; break;
+            case "COB": dato="1"; break;
+            case "EAL": dato="3"; break;
+            case "TOR": dato="10"; break;
+            case "ORU": dato="4"; break;
+            case "POT": dato="5"; break;
+            case "SAC": dato="6"; break;
+            case "SER": dato="8"; break;
+            case "TAR": dato="9"; break;
+            case "TDD": dato="11"; break;
+            case "VIA": dato="12"; break;
+            case "SCZ": dato="7"; break;
+            default: dato="NINGUNO"; break;
+        }
+        return dato;
+    }
     public static String porcentaje(String x2) {
         double doble = Double.parseDouble(x2);
         DecimalFormat df = new DecimalFormat("#.##");

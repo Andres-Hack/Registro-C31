@@ -28,12 +28,17 @@
                                         String consulta = null, consulta1 = null, consulta2 = null, consulta3 = null, consulta4 = null, consulta5 = null, consulta6 = null
                                              , consulta7 = null, consulta8 = null, consulta9 = null, consulta10 = null, consulta11 = null, consulta12 = null,
                                                consulta13 = null, consulta14 = null;
+                                        String consulta_comp_total =null;
+                                        String variable01 = null;
+                                        int sw = 0;
+                                                
                                         String gestion = request.getParameter("gestion");
                                         String gamuep = request.getParameter("Gamuep");
                                         String cambio = request.getParameter("cambio");
                                         String estado = null, valor1 = null;
                                         float dd = 0; float dd1 = 0; float dd2 = 0, dd3 = 0, dd4 = 0, dd5 = 0, dd6 = 0,
                                               dd7 = 0, dd8 = 0, dd9 = 0, dd10 = 0, dd11 = 0, dd12 = 0, dd13 = 0, dd14 = 0;
+                                        float total_comp = 0;
 
                                         Connection con = DBConexion.IniciarSesion();
                                         DecimalFormat formatea = new DecimalFormat("###,###.##");
@@ -41,47 +46,49 @@
                                         if (cambio != null) {
                                             estado = "importe_usd";
                                             valor1 = "$us";
+                                            variable01="sum(monto_usd_bid)+sum(monto_usd_ctr)";
                                         }
                                         else{
                                             estado = "importe";
                                             valor1 = "Bs";
+                                            variable01="sum(monto_bs_bid)+sum(monto_bs_ctr)";
                                         }
-                                        String consulta01="select ROUND(sum(monto_bs_bid), 2) as total where id >= 1 ";
-                                        String consulta02="select ROUND(sum(monto_bs_ctr), 2) as total where id >= 1 ";
-                                        String consulta03="select ROUND(sum(monto_bs_bid)+sum(monto_bs_ctr), 2)  as total where id >= 1 ";
                                         consulta = "SELECT SUM("+estado+") as total FROM tabla_c31 where id >= 1 ";
-                                        
-                                        
                                         if (gestion != "") {                                                    
                                             consulta += " and gestion='"+gestion+"' ";   
-                                            consulta01 += " and gestion='"+gestion+"' ";
-                                            consulta02 += " and gestion='"+gestion+"' ";
-                                            consulta03 += " and gestion='"+gestion+"' ";
                                         }
                                         if (gamuep != "") {
                                            consulta += " and gam_uep='"+gamuep+"' ";
-                                           consulta01 += " and gam='"+gamuep+"' ";
-                                           consulta02 += " and gam='"+gamuep+"' ";
-                                           consulta03 += " and gam='"+gamuep+"' ";                                           
+                                           sw = 1; // si el sw es 1 entonces hay gastos comunes
                                         }
+                                        
+                                        
+                                        consulta_comp_total = "select ("+variable01+") as total from detalle_c31 where gestion='"+gestion+"' and gam='"+gamuep+"'";
                                         
                                         ResultSet rs = null, rs1 = null, rs2 = null, rs3 = null, rs4 = null, rs5 = null, rs6 = null,
                                                   rs7 = null, rs8 = null, rs9 = null, rs10 = null, rs11 = null, rs12 = null, rs13 = null, rs14 = null,
-                                                    rs01=null,rs02=null,rs03=null;
+                                                rs_comp_total=null;
                                         PreparedStatement pst = null, pst1 = null, pst2 = null, pst3 = null, pst4 = null, pst5 = null, pst6 = null,
                                                           pst7 = null, pst8 = null, pst9 = null, pst10 = null, pst11 = null, pst12 = null, pst13 = null,
-                                                pst14 = null, pst01 = null, pst02 = null, pst03 = null;
+                                                pst14 = null, ps_comp_total=null;
                                         
                                         pst = con.prepareStatement(consulta);
-                                        rs = pst.executeQuery();                                             
+                                        rs = pst.executeQuery(); 
+                                        if(sw==1){
+                                            ps_comp_total = con.prepareStatement(consulta_comp_total);
+                                            rs_comp_total = ps_comp_total.executeQuery();
+                                            while (rs_comp_total.next()) {                                                
+                                                total_comp = rs_comp_total.getFloat("total");
+                                            }
+                                        }
                                         
-                                                                             
                                         while (rs.next()) {                                                
                                                 dd = rs.getFloat("total");
                                         }
-                                         
-                                        String oop = formatea.format(dd); 
-                                        System.out.println(oop);  
+                                        
+                                        String oop = formatea.format(dd+total_comp);
+                                        System.out.println("------------------------------------");  
+                                        System.out.println("la suma de no compartido : "+dd+" y compartido : "+total_comp+" de : "+gamuep);  
                                             
                                         ///////////////////////////////////
                                         // CONSULTA DIVIDIDAS POR SUB    //
@@ -191,8 +198,8 @@
             colorByPoint: true,
             data: [{
                 name: 'TOTAL',
-                y: <%= dd %>,
-                drilldown: 'SUB-C - 2,1'
+                y: <%= dd+total_comp %>,
+                drilldown: 'TOTAL'
             }, {
                 name: 'BID',
                 y: <%= dd5 %>,
