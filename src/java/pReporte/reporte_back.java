@@ -42,7 +42,7 @@ import pModelo.DBConexion;
  *
  * @author andres
  */
-@WebServlet(name = "reporte2", urlPatterns = {"/reporte_back"})
+@WebServlet(name = "reporte_back", urlPatterns = {"/reporte_back"})
 public class reporte_back extends HttpServlet {
 
     /**
@@ -92,36 +92,33 @@ public class reporte_back extends HttpServlet {
             String gam = ListaPorcentaje.municipio(x);
             String IDgam = ListaPorcentaje.IDmunicipio(x);
             
-            String dato_subc[][] = new String[3][4];
-            String dato_act1[][] = new String[3][5];
-            String dato_act2[][] = new String[3][2];
-            String dato_act3[][] = new String[3][3];
-            String dato_act4[][] = new String[3][5];
+            String dato_subcBID[][] = new String[4][4];
+            String dato_subcCTR[][] = new String[4][4];
+            for (int i = 0; i < dato_subcBID[0].length; i++) {
+                for (int j = 0; j < dato_subcBID[0].length; j++) {
+                    dato_subcBID[i][j]="0.0";
+                    dato_subcCTR[i][j]="0.0";
+                }
+            }
             
             DecimalFormat formatea = new DecimalFormat("###,###,###.###");
-            
-            String consulta = "SELECT        c.Codigo AS Cod_Subcomp, c.Descripcion AS Subcomponente, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
-                + "FROM            Detalle AS a INNER JOIN"
-                + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN"
-                + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN"
-                + "                         Componentes AS d ON c.c_Componente = d.c_Componente INNER JOIN"
-                + "                         Periodos AS e ON a.c_Periodo = e.c_Periodo INNER JOIN"
-                + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN"
-                + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
-                + "                         Gestiones AS h ON e.Gestion = h.Gestrion "
-                + " WHERE a.c_Municipio=" + IDgam + " "
-                + " GROUP BY c.Codigo, c.Descripcion "
-                + " ORDER BY Cod_Subcomp";
-            String consulta2 = "SELECT        b.Codigo AS Cod_Activ, b.Descripcion AS Actividad, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
-                + "FROM            Detalle AS a INNER JOIN"
+            String consulta = "SELECT        c.Codigo AS Cod_Subcomp, c.Descripcion AS Subcomponente, i.Fuente, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
+                + "FROM            Detalle AS a INNER JOIN "
                 + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
                 + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
                 + "                         Componentes AS d ON c.c_Componente = d.c_Componente INNER JOIN "
                 + "                         Periodos AS e ON a.c_Periodo = e.c_Periodo INNER JOIN "
                 + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN "
                 + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
-                + "                         Gestiones AS h ON e.Gestion = h.Gestrion "
-                + " WHERE a.c_Municipio=" + IDgam + "  and ";
+                + "                         Gestiones AS h ON e.Gestion = h.Gestrion INNER JOIN "
+                + "                         Fuentes AS i ON a.c_Fuente = i.c_Fuente "
+                + "WHERE a.c_Municipio=" + IDgam + "  and c.Codigo=";
+            String consulta2 = "SELECT        b.Codigo, b.Descripcion AS Actividad "
+                + "FROM          Detalle AS a INNER JOIN "
+                + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
+                + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
+                + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio                            "
+                + "WHERE a.c_Municipio=" + IDgam + "  and b.Codigo LIKE ";
             String consulta3 = "SELECT        g.Subactividad AS Cod_Subac, g.Descripcion_Subactividad AS Subactividad, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
                 + "FROM            Detalle AS a INNER JOIN "
                 + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
@@ -132,88 +129,47 @@ public class reporte_back extends HttpServlet {
                 + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
                 + "                         Gestiones AS h ON e.Gestion = h.Gestrion "
                 + "WHERE a.c_Municipio=" + IDgam + " and g.Subactividad LIKE";
-            
-            String consultaAct1 = consulta2+" b.c_Subcomponente=1 GROUP BY b.Codigo, b.Descripcion ORDER BY Cod_Activ";
-            String consultaAct2 = consulta2+" b.c_Subcomponente=2 GROUP BY b.Codigo, b.Descripcion ORDER BY Cod_Activ";
-            String consultaAct3 = consulta2+" b.c_Subcomponente=3 GROUP BY b.Codigo, b.Descripcion ORDER BY Cod_Activ";
-            String consultaAct4 = consulta2+" b.c_Subcomponente=4 GROUP BY b.Codigo, b.Descripcion ORDER BY Cod_Activ";
-            
-            
-            Statement statement = null, statement2 = null, statement3 = null, statementSubAct=null;
-            ResultSet rs = null, rs2 = null, rs3 = null, rsSubAct=null;
-            try {
-                statement = con.createStatement();
-                rs = statement.executeQuery(consulta);
-                int sw1 = 0, sw2 = 0;
-                
-                while (rs.next()) {
-                    dato_subc[0][sw1] = rs.getString("Cod_Subcomp");
-                    dato_subc[1][sw1] = rs.getString("Subcomponente");
-                    dato_subc[2][sw1] = rs.getString("Total_bs");
-                    sw1 = sw1 + 1;
-                    if (sw1 == 4) {
-                        sw1 = 0;
-                    }
-                }                
-                statement2 = con.createStatement();
-                rs2 = statement2.executeQuery(consultaAct1);
-                while (rs2.next()) {
-                    dato_act1[0][sw2] = rs2.getString("Cod_Activ");
-                    dato_act1[1][sw2] = rs2.getString("Actividad");
-                    dato_act1[2][sw2] = rs2.getString("Total_bs");
-                    sw2 = sw2 + 1;
-                    if (sw2 == 6) {
-                        sw2 = 0;
-                    }
+            String consultaX = "SELECT        g.Subactividad AS Cod_Subac, g.Descripcion_Subactividad AS Subactividad "
+                + "FROM            Detalle AS a INNER JOIN "
+                + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
+                + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
+                + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN "
+                + "                         C31 AS g ON a.c_C31 = g.c_C31 "
+                + "WHERE a.c_Municipio=" + IDgam + " and g.Subactividad LIKE";
+
+        Statement statementBID = null, statementCTR = null, statementAct=null, statementSubAct=null;
+        ResultSet rsBID = null, rsCTR = null, rsAct=null, rsSubAct=null;
+        try {
+            for (int i = 0; i < 5; i++) {
+                int sw1 = i + 1;
+                statementBID = con.createStatement();
+                statementCTR = con.createStatement();
+                rsBID = statementBID.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 1 "
+                        + " GROUP BY c.Codigo, c.Descripcion, i.Fuente "
+                        + " ORDER BY Cod_Subcomp, i.Fuente ");
+                rsCTR = statementCTR.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 2 "
+                        + " GROUP BY c.Codigo, c.Descripcion, i.Fuente "
+                        + " ORDER BY Cod_Subcomp, i.Fuente ");
+                while (rsBID.next()) {
+                    dato_subcBID[i][0] = rsBID.getString("Cod_Subcomp");
+                    dato_subcBID[i][1] = rsBID.getString("Subcomponente");
+                    dato_subcBID[i][2] = rsBID.getString("Fuente");
+                    dato_subcBID[i][3] = rsBID.getString("Total_bs");
                 }
-                sw2 = 0;
-                statement3 = con.createStatement();
-                rs3 = statement3.executeQuery(consultaAct2);
-                while (rs3.next()) {
-                    dato_act2[0][sw2] = rs3.getString("Cod_Activ");
-                    dato_act2[1][sw2] = rs3.getString("Actividad");
-                    dato_act2[2][sw2] = rs3.getString("Total_bs");
-                    sw2 = sw2 + 1;
-                    if (sw2 == 6) {
-                        sw2 = 0;
-                    }
+                while (rsCTR.next()) {
+                    dato_subcCTR[i][0] = rsCTR.getString("Cod_Subcomp");
+                    dato_subcCTR[i][1] = rsCTR.getString("Subcomponente");
+                    dato_subcCTR[i][2] = rsCTR.getString("Fuente");
+                    dato_subcCTR[i][3] = rsCTR.getString("Total_bs");
                 }
-                //System.out.println(consultaAct2);
-                rs2.close();
-                statement2.close();
-                sw2 = 0;
-                statement2 = con.createStatement();
-                rs2 = statement2.executeQuery(consultaAct3);
-                while (rs2.next()) {
-                    dato_act3[0][sw2] = rs2.getString("Cod_Activ");
-                    dato_act3[1][sw2] = rs2.getString("Actividad");
-                    dato_act3[2][sw2] = rs2.getString("Total_bs");
-                    sw2 = sw2 + 1;
-                    if (sw2 == 6) {
-                        sw2 = 0;
-                    }
-                }
-                rs2.close();
-                statement2.close();
-                sw2 = 0;
-                statement2 = con.createStatement();
-                rs2 = statement2.executeQuery(consultaAct4);
-                while (rs2.next()) {
-                    dato_act4[0][sw2] = rs2.getString("Cod_Activ");
-                    dato_act4[1][sw2] = rs2.getString("Actividad");
-                    dato_act4[2][sw2] = rs2.getString("Total_bs");
-                    sw2 = sw2 + 1;
-                    if (sw2 == 6) {
-                        sw2 = 0;
-                    }
-                }
-                rs2.close();
-                statement2.close();
-                rs.close();
-                statement.close();
-            } catch (SQLException ex) {
-                System.out.println("error : " + ex);
             }
+            
+
+        } catch (SQLException ex) {
+            System.out.println("error : " + ex);
+        }
+        
+        
             
          Date date = new Date();
          DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -331,131 +287,187 @@ public class reporte_back extends HttpServlet {
              tablesup.addCell(new Paragraph("SUBCOMPONENTE / ACTIVIDAD / SUBACTIVIDAD", fuenteTitulo));
              tablesup.addCell(new Paragraph("MONTO EN BID", fuenteTitulo));
              tablesup.addCell(new Paragraph("MONTO EN CTR", fuenteTitulo));
-             tablesup.addCell(new Paragraph("TOTAL", fuenteTitulo));
+             tablesup.addCell(new Paragraph("TOTAL", fuenteTitulo));   
+             /********************* SUB COMPONENTE 2,1 ******************************/
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.setHorizontalAlignment(Element.ALIGN_LEFT);             
-             tablesup.addCell(new Paragraph(dato_subc[0][0]+" "+dato_subc[1][0], subtotales));
+             tablesup.addCell(new Paragraph(dato_subcBID[0][0]+" "+dato_subcBID[0][1], subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[0][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])+Double.parseDouble(dato_subcCTR[0][3])), subtotales));
+             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+             try {
+                 Connection cox = DBConexion.IniciarSesion();
+                 statementAct = con.createStatement();
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[0][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 while (rsAct.next()) {
+                     String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 
+                     String BID = Consultas.MontoActividadBID(IDgam, dato1);
+                     String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
+                     tablesup.getDefaultCell().setBackgroundColor(color_actividad);
+                     tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     cox.close();
+                     try {
+                         Connection cox2 = DBConexion.IniciarSesion();
+                         statementSubAct = con.createStatement();
+                         rsSubAct = statementSubAct.executeQuery(consultaX + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac, g.Descripcion_Subactividad ");
+                         while (rsSubAct.next()) {/*
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
+                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             cox2.close();*/
+                         }
+                     } catch (SQLException ex) {
+                         System.out.println("error : " + ex);
+                     }
+                 }
+             } catch (SQLException ex) {
+                 System.out.println("ERROR ACTIVIDAD : " + ex);
+             }     
+             /********************* SUB COMPONENTE 2,2 ******************************/
+             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
+             tablesup.addCell(new Paragraph(dato_subcBID[1][0]+" "+dato_subcBID[1][1], subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[1][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])+Double.parseDouble(dato_subcCTR[1][3])), subtotales));
+             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+             try {
+                 Connection cox = DBConexion.IniciarSesion();
+                 statementAct = con.createStatement();
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[1][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 while (rsAct.next()) {
+                     String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 
+                     String BID = Consultas.MontoActividadBID(IDgam, dato1);
+                     String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
+                     tablesup.getDefaultCell().setBackgroundColor(color_actividad);
+                     tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     cox.close();
+                     try {
+                         Connection cox2 = DBConexion.IniciarSesion();
+                         statementSubAct = con.createStatement();
+                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
+                         while (rsSubAct.next()) {/*
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
+                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             cox2.close();*/
+                         }
+                     } catch (SQLException ex) {
+                         System.out.println("error : " + ex);
+                     }
+                 }
+             } catch (SQLException ex) {
+                 System.out.println("error : " + ex);
+             }        
+             /********************* SUB COMPONENTE 2,3 ******************************/
+             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
+             tablesup.addCell(new Paragraph(dato_subcBID[2][0]+" "+dato_subcBID[2][1], subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[2][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])+Double.parseDouble(dato_subcCTR[2][3])), subtotales));
+             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+             try {
+                 Connection cox = DBConexion.IniciarSesion();
+                 statementAct = con.createStatement();
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[2][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 while (rsAct.next()) {
+                     String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 
+                     String BID = Consultas.MontoActividadBID(IDgam, dato1);
+                     String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
+                     tablesup.getDefaultCell().setBackgroundColor(color_actividad);
+                     tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     cox.close();
+                     try {
+                         Connection cox2 = DBConexion.IniciarSesion();
+                         statementSubAct = con.createStatement();
+                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
+                         while (rsSubAct.next()) {/*
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
+                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             cox2.close();*/
+                         }
+                     } catch (SQLException ex) {
+                         System.out.println("error : " + ex);
+                     }
+                 }
+             } catch (SQLException ex) {
+                 System.out.println("error : " + ex);
+             }
+             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
+             tablesup.setHorizontalAlignment(Element.ALIGN_LEFT);       
+             /********************* SUB COMPONENTE 2,4 ******************************/
+             tablesup.addCell(new Paragraph(dato_subcBID[3][0]+" "+dato_subcBID[3][1], subtotales));
              tablesup.setHorizontalAlignment(Element.ALIGN_RIGHT);
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subc[2][0])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[3][3])), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])+Double.parseDouble(dato_subcCTR[3][3])), subtotales));
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-             for (int i = 0; i < dato_act1[0].length; i++) {
-                 tablesup.getDefaultCell().setBackgroundColor(color_actividad);
-                 tablesup.addCell(new Paragraph("    "+dato_act1[1][i], actividad));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_act1[2][i])), montos));
-                 try {
-                     Connection cox = DBConexion.IniciarSesion();
-                     statementSubAct = con.createStatement();
-                     rsSubAct = statementSubAct.executeQuery(consulta3+" '"+dato_act1[0][i]+"%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
-                     while (rsSubAct.next()) {
-                         tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                         tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(rsSubAct.getString("Total_bs"))), montos));
-                         cox.close();
+             try {
+                 Connection cox = DBConexion.IniciarSesion();
+                 statementAct = con.createStatement();
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[3][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 System.out.println("");
+                 while (rsAct.next()) {
+                     String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 
+                     String BID = Consultas.MontoActividadBID(IDgam, dato1);
+                     String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
+                     tablesup.getDefaultCell().setBackgroundColor(color_actividad);
+                     tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     cox.close();
+                     try {
+                         Connection cox2 = DBConexion.IniciarSesion();
+                         statementSubAct = con.createStatement();
+                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
+                         while (rsSubAct.next()) {/*
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
+                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             cox2.close();*/
+                         }
+                     } catch (SQLException ex) {
+                         System.out.println("error : " + ex);
                      }
-                 } catch (SQLException ex) {
-                     System.out.println("error : " + ex);
                  }
-             }         
+             } catch (SQLException ex) {
+                 System.out.println("error : " + ex);
+             }
+             /********************* MONTOS TOTALES ******************************/
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subc[0][1]+" "+dato_subc[1][1], subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subc[2][1])), subtotales));
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-             for (int i = 0; i < dato_act2[0].length; i++) {
-                 tablesup.getDefaultCell().setBackgroundColor(color_actividad);
-                 tablesup.addCell(new Paragraph("    "+dato_act2[1][i], actividad));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_act2[2][i])), montos));
-                 try {
-                     Connection cox = DBConexion.IniciarSesion();
-                     statementSubAct = con.createStatement();
-                     rsSubAct = statementSubAct.executeQuery(consulta3+" '"+dato_act2[0][i]+"%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
-                     while (rsSubAct.next()) {
-                         tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                         tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(rsSubAct.getString("Total_bs"))), montos));
-                         cox.close();
-                     }
-                 } catch (SQLException ex) {
-                     System.out.println("error : " + ex);
-                 }
-                 
-             }         
-             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subc[0][2]+" "+dato_subc[1][2], subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subc[2][2])), subtotales));
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-             for (int i = 0; i < dato_act3[0].length; i++) {
-                 tablesup.getDefaultCell().setBackgroundColor(color_actividad);
-                 tablesup.addCell(new Paragraph("    "+dato_act3[1][i], actividad));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_act3[2][i])), montos));
-                 try {
-                     Connection cox = DBConexion.IniciarSesion();
-                     statementSubAct = con.createStatement();
-                     rsSubAct = statementSubAct.executeQuery(consulta3+" '"+dato_act3[0][i]+"%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
-                     while (rsSubAct.next()) {
-                         tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                         tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(rsSubAct.getString("Total_bs"))), montos));
-                         cox.close();
-                     }
-                 } catch (SQLException ex) {
-                     System.out.println("error : " + ex);
-                 }
-                 
-             }            
-             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subc[0][3]+" "+dato_subc[1][3], subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subc[2][3])), subtotales));
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-             for (int i = 0; i < dato_act4[0].length; i++) {
-                 tablesup.getDefaultCell().setBackgroundColor(color_actividad);
-                 tablesup.addCell(new Paragraph("    "+dato_act4[1][i], actividad));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph("0.0", montos));
-                 tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_act4[2][i])), montos));
-                 try {
-                     Connection cox = DBConexion.IniciarSesion();
-                     statementSubAct = con.createStatement();
-                     rsSubAct = statementSubAct.executeQuery(consulta3+" '"+dato_act4[0][i]+"%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
-                     while (rsSubAct.next()) {
-                         tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                         tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph("0.0", montos));
-                         tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(rsSubAct.getString("Total_bs"))), montos));
-                         cox.close();
-                     }
-                 } catch (SQLException ex) {
-                     System.out.println("error : " + ex);
-                 }
-                 
-             }            
-             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             double suma_subc = Double.parseDouble(dato_subc[2][0])+Double.parseDouble(dato_subc[2][1])+Double.parseDouble(dato_subc[2][2])+Double.parseDouble(dato_subc[2][3]);
+             double suma_bid = Double.parseDouble(dato_subcBID[0][3])+Double.parseDouble(dato_subcBID[1][3])+Double.parseDouble(dato_subcBID[2][3])+Double.parseDouble(dato_subcBID[3][3]);
+             double suma_ctr = Double.parseDouble(dato_subcCTR[0][3])+Double.parseDouble(dato_subcCTR[1][3])+Double.parseDouble(dato_subcCTR[2][3])+Double.parseDouble(dato_subcCTR[3][3]);
              tablesup.addCell(new Paragraph("TOTAL GENERAL", fuente));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph("0.0", subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(suma_subc), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(suma_bid), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(suma_ctr), subtotales));
+             tablesup.addCell(new Paragraph(formatea.format(suma_bid+suma_ctr), subtotales));
 
              documento.add(tablesup);
              

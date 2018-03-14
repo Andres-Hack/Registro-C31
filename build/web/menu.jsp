@@ -42,12 +42,6 @@
                     </a>
               </li>
               <li>
-                    <a href="http://10.0.6.183:8084/registroC31/modificar.jsp" class="">
-                      <div class="gui-icon"><span class="glyphicon glyphicon-refresh"></span></div>
-                      <span class="title">Modificar</span>
-                    </a>
-              </li>
-              <li>
                     <a href="http://10.0.6.183:8084/registroC31/caratula.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-ban-circle"></span></div>
                       <span class="title">Salir</span>

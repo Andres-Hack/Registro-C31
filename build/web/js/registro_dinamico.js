@@ -7,7 +7,7 @@
 var app = angular.module('myApp', []);
 
 app.controller('myCtrl1', function($scope, $http) {
-
+    $scope.saludo = "HOLA MUNDOOOOOO";
     $scope.bolivianos = 0;
     $scope.dato1 = false;
     $scope.operacion = 2;

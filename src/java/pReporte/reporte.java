@@ -71,54 +71,31 @@ public class reporte extends HttpServlet {
             Connection con = DBConexion.IniciarSesion();
             
             consulta = "select * from tabla_c31 where id >= '1'";
-            consulta2 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= '1'";
-            consulta3 = "select ROUND(SUM(importe_usd), 2) total from tabla_c31 where id >= '1'";
             
             if (partida != "") {
                 consulta += " and partida = '"+partida+"'";
-                consulta2 += " and partida = '"+partida+"'";
-                consulta3 += " and partida = '"+partida+"'";
             }
             if (subc != "") {
                 consulta += " and subc = '"+subc+"'";
                 consulta2 += " and subc = '"+subc+"'";
-                consulta3 += " and subc = '"+subc+"'";
             }
             if (municipio != "") {
                 consulta += " and gam_uep = '"+municipio+"'";
-                consulta2 += " and gam_uep = '"+municipio+"'";
-                consulta3 += " and gam_uep = '"+municipio+"'";
             }
             if (suba != "") {
                 consulta += " and subact = '"+suba+"' ";
-                consulta2 += " and subact = '"+suba+"' ";
-                consulta3 += " and subact = '"+suba+"' ";
             }
             if (bid_ctr != "") {
                 consulta += " and bid_ctr = '"+bid_ctr+"' ";
-                consulta2 += " and bid_ctr = '"+bid_ctr+"' ";
-                consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
             }
             if (actividad != "") {
                 consulta += " and act = '"+actividad+"' ";
-                consulta2 += " and act = '"+actividad+"' ";
-                consulta3 += " and act = '"+actividad+"' ";
             }
-            ResultSet rs = null, rs2 = null, rs3 = null;
-            PreparedStatement pst = null, pst2 = null, pst3 = null;
+            ResultSet rs = null;
+            PreparedStatement pst = null;
             pst = con.prepareStatement(consulta);
-            pst2 = con.prepareStatement(consulta2);
-            pst3 = con.prepareStatement(consulta3);
             rs = pst.executeQuery();             
-            rs2 = pst2.executeQuery();             
-            rs3 = pst3.executeQuery();
-            while (rs2.next()) {
-                valorX = rs2.getFloat("total");
-                
-            }
-            while (rs3.next()) {
-                valorY = rs3.getFloat("total");
-            }
+
             
             Date date = new Date();
             DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

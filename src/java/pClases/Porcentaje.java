@@ -5,60 +5,51 @@ package pClases;
  * @author andres
  */
 public class Porcentaje {
-    private int id;
-    private String gestion;
-    private String gam;
-    private String subc;
-    private String porcentaje;
+    private int c_Porcentaje;
+    private int c_Municipio;
+    private int c_Periodo;
+    private double Porcentaje;
+    private double Porcentaje2;
 
-    public Porcentaje() {
-        
+    public int getC_Porcentaje() {
+        return c_Porcentaje;
     }
 
-    public int getId() {
-        return id;
+    public void setC_Porcentaje(int c_Porcentaje) {
+        this.c_Porcentaje = c_Porcentaje;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getC_Municipio() {
+        return c_Municipio;
     }
 
-    public String getGestion() {
-        return gestion;
+    public void setC_Municipio(int c_Municipio) {
+        this.c_Municipio = c_Municipio;
     }
 
-    public void setGestion(String gestion) {
-        this.gestion = gestion;
+    public int getC_Periodo() {
+        return c_Periodo;
     }
 
-    public String getGam() {
-        return gam;
+    public void setC_Periodo(int c_Periodo) {
+        this.c_Periodo = c_Periodo;
     }
 
-    public void setGam(String gam) {
-        this.gam = gam;
+    public double getPorcentaje() {
+        return Porcentaje;
     }
 
-    public String getSubc() {
-        return subc;
+    public void setPorcentaje(double Porcentaje) {
+        this.Porcentaje = Porcentaje;
     }
 
-    public void setSubc(String subc) {
-        this.subc = subc;
+    public double getPorcentaje2() {
+        return Porcentaje2;
     }
 
-    public String getPorcentaje() {
-        return porcentaje;
+    public void setPorcentaje2(double Porcentaje2) {
+        this.Porcentaje2 = Porcentaje2;
     }
 
-    public void setPorcentaje(String porcentaje) {
-        this.porcentaje = porcentaje;
-    }
-
-    public void setId() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    
     
 }

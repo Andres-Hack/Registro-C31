@@ -95,7 +95,7 @@
                                     <%
                                         String gamuep = "", subc="", partida="", suba="", bid_ctr="", actividad="";
                                         String gam="";
-                                        String consulta = null, consulta3 = null;
+                                        String consulta = null;
                                         partida = request.getParameter("partida");
                                         subc = request.getParameter("subc");
                                         gamuep = request.getParameter("txtGamuep");
@@ -105,20 +105,16 @@
                                         actividad = request.getParameter("txtAct");
 
                                         Connection con = DBConexion.IniciarSesion();
-                                        consulta = "select * from tabla_c31 where id >= 1 ";
-                                        consulta3 = "select ROUND(SUM(importe), 2) total from tabla_c31 where id >= 1 ";
+                                        consulta = "select * from C31 where c_C31 >= 1 ";
                                         
                                         if (bid_ctr != "") {
-                                            consulta += " and bid_ctr = '"+bid_ctr+"' ";
-                                            consulta3 += " and bid_ctr = '"+bid_ctr+"' ";
+                                            consulta += " and BID_CTR = '"+bid_ctr+"' ";
                                         }
                                         if (subc != "") {
-                                           consulta += " and subc = '"+subc+"'";
-                                           consulta3 += " and subc = '"+subc+"'";
+                                           consulta += " and SubComp = '"+subc+"'";
                                         }
                                         if (gamuep != "") {
-                                           consulta += " and gam_uep = '"+gamuep+"'";
-                                           consulta3 += " and gam_uep = '"+gamuep+"'";
+                                           consulta += " and GAM_UEP = '"+gamuep+"'";
                                         }
                                         if (gamuep == null) {
                                            gamuep="";
@@ -126,12 +122,10 @@
                                         ListaPorcentaje dato1 = new ListaPorcentaje();
                                         gam=dato1.municipio(gamuep);
 
-                                        ResultSet rs = null, rs3 = null;
-                                        PreparedStatement pst = null, pst3 = null;
+                                        ResultSet rs = null;
+                                        PreparedStatement pst = null;
                                         pst = con.prepareStatement(consulta);
-                                        pst3 = con.prepareStatement(consulta3);
                                         rs = pst.executeQuery();                         
-                                        rs3 = pst3.executeQuery();
                                         
                                         DecimalFormat formateador = new DecimalFormat("#,###.##");     
                                     %>
@@ -189,22 +183,22 @@
                                     </thead>
                                     <tbody>
                                         <% while(rs.next()) { 
-                                            String cadenaX = String.valueOf(formateador.format (rs.getDouble("importe")));
-                                            String cadenaX2 = String.valueOf(formateador.format (rs.getDouble("importe")/6.86));
+                                            String cadenaX = String.valueOf(formateador.format (rs.getDouble("Importe_Bs")));
+                                            String cadenaX2 = String.valueOf(formateador.format (rs.getDouble("Importe_Bs")/6.86));
                                         %>
                                             <tr>
-                                                <td><%= rs.getString("gestion") %></td>
-                                                <td><%= rs.getString("fech_emision") %></td>
-                                                <td><%= rs.getString("fech_pago") %></td>
-                                                <td><%= rs.getString("nro_c31") %></td>
-                                                <td><%= rs.getString("concepto") %></td>
-                                                <td><%= rs.getString("partida") %></td>
-                                                <td><%= rs.getString("beneficiario") %></td>
-                                                <td><%= rs.getString("producto") %></td>
-                                                <td><%= rs.getString("descripcion") %></td>
+                                                <td><%= rs.getString("Anio_Pago") %></td>
+                                                <td><%= rs.getString("Fecha_Emision") %></td>
+                                                <td><%= rs.getString("Fecha_Pago") %></td>
+                                                <td><%= rs.getString("Mes_Dev") %></td>
+                                                <td><%= rs.getString("Concepto") %></td>
+                                                <td><%= rs.getString("Partida") %></td>
+                                                <td><%= rs.getString("Beneficiario") %></td>
+                                                <td><%= rs.getString("Producto") %></td>
+                                                <td><%= rs.getString("Descripcion") %></td>
                                                 <td><%= cadenaX %></td>
                                                 <td><%= cadenaX2 %></td>
-                                                <td><%= rs.getString("bid_ctr") %></td>
+                                                <td><%= rs.getString("BID_CTR") %></td>
                                             </tr>
                                         <% }%>
                                     </tbody>

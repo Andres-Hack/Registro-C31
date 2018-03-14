@@ -19,6 +19,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <%@ include file="/EstilosJS.jsp"  %> 
     <%@ include file="/estadisticas.jsp"  %> 
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/yahoo/pure-release/v0.6.0/pure-min.css">
+    <link rel="stylesheet" href="./css/auto-complete.css">
+    
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    
+    <script type="text/javascript" src="./js/alertify.js"></script>
+    <link rel="stylesheet" href="./css/alertify.core.css" />
+    <link rel="stylesheet" href="./css/alertify.default.css" />
 
 
 </head>
@@ -31,9 +43,6 @@
     <div id="content">
         <section class="bg1">
             <div class="section-body">
-                <div class="row">
-                <%@ include file="/baner.jsp"  %> 
-
                 <div class="row">
                     <div class="col-md-6">
                          <div class="card card-underline">
@@ -63,10 +72,8 @@
                                 </div>
                             </div></div><div class="nano-pane" style="display: none;"><div class"nano-slider" style="height: 425px; transform: translate(0px, 0px);"></div></div></div>
                         </div>
-                    </div>
-                    
+                    </div>                    
                 </div>
-            </div>
         </div></section>
     </div>
     <%@ include file="/menu.jsp"  %> 

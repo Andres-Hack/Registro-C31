@@ -37,6 +37,8 @@ public class Registro {
     private String Importe_Us;
     private int Periodo ;
     private int Distribuible;
+    private String Hoja_Ruta;
+    private String Nro_Factura;
 
     public int getC_C31() {
         return c_C31;
@@ -270,8 +272,6 @@ public class Registro {
         this.Importe_Us = Importe_Us;
     }
 
-    
-
     public int getPeriodo() {
         return Periodo;
     }
@@ -287,7 +287,21 @@ public class Registro {
     public void setDistribuible(int Distribuible) {
         this.Distribuible = Distribuible;
     }
-    
-    
-    
+
+    public String getHoja_Ruta() {
+        return Hoja_Ruta;
+    }
+
+    public void setHoja_Ruta(String Hoja_Ruta) {
+        this.Hoja_Ruta = Hoja_Ruta;
+    }
+
+    public String getNro_Factura() {
+        return Nro_Factura;
+    }
+
+    public void setNro_Factura(String Nro_Factura) {
+        this.Nro_Factura = Nro_Factura;
+    }
+
 }

@@ -1,4 +1,3 @@
-
 <%@page import="pReporte.Consultas"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.logging.Logger"%>
@@ -27,7 +26,7 @@
                                 <div class="section-body">
                                     <div class="row">
                                        <div class="col-md-12">
-                                        <div class="card card-underline">
+                                        <div class="card card-underline" ng-controller="myCtrl1">
                                             <center>
                                                 <p class="bg-danger">La Pagina esta en Mantenimiento ......</p>
                                                 <img src="./img/pc.gif" height="400" width="500" >
@@ -109,12 +108,8 @@
                                                         //while (rs2.next()) { num1 = rs2.getString("total"); }
                                                        
                                                         */
-                                                        
-                                                            String Data = Consultas.MontoSubActividad("1", "2,1,1,1", "2");
-                                                            System.out.println("DATO : "+Data);
-                                                            
-
                                                     %>
+                                                    
                                             </center>
                                             </div>
                                         </div>    

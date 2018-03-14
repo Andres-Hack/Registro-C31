@@ -12,8 +12,11 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.ZapfDingbatsList;
 import com.itextpdf.text.html.WebColors;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -30,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Cell;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -101,7 +105,7 @@ public class reporte2 extends HttpServlet {
                 }
             }
             
-            DecimalFormat formatea = new DecimalFormat("###,###,###.###");
+            DecimalFormat formatea = new DecimalFormat("###,###,###");
             String consulta = "SELECT        c.Codigo AS Cod_Subcomp, c.Descripcion AS Subcomponente, i.Fuente, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
                 + "FROM            Detalle AS a INNER JOIN "
                 + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
@@ -119,7 +123,7 @@ public class reporte2 extends HttpServlet {
                 + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
                 + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio                            "
                 + "WHERE a.c_Municipio=" + IDgam + "  and b.Codigo LIKE ";
-            String consulta3 = "SELECT        g.Subactividad AS Cod_Subac, g.Descripcion_Subactividad AS Subactividad, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
+            String consulta3 = "SELECT        b.Codigo AS Cod_Activ, b.Descripcion AS Actividad, g.Producto AS Producto, g.BID_CTR, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs  "
                 + "FROM            Detalle AS a INNER JOIN "
                 + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
                 + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
@@ -127,15 +131,9 @@ public class reporte2 extends HttpServlet {
                 + "                         Periodos AS e ON a.c_Periodo = e.c_Periodo INNER JOIN "
                 + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN "
                 + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
-                + "                         Gestiones AS h ON e.Gestion = h.Gestrion "
-                + "WHERE a.c_Municipio=" + IDgam + " and g.Subactividad LIKE";
-            String consultaX = "SELECT        g.Subactividad AS Cod_Subac, g.Descripcion_Subactividad AS Subactividad "
-                + "FROM            Detalle AS a INNER JOIN "
-                + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
-                + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
-                + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN "
-                + "                         C31 AS g ON a.c_C31 = g.c_C31 "
-                + "WHERE a.c_Municipio=" + IDgam + " and g.Subactividad LIKE";
+                + "                         Gestiones AS h ON e.Gestion = h.Gestrion INNER JOIN "
+                + "                         Fuentes AS i ON a.c_Fuente = i.c_Fuente "
+                + "WHERE a.c_Municipio=" + IDgam + " and g.Subactividad LIKE ";
 
         Statement statementBID = null, statementCTR = null, statementAct=null, statementSubAct=null;
         ResultSet rsBID = null, rsCTR = null, rsAct=null, rsSubAct=null;
@@ -185,7 +183,7 @@ public class reporte2 extends HttpServlet {
              
              Image image = Image.getInstance("fotoDJ.png");
              image.scaleAbsolute(0f, 0f);
-
+             
              PdfPTable table = new PdfPTable(1);
              PdfPCell cell = new PdfPCell(image);
              table.addCell(cell);
@@ -202,6 +200,7 @@ public class reporte2 extends HttpServlet {
              Font montos= new Font();
              actividad.setSize(6);
              actividad.setFamily("COURIER");
+             actividad.setStyle(Font.BOLD);
              fuenteTitulo.setSize(8);
              fuenteTitulo.setStyle(Font.BOLD);
              fuenteTitulo.setStyle(PdfPCell.ALIGN_CENTER);
@@ -260,7 +259,7 @@ public class reporte2 extends HttpServlet {
              titulo.setAlignment(Paragraph.ALIGN_CENTER);
              titulo.setFont(FontFactory.getFont("Times New Roman", 14, Font.ITALIC, BaseColor.BLACK));
              titulo.add("DETALLE DE GASTOS PMGM CII CON CARGO");
-             titulo.add("AL GOBIERNO MUNICIPAL DE " + gam);
+             titulo.add(" AL GOBIERNO MUNICIPAL DE " + gam);
              documento.add(titulo);
              Paragraph titulo2 = new Paragraph();
              titulo2.setAlignment(Paragraph.ALIGN_CENTER);
@@ -284,17 +283,24 @@ public class reporte2 extends HttpServlet {
              tablesup.setWidthPercentage(100);
              tablesup.getDefaultCell().setBackgroundColor(cabecera);
              tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-             tablesup.addCell(new Paragraph("SUBCOMPONENTE / ACTIVIDAD / SUBACTIVIDAD", fuenteTitulo));
-             tablesup.addCell(new Paragraph("MONTO EN BID", fuenteTitulo));
-             tablesup.addCell(new Paragraph("MONTO EN CTR", fuenteTitulo));
+             tablesup.addCell(new Paragraph("SUBCOMPONENTE / ACTIVIDAD / PRODUCTO", fuenteTitulo));
+             tablesup.addCell(new Paragraph("MONTO BID", fuenteTitulo));
+             tablesup.addCell(new Paragraph("MONTO CTR", fuenteTitulo));
              tablesup.addCell(new Paragraph("TOTAL", fuenteTitulo));   
              /********************* SUB COMPONENTE 2,1 ******************************/
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              tablesup.addCell(new Paragraph(dato_subcBID[0][0]+" "+dato_subcBID[0][1], subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[0][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])+Double.parseDouble(dato_subcCTR[0][3])), subtotales));
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+             PdfPCell celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])), subtotales));
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[0][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])+Double.parseDouble(dato_subcCTR[0][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
              try {
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
@@ -304,23 +310,45 @@ public class reporte2 extends HttpServlet {
                      String BID = Consultas.MontoActividadBID(IDgam, dato1);
                      String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
                      tablesup.getDefaultCell().setBackgroundColor(color_actividad);
-                     tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));                   
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
                      cox.close();
                      try {
                          Connection cox2 = DBConexion.IniciarSesion();
                          statementSubAct = con.createStatement();
-                         rsSubAct = statementSubAct.executeQuery(consultaX + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac, g.Descripcion_Subactividad ");
+                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY b.Codigo, b.Descripcion, g.Producto, g.BID_CTR ORDER BY Cod_Activ, g.BID_CTR ");
                          while (rsSubAct.next()) {
-                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
-                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
-                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "1", rsSubAct.getString("Producto"));
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "2", rsSubAct.getString("Producto"));
+                             
+                             if (!DataBID.equals("0.0") || !DataCTR.equals("0.0")) {
+                                 celda = new PdfPCell(new Paragraph("        " + rsSubAct.getString("Producto"), montos));
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID) + Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);                                 
+                             }
                              cox2.close();
                          }
                      } catch (SQLException ex) {
@@ -333,10 +361,18 @@ public class reporte2 extends HttpServlet {
              /********************* SUB COMPONENTE 2,2 ******************************/
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              tablesup.addCell(new Paragraph(dato_subcBID[1][0]+" "+dato_subcBID[1][1], subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[1][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])+Double.parseDouble(dato_subcCTR[1][3])), subtotales));
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[1][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])+Double.parseDouble(dato_subcCTR[1][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
              try {
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
@@ -347,22 +383,42 @@ public class reporte2 extends HttpServlet {
                      String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
                      tablesup.getDefaultCell().setBackgroundColor(color_actividad);
                      tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
                      cox.close();
                      try {
                          Connection cox2 = DBConexion.IniciarSesion();
                          statementSubAct = con.createStatement();
-                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
+                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY b.Codigo, b.Descripcion, g.Producto, g.BID_CTR ORDER BY Cod_Activ, g.BID_CTR ");
                          while (rsSubAct.next()) {
-                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
-                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
-                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "1", rsSubAct.getString("Producto"));
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "2", rsSubAct.getString("Producto"));
+                             if (!DataBID.equals("0.0") || !DataCTR.equals("0.0")) {
+                                 tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Producto"), montos));
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID) + Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                             }
                              cox2.close();
                          }
                      } catch (SQLException ex) {
@@ -375,10 +431,18 @@ public class reporte2 extends HttpServlet {
              /********************* SUB COMPONENTE 2,3 ******************************/
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              tablesup.addCell(new Paragraph(dato_subcBID[2][0]+" "+dato_subcBID[2][1], subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[2][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])+Double.parseDouble(dato_subcCTR[2][3])), subtotales));
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[2][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])+Double.parseDouble(dato_subcCTR[2][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
              try {
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
@@ -389,22 +453,42 @@ public class reporte2 extends HttpServlet {
                      String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
                      tablesup.getDefaultCell().setBackgroundColor(color_actividad);
                      tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
                      cox.close();
                      try {
                          Connection cox2 = DBConexion.IniciarSesion();
                          statementSubAct = con.createStatement();
-                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
+                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY b.Codigo, b.Descripcion, g.Producto, g.BID_CTR ORDER BY Cod_Activ, g.BID_CTR ");
                          while (rsSubAct.next()) {
-                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
-                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
-                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "1", rsSubAct.getString("Producto"));
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "2", rsSubAct.getString("Producto"));
+                             if (!DataBID.equals("0.0") || !DataCTR.equals("0.0")) {
+                                 tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Producto"), montos));
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID) + Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                             }
                              cox2.close();
                          }
                      } catch (SQLException ex) {
@@ -418,12 +502,18 @@ public class reporte2 extends HttpServlet {
              tablesup.setHorizontalAlignment(Element.ALIGN_LEFT);       
              /********************* SUB COMPONENTE 2,4 ******************************/
              tablesup.addCell(new Paragraph(dato_subcBID[3][0]+" "+dato_subcBID[3][1], subtotales));
-             tablesup.setHorizontalAlignment(Element.ALIGN_RIGHT);
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[3][3])), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])+Double.parseDouble(dato_subcCTR[3][3])), subtotales));
-             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcCTR[3][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])+Double.parseDouble(dato_subcCTR[3][3])), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
              try {
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
@@ -435,22 +525,43 @@ public class reporte2 extends HttpServlet {
                      String CTR = Consultas.MontoActividadCTR(IDgam, dato1);                     
                      tablesup.getDefaultCell().setBackgroundColor(color_actividad);
                      tablesup.addCell(new Paragraph("    " + rsAct.getString("Actividad"), actividad));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
-                     tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
+                     celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(BID)+Double.parseDouble(CTR)), montos));
+                     celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                     celda.setBackgroundColor(color_actividad);
+                     tablesup.addCell(celda);
                      cox.close();
                      try {
                          Connection cox2 = DBConexion.IniciarSesion();
                          statementSubAct = con.createStatement();
-                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY g.Subactividad, g.Descripcion_Subactividad ORDER BY Cod_Subac ");
+                         rsSubAct = statementSubAct.executeQuery(consulta3 + " '" + rsAct.getString("Codigo") + "%' GROUP BY b.Codigo, b.Descripcion, g.Producto, g.BID_CTR ORDER BY Cod_Activ, g.BID_CTR ");
                          while (rsSubAct.next()) {
-                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "1");
-                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Subac"), "2");
-                             tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
-                             tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Subactividad"), actividad));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
-                             tablesup.addCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)+Double.parseDouble(DataCTR)), montos));
+                             String DataBID = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "1", rsSubAct.getString("Producto"));
+                             String DataCTR = Consultas.MontoSubActividad(IDgam, rsSubAct.getString("Cod_Activ"), "2", rsSubAct.getString("Producto"));
+                             if (!DataBID.equals("0.0") || !DataCTR.equals("0.0")) {
+                                 tablesup.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(new Paragraph("        " + rsSubAct.getString("Producto"), montos));
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                                 celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(DataBID) + Double.parseDouble(DataCTR)), montos));
+                                 celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                                 celda.setBackgroundColor(BaseColor.WHITE);
+                                 tablesup.addCell(celda);
+                             }
+                             
                              cox2.close();
                          }
                      } catch (SQLException ex) {
@@ -465,9 +576,18 @@ public class reporte2 extends HttpServlet {
              double suma_bid = Double.parseDouble(dato_subcBID[0][3])+Double.parseDouble(dato_subcBID[1][3])+Double.parseDouble(dato_subcBID[2][3])+Double.parseDouble(dato_subcBID[3][3]);
              double suma_ctr = Double.parseDouble(dato_subcCTR[0][3])+Double.parseDouble(dato_subcCTR[1][3])+Double.parseDouble(dato_subcCTR[2][3])+Double.parseDouble(dato_subcCTR[3][3]);
              tablesup.addCell(new Paragraph("TOTAL GENERAL", fuente));
-             tablesup.addCell(new Paragraph(formatea.format(suma_bid), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(suma_ctr), subtotales));
-             tablesup.addCell(new Paragraph(formatea.format(suma_bid+suma_ctr), subtotales));
+             celda = new PdfPCell(new Paragraph(formatea.format(suma_bid), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(suma_ctr), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
+             celda = new PdfPCell(new Paragraph(formatea.format(suma_bid+suma_ctr), subtotales));
+             celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
+             celda.setBackgroundColor(color_subcomponente);
+             tablesup.addCell(celda);
 
              documento.add(tablesup);
              

@@ -90,7 +90,7 @@
                                           <div class="panel panel-primary">
                                               <div class="panel-heading">
                                                   <span class="glyphicon glyphicon-stats"></span>
-                                                  GRAFICO ESTADISTICO DEL MUNICIPIO DE <c:out value="${datos[18]}"/>
+                                                  GRAFICO ESTADISTICO DEL MUNICIPIO DE <c:out value="${labels[1]}"/>
                                               </div>
                                               <div class="panel-body">
                                                 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -104,7 +104,7 @@
                                           <div class="panel panel-primary">
                                               <div class="panel-heading">
                                                   <span class="glyphicon glyphicon-stats"></span>
-                                                  GRAFICO ESTADISTICO DEL MUNICIPIO DE <c:out value="${datos[18]}"/>
+                                                  GRAFICO ESTADISTICO DEL MUNICIPIO DE <c:out value="${labels[1]}"/>
                                               </div>
                                               <div class="panel-body">
                                                 <div id="container2"></div>
@@ -166,15 +166,15 @@
             allowDecimals: false,
             min: 0,
             title: {
-                text: 'Monto en <c:out value="${datos[17]}"/>'
+                text: 'Monto en  <c:out value="${labels[0]}"/>'
             }
         },
 
         tooltip: {
             formatter: function () {
                 return '<b>' + this.x + '</b><br/>' +
-                    this.series.name + ': ' + this.y + ' <c:out value="${datos[17]}"/><br/>' +
-                    'Total: ' + this.point.stackTotal+' <c:out value="${datos[17]}"/>';
+                    this.series.name + ': ' + this.y + ' <c:out value="${labels[0]}"/><br/>' +
+                    'Total: ' + this.point.stackTotal+' <c:out value="${labels[0]}"/>';
             }
         },
 
@@ -186,35 +186,35 @@
 
         series: [{
             name: '2,1 : APOYO A LA GESTION CATASTRAL Y SU INTERCONEXION CON LA ADMINISTRACION TRIBUTARIA',
-            data: [<c:out value="${datos[9]}"/>, <c:out value="${datos3[0]}"/>, <c:out value="${datos[9]}"/>-<c:out value="${datos3[0]}"/>],
+            data: [<c:out value="${totales[1]}"/>, <c:out value="${ejecutados[0]}"/>, <c:out value="${totales[1]}"/>-<c:out value="${ejecutados[0]}"/>],
             stack: 'male'
         }, {
             name: '2,2 : ADQUISICION DEL SISTEMA DE CATASTRO',
-            data: [<c:out value="${datos[11]}"/>, <c:out value="${datos3[1]}"/>,<c:out value="${datos[11]}"/>-<c:out value="${datos3[1]}"/>],
+            data: [<c:out value="${totales[4]}"/>, <c:out value="${ejecutados[1]}"/>,<c:out value="${totales[4]}"/>-<c:out value="${ejecutados[1]}"/>],
             stack: 'male'
         }, {
             name: '2,3 : CAPACITACIÓN Y DIFUSION y ASISTENCIA TECNICA',
-            data: [<c:out value="${datos[13]}"/>, <c:out value="${datos3[2]}"/>, <c:out value="${datos[13]}"/>-<c:out value="${datos3[2]}"/>],
+            data: [<c:out value="${totales[7]}"/>, <c:out value="${ejecutados[2]}"/>, <c:out value="${totales[7]}"/>-<c:out value="${ejecutados[2]}"/>],
             stack: 'male'
         }, {
             name: '2,4 : ADMINISTRACIÓN Y SUPERVISIÓN',
-            data: [<c:out value="${datos[15]}"/>, <c:out value="${datos3[3]}"/>, <c:out value="${datos[15]}"/>-<c:out value="${datos3[3]}"/>],
+            data: [<c:out value="${totales[10]}"/>, <c:out value="${ejecutados[3]}"/>, <c:out value="${totales[10]}"/>-<c:out value="${ejecutados[3]}"/>],
             stack: 'male'
         }, {
             name: '2,1 : APOYO A LA GESTION CATASTRAL Y SU INTERCONEXION CON LA ADMINISTRACION TRIBUTARIA',
-            data: [<c:out value="${datos[10]}"/>, <c:out value="${datos3[4]}"/>, <c:out value="${datos[10]}"/>-<c:out value="${datos3[4]}"/>],
+            data: [<c:out value="${totales[2]}"/>, <c:out value="${ejecutados[4]}"/>, <c:out value="${totales[2]}"/>-<c:out value="${ejecutados[4]}"/>],
             stack: 'female'
         }, {
             name: '2,2 : ADQUISICION DEL SISTEMA DE CATASTRO',
-            data: [<c:out value="${datos[12]}"/>, <c:out value="${datos3[5]}"/>, <c:out value="${datos[12]}"/>-<c:out value="${datos3[5]}"/>],
+            data: [<c:out value="${totales[5]}"/>, <c:out value="${ejecutados[5]}"/>, <c:out value="${totales[5]}"/>-<c:out value="${ejecutados[5]}"/>],
             stack: 'female'
         }, {
             name: '2,3 : CAPACITACIÓN Y DIFUSION y ASISTENCIA TECNICA',
-            data: [<c:out value="${datos[14]}"/>, <c:out value="${datos3[6]}"/>, <c:out value="${datos[14]}"/>-<c:out value="${datos3[6]}"/>],
+            data: [<c:out value="${totales[8]}"/>, <c:out value="${ejecutados[6]}"/>, <c:out value="${totales[8]}"/>-<c:out value="${ejecutados[6]}"/>],
             stack: 'female'
         }, {
             name: '2,4 : ADMINISTRACIÓN Y SUPERVISIÓN',
-            data: [<c:out value="${datos[16]}"/>, <c:out value="${datos3[7]}"/>, <c:out value="${datos[16]}"/>-<c:out value="${datos3[7]}"/>],
+            data: [<c:out value="${totales[11]}"/>, <c:out value="${ejecutados[7]}"/>, <c:out value="${totales[11]}"/>-<c:out value="${ejecutados[7]}"/>],
             stack: 'female'
         }]
     });
@@ -241,14 +241,14 @@ var chart = new Highcharts.Chart({
             allowDecimals: false,
             min: 0,
             title: {
-                text: 'Monto en <c:out value="${datos[17]}"/>'
+                text: 'Monto en <c:out value="${labels[0]}"/>'
             }
         },
 
         tooltip: {
             formatter: function () {
                 return '<b>' + this.x + '</b><br/>' +
-                    this.series.name + ': ' + this.y + ' <c:out value="${datos[17]}"/><br/>';
+                    this.series.name + ': ' + this.y + '<c:out value="${labels[0]}"/><br/>';
             }
         },
         plotOptions: {
@@ -259,15 +259,15 @@ var chart = new Highcharts.Chart({
     
     series: [{
             name: 'Monto Programado',
-            data: [<c:out value="${datos[6]}"/>],
+            data: [<c:out value="${totales[12]}"/>],
             depth: 'male'
         }, {
+            data: [<c:out value="${ejecutados[8]}"/>],
             name: 'Monto Ejecutado',
-            data: [<c:out value="${datos3[8]}"/>],
             depth: 'male'
         }, {
             name: 'Monto por Ejecutar',
-            data: [<c:out value="${datos[6]}"/>-<c:out value="${datos3[8]}"/>],
+            data: [<c:out value="${totales[12]}"/>-<c:out value="${ejecutados[8]}"/>],
             depth: 'male'
         }]
 });

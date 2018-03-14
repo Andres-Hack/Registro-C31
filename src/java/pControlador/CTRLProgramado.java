@@ -11,182 +11,111 @@ import pModelo.DBConexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import pReporte.Consultas;
 
 /**
  *
  * @author andres
  */
 @WebServlet(name = "CTRLProgramado", urlPatterns = {"/CTRLProgramado"})
-public class CTRLProgramado extends HttpServlet {
-    private Statement statement;
-    private Statement statement1;
-    private Statement statement2;
-    private Statement statement3;
-    private Statement statement4;
-    private Statement statement5;
-    private Statement statement6;
-    private Statement statement7;
-    private Statement statement8;
-    private Statement statement9;
-    private  DecimalFormat df;
-    
+public class CTRLProgramado extends HttpServlet {    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String consulta = "", consulta1A= null, consulta1B = null, consulta1 = null,
-                consulta2 = null, consulta3 = null, consulta4 = null, consulta5 = null,
-                consulta6 = null, consulta7 = null, consulta8 = null, consulta9 = null;
         String valor1;
         valor1 = "x";
-        List datos = new ArrayList(8);
-        List datos3 = new ArrayList();
-        String estado = "";
-                                        
+        List total = new ArrayList(15);
+        List label = new ArrayList(5);
+        List ejecutado = new ArrayList(10);
+
+        String dolar="1", sw="", montoTotal="";
+        String valor21BID = "", valor22BID = "", valor23BID = "", valor24BID = "";
+        String valor21CTR = "", valor22CTR = "", valor23CTR = "", valor24CTR = "";
         String gamuep = request.getParameter("Gamuep");
         String cambio = request.getParameter("cambio");
-                                       
-        Connection con = DBConexion.IniciarSesion();
+        String IDgam = ListaPorcentaje.IDmunicipio(gamuep);
+        String gam = ListaPorcentaje.municipio(gamuep);
                                         
         if (cambio != null) {
-            estado = "importe_usd";
+            sw="1";
             valor1 = "$us";
-            
+            dolar="1";                                        
         }
         else{
-            estado = "importe";
+            sw="2";
             valor1 = "Bs";
+            dolar="6.86";                                        
         }
-                                        
-        consulta = "select * from presupuesto where id >= 1 ";
-        consulta1A = "select SUM("+estado+") as total from tabla_c31 where bid_ctr='BID' ";
-        consulta1B = "select SUM("+estado+") as total from tabla_c31 where bid_ctr='CTR' ";
-        consulta1 = "select SUM("+estado+") as total from tabla_c31 where id>=1 ";
+        label.add(valor1);
+        label.add(gam);
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1=null;
+        ResultSet rs1=null;
         
-        consulta2 = consulta1A+" and subc='2,1'";
-        consulta3 = consulta1A+" and subc='2,2'";
-        consulta4 = consulta1A+" and subc='2,3'";
-        consulta5 = consulta1A+" and subc='2,4'";  
-        consulta6 = consulta1B+" and subc='2,1'";
-        consulta7 = consulta1B+" and subc='2,2'";
-        consulta8 = consulta1B+" and subc='2,3'";
-        consulta9 = consulta1B+" and subc='2,4'"; 
+        valor21BID = Consultas.MontoTotalSubc("TODO", gamuep, "BID", sw, "1");
+        valor22BID = Consultas.MontoTotalSubc("TODO", gamuep, "BID", sw, "2");
+        valor23BID = Consultas.MontoTotalSubc("TODO", gamuep, "BID", sw, "3");
+        valor24BID = Consultas.MontoTotalSubc("TODO", gamuep, "BID", sw, "4");
+        valor21CTR = Consultas.MontoTotalSubc("TODO", gamuep, "CTR", sw, "1");
+        valor22CTR = Consultas.MontoTotalSubc("TODO", gamuep, "CTR", sw, "2");
+        valor23CTR = Consultas.MontoTotalSubc("TODO", gamuep, "CTR", sw, "3");
+        valor24CTR = Consultas.MontoTotalSubc("TODO", gamuep, "CTR", sw, "4");        
+        ejecutado.add(valor21BID);
+        ejecutado.add(valor22BID);
+        ejecutado.add(valor23BID);
+        ejecutado.add(valor24BID);
+        ejecutado.add(valor21CTR);
+        ejecutado.add(valor22CTR);
+        ejecutado.add(valor23CTR);
+        ejecutado.add(valor24CTR);
+        montoTotal=String.valueOf(Double.parseDouble(valor21BID)+Double.parseDouble(valor22BID)+Double.parseDouble(valor23BID)+Double.parseDouble(valor24BID)+
+                Double.parseDouble(valor21CTR)+Double.parseDouble(valor22CTR)+Double.parseDouble(valor23CTR)+Double.parseDouble(valor24CTR));
+        ejecutado.add(montoTotal);
         
-
-        if (gamuep!=null) {
-            if (gamuep=="TODO") {
-                consulta = consulta+" and gam='"+gamuep+"' ";
-                consulta1 = consulta1+" and gam_uep='"+gamuep+"' ";
-                consulta2 = consulta2+" and gam_uep='"+gamuep+"'";
-                consulta3 = consulta3+" and gam_uep='"+gamuep+"' ";
-                consulta4 = consulta4+" and gam_uep='"+gamuep+"' ";
-                consulta5 = consulta5+" and gam_uep='"+gamuep+"' "; 
-                consulta6 = consulta6+" and gam_uep='"+gamuep+"' ";
-                consulta7 = consulta7+" and gam_uep='"+gamuep+"' ";
-                consulta8 = consulta8+" and gam_uep='"+gamuep+"' ";
-                consulta9 = consulta9+" and gam_uep='"+gamuep+"' ";
-            } else {
-                consulta = consulta+" and gam='TOTAL' ";
-                
-            }
-        }
-        System.out.println("PRIMERA CONSULTA : "+consulta);
-        System.out.println("SEGUNDA CONSULTA : "+consulta1);
-                                       
-        try {    
-            statement = con.createStatement();
+        try {
             statement1 = con.createStatement();
-            statement2 = con.createStatement();
-            statement3 = con.createStatement();
-            statement4 = con.createStatement();
-            statement5 = con.createStatement();
-            statement6 = con.createStatement();
-            statement7 = con.createStatement();
-            statement8 = con.createStatement();
-            statement9 = con.createStatement();
-            
-            ResultSet rs = statement.executeQuery(consulta);
-            ResultSet rs1 = statement1.executeQuery(consulta1);
-            ResultSet rs2 = statement2.executeQuery(consulta2);
-            ResultSet rs3 = statement3.executeQuery(consulta3);
-            ResultSet rs4 = statement4.executeQuery(consulta4);
-            ResultSet rs5 = statement5.executeQuery(consulta5);
-            ResultSet rs6 = statement6.executeQuery(consulta6);
-            ResultSet rs7 = statement7.executeQuery(consulta7);
-            ResultSet rs8 = statement8.executeQuery(consulta8);
-            ResultSet rs9 = statement9.executeQuery(consulta9);
-            
-            df = new DecimalFormat("##,###,###.##");
-            
-            while (rs2.next()) {datos3.add(rs2.getString(1));}
-            while (rs3.next()) {datos3.add(rs3.getString(1));}
-            while (rs4.next()) {datos3.add(rs4.getString(1));}
-            while (rs5.next()) {datos3.add(rs5.getString(1));}
-            while (rs6.next()) {datos3.add(rs6.getString(1));}
-            while (rs7.next()) {datos3.add(rs7.getString(1));}
-            while (rs8.next()) {datos3.add(rs8.getString(1));}
-            while (rs9.next()) {datos3.add(rs9.getString(1));}
-            while (rs1.next()) {datos3.add(rs1.getString(1));}
-            
-            while (rs.next()) {
-                datos.add(rs.getString(1));
-                datos.add(rs.getString(2));
-                if (cambio != null) {
-                    datos.add(rs.getString(3));
-                    datos.add(rs.getString(4));
-                    datos.add(rs.getString(5));
-                    datos.add(rs.getString(6));
-                    datos.add(rs.getString(7));
-                    datos.add(rs.getString(8));
-                    datos.add(rs.getString(9));
-                    datos.add(rs.getString(10));
-                    datos.add(rs.getString(11));
-                    datos.add(rs.getString(12));
-                    datos.add(rs.getString(13));
-                    datos.add(rs.getString(14));
-                    datos.add(rs.getString(15));
-                    datos.add(rs.getString(16));
-                    datos.add(rs.getString(17));
-                } else {
-                    datos.add(Float.parseFloat(rs.getString(3))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(4))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(5))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(6))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(7))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(8))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(9))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(10))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(11))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(12))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(13))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(14))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(15))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(16))*6.86);
-                    datos.add(Float.parseFloat(rs.getString(17))*6.86);
-                }
+            rs1 = statement1.executeQuery("select "
+                    + "(Subc21*"+dolar+") as dat1,"
+                    + "(Subc21BID*"+dolar+") as dat2,"
+                    + "(Subc21CTR*"+dolar+") as dat3,"
+                    + "(Subc22*"+dolar+") as dat4,"
+                    + "(Subc22BID*"+dolar+") as dat5,"
+                    + "(Subc22CTR*"+dolar+") as dat6,"
+                    + "(Subc23*"+dolar+") as dat7,"
+                    + "(Subc23BID*"+dolar+") as dat8,"
+                    + "(Subc23CTR*"+dolar+") as dat9,"
+                    + "(Subc24*"+dolar+") as dat10,"
+                    + "(Subc24BID*"+dolar+") as dat11,"
+                    + "(Subc24CTR*"+dolar+") as dat12, "
+                    + "(Total_us*"+dolar+") as Total "
+                    + "from Presupuesto where c_Municipio="+IDgam);
+            while (rs1.next()) {
+                 total.add(rs1.getString("dat1"));
+                 total.add(rs1.getString("dat2"));
+                 total.add(rs1.getString("dat3"));
+                 total.add(rs1.getString("dat4"));
+                 total.add(rs1.getString("dat5"));
+                 total.add(rs1.getString("dat6"));
+                 total.add(rs1.getString("dat7"));
+                 total.add(rs1.getString("dat8"));
+                 total.add(rs1.getString("dat9"));
+                 total.add(rs1.getString("dat10"));
+                 total.add(rs1.getString("dat11"));
+                 total.add(rs1.getString("dat12"));
+                 total.add(rs1.getString("Total"));
             }
-            datos.add(valor1);
-            datos.add(gamuep);
+
+            con.close();
         } catch (SQLException ex) {
-            Logger.getLogger(CTRLProgramado.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("EL ERROR ES ESTE ..!!! "+ex);
         }
-        for (int i = 0; i <= 8; i++) {
-            if (datos3.get(i) == null) {
-                datos3.set(i, 0);
-            }
-        }
-        //for (int i = 0; i < 10; i++) {
-        //    System.out.println("Array pocicion "+i+" es :"+datos.get(i));
-        //}
         
-        
-        request.setAttribute("datos", datos);
-        request.setAttribute("datos3", datos3);
+        request.setAttribute("totales", total);
+        request.setAttribute("ejecutados", ejecutado);
+        request.setAttribute("labels", label);
         request.getRequestDispatcher("programado.jsp").forward(request, response);
     }
 

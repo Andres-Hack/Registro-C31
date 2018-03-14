@@ -34,13 +34,7 @@ public class ListaPorcentaje {
             
             while (rs.next()) {
                 Porcentaje porcentajes = new Porcentaje();
-                porcentajes.setId(rs.getInt("id"));
-                porcentajes.setGestion(rs.getString("gestion"));
-                String muni = municipio(rs.getString("gam"));
-                porcentajes.setGam(muni);
-                porcentajes.setSubc(rs.getString("subc"));
-                String porcen = porcentaje(rs.getString("porcentaje"));
-                porcentajes.setPorcentaje(porcen);
+
                 listaPorcentaje.add(porcentajes);            
             }
             

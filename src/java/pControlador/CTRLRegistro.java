@@ -74,7 +74,9 @@ public class CTRLRegistro extends HttpServlet {
             float a=Float.parseFloat(request.getParameter("txtImporte"));
             float usd = (float) (a/6.86);
             String usd2 = Float.toString(usd);
-            R.setAnio_Pago(request.getParameter("txtGestion"));
+            R.setHoja_Ruta(request.getParameter("txtHR"));
+            R.setNro_Factura(request.getParameter("txtFactura"));
+            R.setAnio_Pago(request.getParameter("txtGestion"));         
             R.setFecha_Emision(request.getParameter("txtFechaE"));
             R.setFecha_Pago(request.getParameter("txtFechaP"));
             R.setMes_Dev(request.getParameter("txtMesC31"));
@@ -83,24 +85,26 @@ public class CTRLRegistro extends HttpServlet {
             R.setBID_CTR(request.getParameter("txtBidctr"));
             R.setF_F(request.getParameter("txtFf"));
             R.setO_F(request.getParameter("txtOf"));
-            R.setDescripcion(request.getParameter("txtDescripcion"));
             R.setSubComp(request.getParameter("txtSubc"));
+            R.setDescripcion(request.getParameter("txtDescSubc"));
             R.setActividad(request.getParameter("txtAct"));
+            R.setDescripcion_Actividad(request.getParameter("txtDescAct"));
             R.setSubactividad(request.getParameter("txtSubAct"));
+            R.setDescripcion_Subactividad(request.getParameter("txtDescSubAct"));
             R.setC_G(request.getParameter("txtGast"));
             R.setT_G(request.getParameter("txtTipo"));
             R.setPartida(request.getParameter("txtPartida"));
             R.setInst(request.getParameter("txtInst"));
             R.setGAM_UEP(request.getParameter("txtGamuep"));
-            R.setBeneficiario(request.getParameter("txtBeneficiario"));
             R.setTipo(request.getParameter("txtTipo"));
-            R.setProducto(request.getParameter("txtProducto"));
-            R.setDescripcion_Actividad(request.getParameter("txtActividad2"));
+            R.setBeneficiario(request.getParameter("txtBeneficiario"));
             R.setConcepto(request.getParameter("txtConcepto"));
+            R.setProducto(request.getParameter("txtProducto"));
             R.setImporte_Bs(request.getParameter("txtImporte"));
             R.setTC(request.getParameter("txtTc"));
-            R.setImporte_Us(usd2);
+            R.setImporte_Us(usd2);       
             
+
             String ls_isbn = request.getParameter("txtId");
             
             int op=Integer.parseInt(request.getParameter("op"));
@@ -112,9 +116,8 @@ public class CTRLRegistro extends HttpServlet {
             {
                 case 1: 
                     adicion(R);
-                    request.setAttribute("dato", "1");
+                    request.setAttribute("dato", "4");
                     request.getRequestDispatcher("inicio.jsp").forward(request, response);
-                    //response.sendRedirect("inicio.jsp");
                     break;                
                 case 2: 
                     eliminar(ls_isbn); 
@@ -128,7 +131,6 @@ public class CTRLRegistro extends HttpServlet {
                     adicion2(R);
                     request.setAttribute("dato", "4");
                     request.getRequestDispatcher("inicio.jsp").forward(request, response);
-                    //response.sendRedirect("inicio.jsp");
                     break; 
             }
         } catch (SQLException ex) {

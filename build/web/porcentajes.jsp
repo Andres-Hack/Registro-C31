@@ -23,14 +23,45 @@
                                     <div class="row">
                                        <div class="col-md-12">
                                            <div class="card-head">
-                                               <header><span class="glyphicon glyphicon-search"></span> Distribucion de porcentajes</header>
+                                               <header><span class="glyphicon glyphicon-search"></span> Distribucion de porcentajes por :</header>
                                            </div>
                                            <div class="card-body" ng-controller="myCtrl1">
                                                
                                                <form >
-                                                  <div class="input-group">
-                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                                    <input id="email" type="text" class="form-control" name="email" placeholder="Email">
+                                                  <div class="row">
+                                                    <div class="input-group col-md-4">
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                        <select class="form-control" name="txtgestion" placeholder="Gestión">
+                                                            <option value="" >-----------</option>
+                                                            <option value="TODO" >TODO</option>
+                                                            <option value="2013" >2013</option>
+                                                            <option value="2014" >2014</option>
+                                                            <option value="2015" >2015</option>
+                                                            <option value="2016" >2016</option>
+                                                            <option value="2017" >2017</option>
+                                                        </select>
+                                                    </div>
+                                                      <div class="input-group col-md-4">
+                                                              <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                                              <select name="Gamuep" class="form-control">
+                                                                  <option value="" selected="selected"></option>
+                                                                  <option value="" >-----------</option>
+                                                                  <option value="CBB">COCHABAMBA</option>
+                                                                  <option value="COB">COBIJA</option>
+                                                                  <option value="EAL">EL ALTO</option>
+                                                                  <option value="TOR">EL TORNO</option>
+                                                                  <option value="ORU">ORURO</option>
+                                                                  <option value="POT">POTOSI</option>
+                                                                  <option value="SAC">SACABA</option>
+                                                                  <option value="SER">SUCRE</option>
+                                                                  <option value="TAR">TARIJA</option>
+                                                                  <option value="TDD">TRINIDAD</option>
+                                                                  <option value="VIA">VIACHA</option>
+                                                                  <option value="SCZ">SANTA CRUZ</option>
+                                                              </select>
+                                                      </div>
+                                                      <br />
+                                                      <button type="submit" class="btn btn-success">Buscar</button>
                                                   </div>
                                                </form>
                                                
@@ -54,10 +85,10 @@
                                                             for (int i=0;i<lista.size();i++)
                                                             {
                                                                out.println("<tr>");
-                                                               out.println("<th scope='row'>"+lista.get(i).getId()+"</th>");
-                                                               out.println("<td>"+lista.get(i).getGestion()+"</td>");
-                                                               out.println("<td>"+lista.get(i).getGam()+"</td>");
-                                                               out.println("<td>"+lista.get(i).getSubc()+"</td>");
+                                                               out.println("<th scope='row'>"+lista.get(i).getC_Porcentaje()+"</th>");
+                                                               out.println("<td>"+lista.get(i).getC_Periodo()+"</td>");
+                                                               out.println("<td>"+lista.get(i).getC_Municipio()+"</td>");
+                                                               out.println("<td>"+lista.get(i).getC_Municipio()+"</td>");
                                                                out.println("<td>"+lista.get(i).getPorcentaje()+" %</td>");
                                                                out.println("</tr>");
                                                             }

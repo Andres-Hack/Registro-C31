@@ -1,3 +1,4 @@
+<%@page import="pReporte.Consultas"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
@@ -10,7 +11,6 @@
 <%@page import="pModelo.DBConexion" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<!-- saved from url=(0026)https://sigec.oopp.gob.bo/ -->
 <% HttpSession sesion = request.getSession(); %>
 <% if(sesion.getAttribute("usuario") != null) {%>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -23,145 +23,55 @@
     </style>
     <script type="text/javascript">
     
-                    <%
+        <%
+                DecimalFormat formatea = new DecimalFormat("###,###,###.###");
 
-                                        String consulta = null, consulta1 = null, consulta2 = null, consulta3 = null, consulta4 = null, consulta5 = null, consulta6 = null
-                                             , consulta7 = null, consulta8 = null, consulta9 = null, consulta10 = null, consulta11 = null, consulta12 = null,
-                                               consulta13 = null, consulta14 = null;
-                                        String consulta_comp_total =null;
-                                        String variable01 = null;
-                                        int sw = 0;
-                                                
-                                        String gestion = request.getParameter("gestion");
-                                        String gamuep = request.getParameter("Gamuep");
-                                        String cambio = request.getParameter("cambio");
-                                        String estado = null, valor1 = null;
-                                        float dd = 0; float dd1 = 0; float dd2 = 0, dd3 = 0, dd4 = 0, dd5 = 0, dd6 = 0,
-                                              dd7 = 0, dd8 = 0, dd9 = 0, dd10 = 0, dd11 = 0, dd12 = 0, dd13 = 0, dd14 = 0;
-                                        float total_comp = 0;
+                String valor1 = "", montoBID = "0", montoCTR = "0", montoTotal="0", montoTotal21="0", montoTotal22="0", montoTotal23="0", montoTotal24="0"
+                        , mostrar="0";
+                String valor21BID = "", valor22BID = "", valor23BID = "", valor24BID = "";
+                String valor21CTR = "", valor22CTR = "", valor23CTR = "", valor24CTR = "";
+                
+                String gestion = request.getParameter("gestion");
+                String gamuep = request.getParameter("Gamuep");
+                String cambio = request.getParameter("cambio");
 
-                                        Connection con = DBConexion.IniciarSesion();
-                                        DecimalFormat formatea = new DecimalFormat("###,###.##");
-                                        
-                                        if (cambio != null) {
-                                            estado = "importe_usd";
-                                            valor1 = "$us";
-                                            variable01="sum(monto_usd_bid)+sum(monto_usd_ctr)";
-                                        }
-                                        else{
-                                            estado = "importe";
-                                            valor1 = "Bs";
-                                            variable01="sum(monto_bs_bid)+sum(monto_bs_ctr)";
-                                        }
-                                        consulta = "SELECT SUM("+estado+") as total FROM tabla_c31 where id >= 1 ";
-                                        if (gestion != "") {                                                    
-                                            consulta += " and gestion='"+gestion+"' ";   
-                                        }
-                                        if (gamuep != "") {
-                                           consulta += " and gam_uep='"+gamuep+"' ";
-                                           sw = 1; // si el sw es 1 entonces hay gastos comunes
-                                        }
-                                        
-                                        
-                                        consulta_comp_total = "select ("+variable01+") as total from detalle_c31 where gestion='"+gestion+"' and gam='"+gamuep+"'";
-                                        
-                                        ResultSet rs = null, rs1 = null, rs2 = null, rs3 = null, rs4 = null, rs5 = null, rs6 = null,
-                                                  rs7 = null, rs8 = null, rs9 = null, rs10 = null, rs11 = null, rs12 = null, rs13 = null, rs14 = null,
-                                                rs_comp_total=null;
-                                        PreparedStatement pst = null, pst1 = null, pst2 = null, pst3 = null, pst4 = null, pst5 = null, pst6 = null,
-                                                          pst7 = null, pst8 = null, pst9 = null, pst10 = null, pst11 = null, pst12 = null, pst13 = null,
-                                                pst14 = null, ps_comp_total=null;
-                                        
-                                        pst = con.prepareStatement(consulta);
-                                        rs = pst.executeQuery(); 
-                                        if(sw==1){
-                                            ps_comp_total = con.prepareStatement(consulta_comp_total);
-                                            rs_comp_total = ps_comp_total.executeQuery();
-                                            while (rs_comp_total.next()) {                                                
-                                                total_comp = rs_comp_total.getFloat("total");
-                                            }
-                                        }
-                                        
-                                        while (rs.next()) {                                                
-                                                dd = rs.getFloat("total");
-                                        }
-                                        
-                                        String oop = formatea.format(dd+total_comp);
-                                        System.out.println("------------------------------------");  
-                                        System.out.println("la suma de no compartido : "+dd+" y compartido : "+total_comp+" de : "+gamuep);  
-                                            
-                                        ///////////////////////////////////
-                                        // CONSULTA DIVIDIDAS POR SUB    //
-                                        // COMPONENTE Y ACTIVIDADES      //
-                                        ///////////////////////////////////
-                                        consulta1 = consulta+" and subc='2,1' ";
-                                        consulta2 = consulta+" and subc='2,2' ";
-                                        consulta3 = consulta+" and subc='2,3' ";
-                                        consulta4 = consulta+" and subc='2,4' ";
-                                        consulta5 = consulta+" and bid_ctr = 'BID'";
-                                        consulta6 = consulta+" and bid_ctr = 'CTR'";
-                                        consulta7 = consulta+" and subc='2,1' and bid_ctr = 'BID'";
-                                        consulta8 = consulta+" and subc='2,2' and bid_ctr = 'BID'";
-                                        consulta9 = consulta+" and subc='2,3' and bid_ctr = 'BID'";
-                                        consulta10 = consulta+" and subc='2,4' and bid_ctr = 'BID'";
-                                        consulta11 = consulta+" and subc='2,1' and bid_ctr = 'CTR'";
-                                        consulta12 = consulta+" and subc='2,2' and bid_ctr = 'CTR'";
-                                        consulta13 = consulta+" and subc='2,3' and bid_ctr = 'CTR'";
-                                        consulta14 = consulta+" and subc='2,4' and bid_ctr = 'CTR'";
-                                        pst1 = con.prepareStatement(consulta1); pst2 = con.prepareStatement(consulta2);
-                                        pst3 = con.prepareStatement(consulta3); pst4 = con.prepareStatement(consulta4); pst5 = con.prepareStatement(consulta5); pst6 = con.prepareStatement(consulta6);
-                                        pst7 = con.prepareStatement(consulta7); pst9 = con.prepareStatement(consulta9);pst11 = con.prepareStatement(consulta11);pst13 = con.prepareStatement(consulta13);
-                                        pst8 = con.prepareStatement(consulta8);pst10 = con.prepareStatement(consulta10);pst12 = con.prepareStatement(consulta12);pst14 = con.prepareStatement(consulta14);
-                                        rs1 = pst1.executeQuery(); rs2 = pst2.executeQuery(); rs3 = pst3.executeQuery(); 
-                                        rs4 = pst4.executeQuery(); rs5 = pst5.executeQuery(); rs6 = pst6.executeQuery(); rs7 = pst7.executeQuery();
-                                        rs9 = pst9.executeQuery(); rs11 = pst11.executeQuery(); rs13 = pst13.executeQuery();
-                                        rs8 = pst8.executeQuery(); rs10 = pst10.executeQuery(); rs12 = pst12.executeQuery(); rs14 = pst14.executeQuery();
-                                        while (rs.next()) {                                                
-                                                dd = rs.getFloat("total");
-                                        }
-                                        while (rs1.next()) {  dd1 = rs1.getFloat("total"); }
-                                        while (rs2.next()) {  dd2 = rs2.getFloat("total"); }
-                                        while (rs3.next()) {  dd3 = rs3.getFloat("total"); }
-                                        while (rs4.next()) {  dd4 = rs4.getFloat("total"); }
-                                        while (rs5.next()) {  dd5 = rs5.getFloat("total"); }
-                                        while (rs6.next()) {  dd6 = rs6.getFloat("total"); }
-                                        while (rs7.next()) {  dd7 = rs7.getFloat("total"); }
-                                        while (rs8.next()) {  dd8 = rs8.getFloat("total"); }
-                                        while (rs9.next()) {  dd9 = rs9.getFloat("total"); }
-                                        while (rs10.next()) {  dd10 = rs10.getFloat("total"); }
-                                        while (rs11.next()) {  dd11 = rs11.getFloat("total"); }
-                                        while (rs12.next()) {  dd12 = rs12.getFloat("total"); }
-                                        while (rs13.next()) {  dd13 = rs13.getFloat("total"); }
-                                        while (rs14.next()) {  dd14 = rs14.getFloat("total"); }
-                                        if (gamuep != null) {
-                                            switch (gamuep){
-                                                case "CBB" : gamuep = "Cochabamba"; break;
-                                                case "COB" : gamuep = "Cobija"; break;
-                                                case "EAL" : gamuep = "El Alto"; break;
-                                                case "TOR" : gamuep = "El Torno"; break;
-                                                case "ORU" : gamuep = "Oruro"; break;
-                                                case "POT" : gamuep = "Potosi"; break;
-                                                case "SAC" : gamuep = "Sacaba"; break;
-                                                case "SER" : gamuep = "Sucre"; break;
-                                                case "TAR" : gamuep = "Tarija"; break;
-                                                case "TDD" : gamuep = "Trinidad"; break;
-                                                case "VIA" : gamuep = "Viacha"; break;
-                                                case "SCZ" : gamuep = "Santa Cruz"; break;
-                                                default: gamuep = ""; break;
-                                            }
-                                        }
-                                        
-                                        float deuda = 5000;
-                                        
-                   %>
-            $(function () {
+                if (cambio != null) {
+                    cambio = "1";
+                    valor1 = "$us";
+                } else {
+                    cambio = "2";
+                    valor1 = "Bs";
+                }
+                if (gamuep != null) {
+                    montoBID = Consultas.MontoTotal(gestion, gamuep, "BID", cambio);
+                    montoCTR = Consultas.MontoTotal(gestion, gamuep, "CTR", cambio);
+                    montoTotal = String.valueOf(Double.parseDouble(montoBID)+Double.parseDouble(montoCTR));
+                    
+                    valor21BID = Consultas.MontoTotalSubc(gestion, gamuep, "BID", cambio, "1");
+                    valor22BID = Consultas.MontoTotalSubc(gestion, gamuep, "BID", cambio, "2");
+                    valor23BID = Consultas.MontoTotalSubc(gestion, gamuep, "BID", cambio, "3");
+                    valor24BID = Consultas.MontoTotalSubc(gestion, gamuep, "BID", cambio, "4");
+                    valor21CTR = Consultas.MontoTotalSubc(gestion, gamuep, "CTR", cambio, "1");
+                    valor22CTR = Consultas.MontoTotalSubc(gestion, gamuep, "CTR", cambio, "2");
+                    valor23CTR = Consultas.MontoTotalSubc(gestion, gamuep, "CTR", cambio, "3");
+                    valor24CTR = Consultas.MontoTotalSubc(gestion, gamuep, "CTR", cambio, "4");
+                    montoTotal21=String.valueOf(Double.parseDouble(valor21BID)+Double.parseDouble(valor21CTR));
+                    montoTotal22=String.valueOf(Double.parseDouble(valor22BID)+Double.parseDouble(valor22CTR));
+                    montoTotal23=String.valueOf(Double.parseDouble(valor23BID)+Double.parseDouble(valor23CTR));
+                    montoTotal24=String.valueOf(Double.parseDouble(valor24BID)+Double.parseDouble(valor24CTR));
+                    
+                }
+                mostrar = formatea.format(Double.parseDouble(montoTotal));
+                         
+        %>
+    $(function () {
     // Create the chart
     Highcharts.chart('container', {
         chart: {
             type: 'column'
         },
         title: {
-            text: 'PROGRAMA DE MEJORA DE LA GESTION MUNICIPAL - CII <br /> <%= oop %> <%= valor1 %> <br /> <%= gamuep %> - <%= gestion %>'
+            text: 'PROGRAMA DE MEJORA DE LA GESTION MUNICIPAL - CII <br /> <%= mostrar %>  <%= valor1 %> <br /> <%= gamuep %> - <%= gestion %>'
         },
         subtitle: {
             text: 'Hacer click en las columnas para entrar a detalles.'
@@ -198,38 +108,38 @@
             colorByPoint: true,
             data: [{
                 name: 'TOTAL',
-                y: <%= dd+total_comp %>,
+                y: <%= montoTotal %>,
                 drilldown: 'TOTAL'
             }, {
                 name: 'BID',
-                y: <%= dd5 %>,
+                y: <%= montoBID %>,
                 drilldown: 'BID'
             }, {
                 name: 'CTR',
-                y: <%= dd6 %>,
+                y: <%= montoCTR %>,
                 drilldown: 'CTR'
             }]
         }],
         drilldown: {
             series: [{
                 name: 'COMPONENTES',
-                id: 'SUB-C - 2,1',
+                id: 'TOTAL',
                 data: [
                     [
                         '2,1 : Apoyo a la gestion catastral y su interconexion con la administracion tributaria',
-                        <%= dd1 %>
+                        <%= montoTotal21 %>
                     ],
                     [
                         '2,2 : Adquisicion del sistema de catastro',
-                        <%= dd2 %>
+                        <%= montoTotal22 %>
                     ],
                     [
                         '2,3 : Capacitacion, difucion y asistencia tecnica',
-                        <%= dd3 %>
+                        <%= montoTotal23 %>
                     ],
                     [
                         '2,4 : Administracion, suipervision y auditorias',
-                        <%= dd4 %>
+                        <%= montoTotal24 %>
                     ]
                 ]
             }, {
@@ -238,19 +148,19 @@
                 data: [
                     [
                         '2,1 : Apoyo a la gestion catastral y su interconexion con la administracion tributaria',
-                        <%= dd7 %>
+                        <%= valor21BID %>
                     ],
                     [
                         '2,2 : Adquisicion del sistema de catastro',
-                        <%= dd8 %>
+                       <%= valor22BID %>
                     ],
                     [
                         '2,3 : Capacitacion, difucion y asistencia tecnica',
-                        <%= dd9 %>
+                        <%= valor23BID %>
                     ],
                     [
                         '2,4 : Administracion, suipervision y auditorias',
-                        <%= dd10 %>
+                        <%= valor24BID %>
                     ]
                 ]
             }, {
@@ -259,19 +169,19 @@
                 data: [
                     [
                         '2,1 : Apoyo a la gestion catastral y su interconexion con la administracion tributaria',
-                        <%= dd11 %>
+                        <%= valor21CTR %>
                     ],
                     [
                         '2,2 : Adquisicion del sistema de catastro',
-                        <%= dd12 %>
+                        <%= valor22CTR %>
                     ],
                     [
                         '2,3 : Capacitacion, difucion y asistencia tecnica',
-                        <%= dd13 %>
+                        <%= valor23CTR %>
                     ],
                     [
                         '2,4 : Administracion, suipervision y auditorias',
-                        <%= dd14 %>
+                        <%= valor24CTR %>
                     ]
                 ]
             }]
@@ -309,7 +219,7 @@ $(function () {
             type: 'pie'
         },
         title: {
-            text: 'Ejecución Global Municipio "<%= gamuep %>" <br /> Total : <%= oop %> <%= valor1 %>'
+            text: 'Ejecución Global Municipio "<%= gamuep %>" <br /> Total xxxx :  <%= valor1 %>'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.y:.2f} Bs</b>'
@@ -331,8 +241,8 @@ $(function () {
         series: [{
             name: 'Total',
             data: [
-                { name: 'Sub Conponente Total', y: <%= dd %> },
-                { name: 'Deuda', y: <%= deuda %> }
+                { name: 'Sub Conponente Total', y: 41 },
+                { name: 'Deuda', y: 741 }
             ]
         }]
     });
@@ -368,11 +278,12 @@ $(function () {
                                                 <div class="form-group">
                                                     <select class="form-control" name="gestion" >
                                                         <option value="" >-----------</option>
-                                                        <option value="" >Todo</option>
+                                                        <option value="TODO" >TODO</option>
                                                         <option value="2013" >2013</option>
                                                         <option value="2014" >2014</option>
                                                         <option value="2015" >2015</option>
                                                         <option value="2016" >2016</option>
+                                                        <option value="2017" >2017</option>
                                                     </select>
                                                     <label for='nur'>GESTION</label>
                                                 </div>
@@ -381,7 +292,7 @@ $(function () {
                                                 <div class="form-group">
                                                     <select name="Gamuep" class="form-control">
                                                         <option value="" selected="selected"></option>
-                                                        <option value="UEP">UEP</option>
+                                                        <option value="" >-----------</option>
                                                         <option value="CBB">COCHABAMBA</option>
                                                         <option value="COB">COBIJA</option>
                                                         <option value="EAL">EL ALTO</option>
@@ -436,18 +347,6 @@ $(function () {
                                     </div>
                                 </div> 
                         </div>
-                        <!--
-                        <div class="col-md-6">
-                             <div class="card card-underline">
-                                    <div class="card-head">
-                                        <header><span class="glyphicon glyphicon-signal"></span> DATOS GLOBALES </header>
-                                    </div>
-                                    <div class="card-body" >
-                                        <div id="container2" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
-                                    </div>
-                            </div> 
-                        </div> 
-                        -->
                     </div>
                     
                 </div>

@@ -1,6 +1,6 @@
 {
 	"integrantes": [{
-		"a": "2,1,1 : CARTOGRAFIA BASE MUNICIPIOS",
+		"a": "2,1,1 : CARTOGRAFIA BASE DE LOS MUNICIPIOS",
 		"b": "2,2,1 : ADQUISICION DEL SOFTWARE, MIGRACIÓN E IMPLEMENTACIÓN",
 		"c": "2,3,1 : CAPACITACIÓN",
 		"d": "2,4,1 : SERVICIOS PERSONALES",
@@ -9,7 +9,7 @@
 	  "c2": "2,3,1",
 	  "d2": "2,4,1"
 	}, {
-		"a": "2,1,2 : LEVANTAMIENTO INFORMACIÓN CATASTRAL MUNICIPIOS",
+		"a": "2,1,2 : LEVANTAMIENTO INFORMACION CATASTRAL MUNICIPIOS",
 		"b": "2,2,2 : DIGITALIZACIÓN ARCHIVOS DE CATASTRO",
 		"c": "2,3,2 : DIFUCIÓN",
 		"d": "2,4,2 : SERVICIOS NO PERSONALES",
@@ -18,7 +18,7 @@
 	  "c2": "",
 	  "d2": "2,4,2"
 	}, {
-		"a": "2,1,3 : VALORACIÓN CATASTRAL MUNICIPIOS",
+		"a": "2,1,3 : VALORACION CATASTRAL",
 		"b": "",
 		"c": "2,3,3 : ASISTENCIA TÉCNICA",
 		"d": "2,4,3 : MATERIALES Y SUMINISTROS",
@@ -45,7 +45,7 @@
 	  "c2": "",
 	  "d2": "2,4,5"
 	}, {
-		"a": "2,1,6 : SISTEMA DE CATASTRO URBANO INTERCONECTADO CON LA ADMINISTRACIÓN TRIBUTARIA",
+		"a": "",
 		"b": "",
 		"c": "",
 		"d": "",

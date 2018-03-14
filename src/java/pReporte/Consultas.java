@@ -4,300 +4,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import pClases.Actividad;
-import pClases.Subactividad;
-import pClases.Subcomponente;
+import pControlador.ListaPorcentaje;
+import static pDistribucion.DTRmunicipios.PeriodoID;
 import pModelo.DBConexion;
 
 public class Consultas {
-    
-    public static Double Montos(String municipio, String subc, String bid_ctr){
-        Connection con = DBConexion.IniciarSesion();
-        double data123=MontoCompartidoSubc(municipio, subc, bid_ctr);
-        String dato1="";
-        if ("BID".equalsIgnoreCase(bid_ctr)) {
-            dato1 = "monto_bs_bid";
-        } else {
-            dato1 = "monto_bs_ctr";
-        }
-        String consulta = "select round(sum(importe), 2) as total from tabla_c31 where inst='GAM' and gam_uep='"+municipio+"'and subc='"+subc+"' and bid_ctr='"+bid_ctr+"'";
-        String consulta2 = "select round(sum("+dato1+"), 2) as total from detalle_c31 where gam='"+municipio+"'";
-        double dato = 0, a= 0, b=0;        
-        
-        try {
-            Statement statement = con.createStatement();            
-            ResultSet rs = statement.executeQuery(consulta);
-            
-            while (rs.next()) { a=rs.getDouble("total"); }
-
-            rs.close();
-            statement.close();
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            Statement statement2 = con.createStatement();            
-            ResultSet rs2 = statement2.executeQuery(consulta2);
-            
-            while (rs2.next()) { b=rs2.getDouble("total"); }
-            
-            rs2.close();
-            statement2.close();
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        dato=a+b+data123;
-        return dato;
-    }
-    public static String montoAcdtividad(String subc, String act, String gam, String bid_ctr) {
-        Statement statement;
-        ResultSet rs;
-        String monto ="";
-        Connection con = DBConexion.IniciarSesion();
-        double suma = 0;
-        double data123=MontoCompartidoAct(subc, act, gam, bid_ctr);
-        try {
-            statement = con.createStatement();
-            rs = statement.executeQuery("select round(sum(importe), 2) as total from tabla_c31 where subc='"+subc+"' and act='"+act+"' and gam_uep='"+gam+"' and bid_ctr='"+bid_ctr+"'");
-            while (rs.next()) {
-                suma = rs.getDouble("total");
-            }
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        suma = suma+data123;
-        monto = String.valueOf(suma);
-        return monto;
-    }
-    public static String montoSubactividad(String subact, String gam, String bid_ctr) {
-        Statement statement;
-        ResultSet rs;
-        String monto ="";
-        Connection con = DBConexion.IniciarSesion();
-        double suma = 0;
-        double data123=MontoCompartidoSubAct(subact, gam, bid_ctr);
-        try {
-            statement = con.createStatement();
-            rs = statement.executeQuery("select round(sum(importe), 2) as total from tabla_c31 where subact='"+subact+"' and gam_uep='"+gam+"' and bid_ctr='"+bid_ctr+"'");
-            while (rs.next()) {
-                suma = rs.getDouble("total");
-            }
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        suma = suma+data123;
-        monto = String.valueOf(suma);
-        return monto;
-    }
-    /*##############################################################
-    ################################################################
-    ################## CONSULTAS DE LOS CODIGOS ####################
-    ################################################################
-    ##############################################################*/
-    public static LinkedList<Subcomponente> Subcomponente() throws SQLException {
-        LinkedList<Subcomponente> subc;
-        Statement statement;
-        ResultSet rs;
-        try (Connection cnn = DBConexion.IniciarSesion()) {
-            subc = new LinkedList<Subcomponente>();
-            statement = cnn.createStatement();
-            rs = statement.executeQuery("select codigo from subactividad");
-            while (rs.next()) {
-                Subcomponente obj = new Subcomponente();
-                obj.setCodigo(rs.getString("codigo"));
-                subc.add(obj);
-            }
-            cnn.close();
-        }
-        rs.close();
-        statement.close();
-        return subc;        
-    }
-    public static LinkedList<Actividad> Actividad(int d) throws SQLException {
-        LinkedList<Actividad> act;
-        Statement statement;
-        ResultSet rs;
-        try (Connection cnn = DBConexion.IniciarSesion()) {
-            act = new LinkedList<Actividad>();
-            statement = cnn.createStatement();
-            rs = statement.executeQuery("select codigo from actividad where id_subc='"+d+"'");
-            while (rs.next()) {
-                Actividad obj = new Actividad();
-                obj.setCodigo(rs.getString("codigo"));
-                act.add(obj);
-            }
-            cnn.close();
-        }
-        rs.close();
-        statement.close();
-        return act;        
-    }
-    public static LinkedList<Subactividad> Subactividad(int d) throws SQLException {
-        LinkedList<Subactividad> subact;
-        Statement statement;
-        ResultSet rs;
-        try (Connection cnn = DBConexion.IniciarSesion()) {
-            subact = new LinkedList<Subactividad>();
-            statement = cnn.createStatement();
-            rs = statement.executeQuery("select codigo from subactividad where id_act='"+d+"'");
-            while (rs.next()) {
-                Subactividad obj = new Subactividad();
-                obj.setCodigo(rs.getString("codigo"));
-                subact.add(obj);
-            }
-            cnn.close();
-        }
-        rs.close();
-        statement.close();
-        return subact;        
-    }
-    public static String MontoDetalle(String muni) {
-        Statement statement1, statement2;
-        ResultSet rs1, rs2;
-        String monto ="";
-        Connection con = DBConexion.IniciarSesion();
-        try {
-            statement1 = con.createStatement();
-            statement2 = con.createStatement();
-            rs1 = statement1.executeQuery("select round(sum(monto_bs_bid), 2) as total from detalle_c31 where gam='"+muni+"'");
-            rs2 = statement2.executeQuery("select round(sum(monto_bs_ctr), 2) as total from detalle_c31 where gam='"+muni+"'");
-            while (rs1.next()) {
-                monto = rs1.getString("total");
-            }
-            while (rs2.next()) {
-                monto = monto+"-"+rs2.getString("total");
-            }
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        return monto;
-        
-    }
-    /*##############################################################
-    ################################################################
-    ############## CONSULTAS DE MONTOS COMPARTIDOS #################
-    ################################################################
-    ##############################################################*/
-    public static Double MontoCompartidoSubc(String municipio, String subc, String bid_ctr){
-        Statement statement1;
-        ResultSet rs1;
-        Connection con = DBConexion.IniciarSesion();
-        String monto ="", dato1="", subcomponente="";
-        double importe = 0, suma=0;
-        try {
-            statement1 = con.createStatement();
-            if (subc.equals("TODO")) {
-                subcomponente= "";
-            } else {
-                subcomponente= " and subc='"+subc+"'";
-            }
-            rs1 = statement1.executeQuery("select id from tabla_c31 where inst='UEP' "+subcomponente);
-            while (rs1.next()) {
-                monto = rs1.getString("id");
-                Statement statement2;
-                ResultSet rs2;
-                if (bid_ctr.equals("TODO")) {
-                    dato1 = "sum(monto_bs_bid)+sum(monto_bs_ctr)";
-                } else {
-                    if ("BID".equals(bid_ctr)) {
-                        dato1 = "sum(monto_bs_bid)";
-                    } else{
-                        dato1 = "sum(monto_bs_ctr)";
-                    }
-                }
-                
-                statement2 = con.createStatement();
-                rs2 = statement2.executeQuery("select "+dato1+" as total from detalle_c31 where gam='"+municipio+"' and id_c31='"+monto+"'");
-                while (rs2.next()) {
-                    importe = rs2.getDouble("total");
-                }
-                suma = suma + importe;
-            }
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        return suma;
-    }
-    public static Double MontoCompartidoAct(String subc, String act, String gam, String bid_ctr){
-        Connection con = DBConexion.IniciarSesion();
-        Statement statement1;
-        ResultSet rs1;
-        String monto ="", dato1="", actividad="";
-        double importe = 0, suma=0;
-        try {
-            statement1 = con.createStatement();
-            if (subc.equals("TODO")) {
-                actividad= "";
-            } else {
-                actividad= " and subc='"+subc+"' and act='"+act+"'";
-            }
-            rs1 = statement1.executeQuery("select id from tabla_c31 where inst='UEP' "+actividad);
-            while (rs1.next()) {
-                monto = rs1.getString("id");
-                Statement statement2;
-                ResultSet rs2;
-                if (bid_ctr.equals("TODO")) {
-                    dato1 = "sum(monto_bs_bid)+sum(monto_bs_ctr)";
-                } else {
-                    if ("BID".equals(bid_ctr)) {
-                        dato1 = "sum(monto_bs_bid)";
-                    } else{
-                        dato1 = "sum(monto_bs_ctr)";
-                    }
-                }
-                statement2 = con.createStatement();
-                rs2 = statement2.executeQuery("select "+dato1+" as total from detalle_c31 where gam='"+gam+"' and id_c31='"+monto+"'");
-                while (rs2.next()) {
-                    importe = rs2.getDouble("total");
-                }
-                suma = suma + importe;
-            }
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        return suma;
-    }
-    public static Double MontoCompartidoSubAct(String subact, String gam, String bid_ctr) {
-        Connection con = DBConexion.IniciarSesion();
-        Statement statement1;
-        ResultSet rs1;
-        String monto ="", dato1="";
-        double importe = 0, suma=0;
-        try {
-            statement1 = con.createStatement();
-            rs1 = statement1.executeQuery("select id from tabla_c31 where inst='UEP' and subact='"+subact+"'");
-            while (rs1.next()) {
-                monto = rs1.getString("id");
-                Statement statement2;
-                ResultSet rs2;
-                if ("BID".equals(bid_ctr)) {
-                    dato1 = "monto_bs_bid";
-                } else {
-                    dato1 = "monto_bs_ctr";
-                }
-                statement2 = con.createStatement();
-                rs2 = statement2.executeQuery("select sum("+dato1+") as total from detalle_c31 where gam='"+gam+"' and id_c31='"+monto+"'");
-                while (rs2.next()) {
-                    importe = rs2.getDouble("total");
-                }
-                suma = suma + importe;
-            }
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
-        }        
-        return suma;
-    }
     /*##############################################################
     ################################################################
     ############## CONSULTAS DE REPORTE  #################
@@ -357,29 +70,140 @@ public class Consultas {
         return monto;
     }
 
-    public static String MontoSubActividad(String muni, String subact, String bid_ctr) {
+    public static String MontoSubActividad(String muni, String subact, String bid_ctr, String Producto) {
         Connection con = DBConexion.IniciarSesion();
-        Connection con2 = DBConexion.IniciarSesion();
-        Statement statement1=null, statement2=null;
-        ResultSet rs1=null, rs2=null;
+        Statement statement1=null;
+        ResultSet rs1=null;
         double monto = 0.0;
         try {
             statement1 = con.createStatement();
-            rs1 = statement1.executeQuery("select c_C31 FROM C31 where Subactividad='"+subact+"'");
+            rs1 = statement1.executeQuery("SELECT        b.Codigo AS Cod_Activ, b.Descripcion AS Actividad, g.Producto AS Producto, g.BID_CTR, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
+                    + "FROM            Detalle AS a INNER JOIN "
+                    + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
+                    + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
+                    + "                         Componentes AS d ON c.c_Componente = d.c_Componente INNER JOIN "
+                    + "                         Periodos AS e ON a.c_Periodo = e.c_Periodo INNER JOIN "
+                    + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN "
+                    + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
+                    + "                         Gestiones AS h ON e.Gestion = h.Gestrion INNER JOIN "
+                    + "                         Fuentes AS i ON a.c_Fuente = i.c_Fuente "
+                    + "WHERE a.c_Municipio="+muni+" and a.c_Fuente="+bid_ctr+" and Producto='"+Producto+"' "
+                    + "GROUP BY b.Codigo, b.Descripcion, g.Producto, g.BID_CTR "
+                    + "ORDER BY Cod_Activ, g.BID_CTR");
             while (rs1.next()) {
-                statement2 = con2.createStatement();
-                rs2 = statement2.executeQuery("select SUM(Importe * Porcentaje) / 100 AS Total_bs from Detalle where c_Municipio="+muni+" and c_Fuente="+bid_ctr+" and c_C31="+rs1.getString("c_C31")+"");
-                
-                while (rs2.next()) {                    
-                    monto = monto+rs2.getDouble("Total_bs");
-                }                
+                monto = rs1.getDouble("Total_bs");
             }
             if(monto==0.0){ monto=0.0;}
             con.close();
-            con2.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+        return String.valueOf(monto);
+    }
+    public static String nombreProducto(String muni, String subact, String bid_ctr, String Producto) {
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1=null;
+        ResultSet rs1=null;
+        String descripcion ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("SELECT        b.Codigo AS Cod_Activ, b.Descripcion AS Actividad, g.Producto AS Producto, g.BID_CTR, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
+                    + "FROM            Detalle AS a INNER JOIN "
+                    + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
+                    + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
+                    + "                         Componentes AS d ON c.c_Componente = d.c_Componente INNER JOIN "
+                    + "                         Periodos AS e ON a.c_Periodo = e.c_Periodo INNER JOIN "
+                    + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN "
+                    + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
+                    + "                         Gestiones AS h ON e.Gestion = h.Gestrion INNER JOIN "
+                    + "                         Fuentes AS i ON a.c_Fuente = i.c_Fuente "
+                    + "WHERE a.c_Municipio="+muni+" and a.c_Fuente="+bid_ctr+" and Producto='"+Producto+"' and g.Subactividad LIKE '"+subact+"%' "
+                    + "GROUP BY b.Codigo, b.Descripcion, g.Producto, g.BID_CTR "
+                    + "ORDER BY Cod_Activ, g.BID_CTR");
+            while (rs1.next()) {
+                descripcion = rs1.getString("Producto");
+            }
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return descripcion;
+    }
+    /*##############################################################
+    ################################################################
+    ############## CONSULTAS DE BUSQUEDA A DETALLE  ################
+    ################################################################
+    ##############################################################*/
+    public static String MontoTotal(String gestion, String gam, String bid_ctr, String cambio) {
+        Connection con = DBConexion.IniciarSesion();
+        String BID_CTR = "", consulta_gestion="";
+        double dolar=0.0;
+        String IDperiodo = PeriodoID(gestion);
+        String IDgam = ListaPorcentaje.IDmunicipio(gam);
+        
+        if (bid_ctr.equals("BID")) { BID_CTR = "1"; } else { BID_CTR = "2"; }
+        if (cambio.equals("1")){ dolar=6.86; } else { dolar=1; }        
+        if (!gestion.equals("TODO")) { consulta_gestion=" AND c_Periodo="+IDperiodo; }
+        
+        Statement statement=null;
+        ResultSet rs=null;
+        double monto = 0.0;
+        try {
+            statement = con.createStatement();
+            rs = statement.executeQuery("select SUM(Importe * Porcentaje) / (100*"+dolar+") AS Total FROM Detalle where c_Municipio="+IDgam+" "+consulta_gestion+" AND c_Fuente="+BID_CTR+"");          
+            while (rs.next()) {        
+                monto = monto + rs.getDouble("Total");     
+            }
+            if(monto==0.0){ monto=0.0;}
+            con.close();
         } catch (SQLException ex) {
             Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
         }        
+        return String.valueOf(monto);
+    }
+    public static String MontoTotalSubc(String gestion, String gam, String bid_ctr, String cambio, String subc) {
+        Connection con2 = DBConexion.IniciarSesion();
+        String BID_CTR = "", consulta_gestion="";
+        double dolar=0.0;
+        String IDperiodo = PeriodoID(gestion);
+        String IDgam = ListaPorcentaje.IDmunicipio(gam);
+        
+        if (bid_ctr.equals("BID")) { BID_CTR = "1"; } else { BID_CTR = "2"; }
+        if (cambio.equals("1")){ dolar=6.86; } else { dolar=1; } 
+        if (!gestion.equals("TODO")) { consulta_gestion=" AND a.c_Periodo="+IDperiodo; }
+        
+        Statement statement2=null;
+        ResultSet rs2=null;
+        String consultaP = "SELECT    SUM(a.Importe * a.Porcentaje) / (100*" + dolar + ") AS Total_bs "
+                + "FROM            Detalle AS a INNER JOIN "
+                + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
+                + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
+                + "                         Componentes AS d ON c.c_Componente = d.c_Componente INNER JOIN "
+                + "                         Periodos AS e ON a.c_Periodo = e.c_Periodo INNER JOIN "
+                + "                         Municipios AS f ON a.c_Municipio = f.c_Municipio INNER JOIN "
+                + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
+                + "                         Gestiones AS h ON e.Gestion = h.Gestrion INNER JOIN "
+                + "                         Fuentes AS i ON a.c_Fuente = i.c_Fuente "
+                + "WHERE a.c_Municipio="+IDgam+" and a.c_Fuente="+BID_CTR+" and b.c_Subcomponente="+subc+" "+consulta_gestion
+                + " GROUP BY c.Codigo";
+
+        double monto = 0.0;
+
+                try {
+                    statement2 = con2.createStatement();
+                    rs2 = statement2.executeQuery(consultaP);
+                    while (rs2.next()) {
+                        monto = monto + rs2.getDouble("Total_bs");
+                    }
+                    if (monto == 0.0) {
+                        monto = 0.0;
+                    }
+                    con2.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Consultas.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+               
         return String.valueOf(monto);
     }
 }
