@@ -164,7 +164,7 @@ public class DTRmunicipios {
         ResultSet rs = null;
         PreparedStatement pst = null;
         try {
-            pst = con.prepareStatement("select c_Periodo from Periodos where Gestion='"+idperiodo+"'");
+            pst = con.prepareStatement("select c_Periodo from Periodos where Gestion='"+idperiodo+"'  LIMIT 1");
             rs = pst.executeQuery();
             while (rs.next()) {
                 id = rs.getString("c_Periodo");

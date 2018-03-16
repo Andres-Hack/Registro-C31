@@ -15,6 +15,10 @@ app.controller('myCtrl1', function($scope, $http) {
     $scope.valor2 = false;
     $scope.valor3 = false;
     $scope.valor4 = false;
+    $scope.myFunc = function() {
+        $scope.saludo = "Hola jajaja";  
+    };
+    
     $scope.importar = function(){
       $http.get('datos.json').success(function(datos){
           $scope.actividad = datos;

@@ -12,11 +12,8 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.ZapfDingbatsList;
 import com.itextpdf.text.html.WebColors;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -33,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Cell;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -92,7 +88,7 @@ public class reporte2 extends HttpServlet {
             
             Connection con = DBConexion.IniciarSesion();
             
-            String x=request.getParameter("txtGamuep");
+            String x=request.getParameter("nu15_gaf{");
             String gam = ListaPorcentaje.municipio(x);
             String IDgam = ListaPorcentaje.IDmunicipio(x);
             
@@ -133,7 +129,7 @@ public class reporte2 extends HttpServlet {
                 + "                         C31 AS g ON a.c_C31 = g.c_C31 INNER JOIN "
                 + "                         Gestiones AS h ON e.Gestion = h.Gestrion INNER JOIN "
                 + "                         Fuentes AS i ON a.c_Fuente = i.c_Fuente "
-                + "WHERE a.c_Municipio=" + IDgam + " and g.Subactividad LIKE ";
+                + "WHERE a.c_Municipio=" + IDgam + " and (e.Gestion='2013' or e.Gestion='2014' or e.Gestion='2015' or e.Gestion='2016' or e.Gestion='2017') and g.Subactividad LIKE ";
 
         Statement statementBID = null, statementCTR = null, statementAct=null, statementSubAct=null;
         ResultSet rsBID = null, rsCTR = null, rsAct=null, rsSubAct=null;
@@ -142,10 +138,10 @@ public class reporte2 extends HttpServlet {
                 int sw1 = i + 1;
                 statementBID = con.createStatement();
                 statementCTR = con.createStatement();
-                rsBID = statementBID.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 1 "
+                rsBID = statementBID.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 1 and (e.Gestion='2013' or e.Gestion='2014' or e.Gestion='2015' or e.Gestion='2016' or e.Gestion='2017')  "
                         + " GROUP BY c.Codigo, c.Descripcion, i.Fuente "
                         + " ORDER BY Cod_Subcomp, i.Fuente ");
-                rsCTR = statementCTR.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 2 "
+                rsCTR = statementCTR.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 2 and (e.Gestion='2013' or e.Gestion='2014' or e.Gestion='2015' or e.Gestion='2016' or e.Gestion='2017') "
                         + " GROUP BY c.Codigo, c.Descripcion, i.Fuente "
                         + " ORDER BY Cod_Subcomp, i.Fuente ");
                 while (rsBID.next()) {

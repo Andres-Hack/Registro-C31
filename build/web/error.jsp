@@ -17,7 +17,7 @@
 		<!-- content -->
 		<div id="content">
 			<ul class="nav">
-         	<li class="home"><a href="http://10.0.6.183:8084/registroC31/">Volber atras ..</a></li>
+         	<li class="home"><a href="http://10.0.6.183:8084/registroC31/">Volver atras ..</a></li>
 
          </ul>
          <p>Para poder ingresar debe comunicarse conel administrador de la pagina web o caso contrario

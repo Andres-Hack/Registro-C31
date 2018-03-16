@@ -126,19 +126,19 @@
                 id: 'TOTAL',
                 data: [
                     [
-                        '2,1 : Apoyo a la gestion catastral y su interconexion con la administracion tributaria',
+                        '2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO',
                         <%= montoTotal21 %>
                     ],
                     [
-                        '2,2 : Adquisicion del sistema de catastro',
+                        '2.2 DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL',
                         <%= montoTotal22 %>
                     ],
                     [
-                        '2,3 : Capacitacion, difucion y asistencia tecnica',
+                        '2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN',
                         <%= montoTotal23 %>
                     ],
                     [
-                        '2,4 : Administracion, suipervision y auditorias',
+                        '2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS',
                         <%= montoTotal24 %>
                     ]
                 ]
@@ -147,19 +147,19 @@
                 id: 'BID',
                 data: [
                     [
-                        '2,1 : Apoyo a la gestion catastral y su interconexion con la administracion tributaria',
+                        '2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO',
                         <%= valor21BID %>
                     ],
                     [
-                        '2,2 : Adquisicion del sistema de catastro',
+                        '2.2 DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL',
                        <%= valor22BID %>
                     ],
                     [
-                        '2,3 : Capacitacion, difucion y asistencia tecnica',
+                        '2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN',
                         <%= valor23BID %>
                     ],
                     [
-                        '2,4 : Administracion, suipervision y auditorias',
+                        '2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS',
                         <%= valor24BID %>
                     ]
                 ]
@@ -168,19 +168,19 @@
                 id: 'CTR',
                 data: [
                     [
-                        '2,1 : Apoyo a la gestion catastral y su interconexion con la administracion tributaria',
+                        '2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO',
                         <%= valor21CTR %>
                     ],
                     [
-                        '2,2 : Adquisicion del sistema de catastro',
+                        '2.2 DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL',
                         <%= valor22CTR %>
                     ],
                     [
-                        '2,3 : Capacitacion, difucion y asistencia tecnica',
+                        '2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN',
                         <%= valor23CTR %>
                     ],
                     [
-                        '2,4 : Administracion, suipervision y auditorias',
+                        '2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS',
                         <%= valor24CTR %>
                     ]
                 ]
@@ -284,6 +284,7 @@ $(function () {
                                                         <option value="2015" >2015</option>
                                                         <option value="2016" >2016</option>
                                                         <option value="2017" >2017</option>
+                                                        <option value="2018" >2018</option>
                                                     </select>
                                                     <label for='nur'>GESTION</label>
                                                 </div>

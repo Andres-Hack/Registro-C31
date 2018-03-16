@@ -26,7 +26,7 @@
               <li>
                     <a href="http://10.0.6.183:8084/registroC31/detalles.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-signal"></span></div>
-                      <span class="title">Estadistics a Detalle</span>
+                      <span class="title">Estadisticas a Detalle</span>
                     </a>
               </li>
               <li>
@@ -36,8 +36,14 @@
                     </a>
               </li>
               <li>
-                    <a href="CTRLPorcentajes" class="">
+                    <a href="http://10.0.6.183:8084/registroC31/modificar.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-edit"></span></div>
+                      <span class="title">Modificar</span>
+                    </a>
+              </li>
+              <li>
+                    <a href="CTRLPorcentajes" class="">
+                      <div class="gui-icon"><span class="glyphicon glyphicon-leaf"></span></div>
                       <span class="title">Distribución Porcentajes</span>
                     </a>
               </li>

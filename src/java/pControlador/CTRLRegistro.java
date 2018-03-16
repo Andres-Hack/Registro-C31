@@ -73,14 +73,24 @@ public class CTRLRegistro extends HttpServlet {
             Registro R = new Registro();
             float a=Float.parseFloat(request.getParameter("txtImporte"));
             float usd = (float) (a/6.86);
+            String str1 = request.getParameter("txtFechaE");
+            String str2 = request.getParameter("txtFechaP");
+            String delimiter = "-";
+            String[] temp1;
+            String[] temp2;
+            temp1 = str1.split(delimiter);
+            temp2 = str2.split(delimiter);
+            String fech_entr = String.valueOf(Integer.parseInt(temp1[1]));
+            String fech_pago = String.valueOf(Integer.parseInt(temp2[1]));            
             String usd2 = Float.toString(usd);
+            
             R.setHoja_Ruta(request.getParameter("txtHR"));
             R.setNro_Factura(request.getParameter("txtFactura"));
             R.setAnio_Pago(request.getParameter("txtGestion"));         
             R.setFecha_Emision(request.getParameter("txtFechaE"));
             R.setFecha_Pago(request.getParameter("txtFechaP"));
-            R.setMes_Dev(request.getParameter("txtMesC31"));
-            R.setMes_Pago(request.getParameter("txtPago"));
+            R.setMes_Dev(fech_entr);
+            R.setMes_Pago(fech_pago);
             R.setC31(request.getParameter("txtNroC31"));
             R.setBID_CTR(request.getParameter("txtBidctr"));
             R.setF_F(request.getParameter("txtFf"));
@@ -92,7 +102,7 @@ public class CTRLRegistro extends HttpServlet {
             R.setSubactividad(request.getParameter("txtSubAct"));
             R.setDescripcion_Subactividad(request.getParameter("txtDescSubAct"));
             R.setC_G(request.getParameter("txtGast"));
-            R.setT_G(request.getParameter("txtTipo"));
+            R.setT_G("0");
             R.setPartida(request.getParameter("txtPartida"));
             R.setInst(request.getParameter("txtInst"));
             R.setGAM_UEP(request.getParameter("txtGamuep"));
