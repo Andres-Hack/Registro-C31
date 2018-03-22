@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -62,25 +62,6 @@ public class reporte1 extends HttpServlet {
         
     }
     
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -89,6 +70,13 @@ public class reporte1 extends HttpServlet {
             Connection con = DBConexion.IniciarSesion();
             
             String x=request.getParameter("nu15_gaf{");
+            String y=request.getParameter("ldiak");
+            String z=request.getParameter("insdw");
+            
+            String gest = "", ano = "", cambio="Bs", dolar="1";
+            if (y.equals("TODO")) {gest=" (e.Gestion='2013' or e.Gestion='2014' or e.Gestion='2015' or e.Gestion='2016' or e.Gestion='2017')"; ano = "2013 - 2017";}
+            else{ gest = " e.Gestion='"+y+"' "; ano = y; }
+            if (z.equals("true")) { dolar="6.86"; cambio="$us"; }
             String gam = ListaPorcentaje.municipio(x);
             String IDgam = ListaPorcentaje.IDmunicipio(x);
             
@@ -102,7 +90,7 @@ public class reporte1 extends HttpServlet {
             }
             
             DecimalFormat formatea = new DecimalFormat("###,###,###");
-            String consulta = "SELECT        c.Codigo AS Cod_Subcomp, c.Descripcion AS Subcomponente, i.Fuente, SUM(a.Importe * a.Porcentaje) / 100 AS Total_bs "
+            String consulta = "SELECT        c.Codigo AS Cod_Subcomp, c.Descripcion AS Subcomponente, i.Fuente, SUM(a.Importe * a.Porcentaje) / (100*"+dolar+") AS Total_bs "
                 + "FROM            Detalle AS a INNER JOIN "
                 + "                         Actividades AS b ON a.c_Actividad = b.c_Actividad INNER JOIN "
                 + "                         Subcomponentes AS c ON b.c_Subcomponente = c.c_Subcomponente INNER JOIN "
@@ -118,14 +106,14 @@ public class reporte1 extends HttpServlet {
         Statement statementBID = null, statementCTR = null;
         ResultSet rsBID = null, rsCTR = null;
         try {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 4; i++) {
                 int sw1 = i + 1;
                 statementBID = con.createStatement();
                 statementCTR = con.createStatement();
-                rsBID = statementBID.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 1 and (e.Gestion='2013' or e.Gestion='2014' or e.Gestion='2015' or e.Gestion='2016' or e.Gestion='2017') "
+                rsBID = statementBID.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 1 and "+gest
                         + " GROUP BY c.Codigo, c.Descripcion, i.Fuente "
                         + " ORDER BY Cod_Subcomp, i.Fuente ");
-                rsCTR = statementCTR.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 2 and (e.Gestion='2013' or e.Gestion='2014' or e.Gestion='2015' or e.Gestion='2016' or e.Gestion='2017') "
+                rsCTR = statementCTR.executeQuery(consulta + "'2," + sw1 + "' and a.c_Fuente = 2 and "+gest
                         + " GROUP BY c.Codigo, c.Descripcion, i.Fuente "
                         + " ORDER BY Cod_Subcomp, i.Fuente ");
                 while (rsBID.next()) {
@@ -178,6 +166,8 @@ public class reporte1 extends HttpServlet {
              Font subtotales= new Font();
              Font actividad= new Font();
              Font montos= new Font();
+             Font cabecera2 = new Font();
+             cabecera2 = FontFactory.getFont("Courier", 9, BaseColor.WHITE);
              actividad.setSize(6);
              actividad.setFamily("COURIER");
              fuenteTitulo.setSize(8);
@@ -194,9 +184,9 @@ public class reporte1 extends HttpServlet {
              montos.setSize(6);
              montos.setFamily("COURIER");
              montos.setStyle(PdfPCell.ALIGN_LEFT);
-             BaseColor cabecera = WebColors.getRGBColor("#65FF65");
-             BaseColor color_subcomponente = WebColors.getRGBColor("#FFA790");
-             BaseColor color_actividad = WebColors.getRGBColor("#FFE182");
+             BaseColor cabecera = WebColors.getRGBColor("#053C6B");
+             BaseColor color_subcomponente = WebColors.getRGBColor("#91BEE0");
+             BaseColor color_actividad = WebColors.getRGBColor("#FFFFFF");
              
              PdfPTable caratula = new PdfPTable(4);
              caratula.getDefaultCell().setBorder(Rectangle.NO_BORDER);
@@ -207,7 +197,7 @@ public class reporte1 extends HttpServlet {
              PdfPCell celda3 = new PdfPCell(new Paragraph("", fuente0));
              PdfPCell celda4 = new PdfPCell(new Paragraph("Version 1.0", fuente0));
              PdfPCell celda5 = new PdfPCell(new Paragraph("Gestion :", fuente0));
-             PdfPCell celda6 = new PdfPCell(new Paragraph("2013 - 2017", fuente0));
+             PdfPCell celda6 = new PdfPCell(new Paragraph(ano, fuente0));
              PdfPCell celda7 = new PdfPCell(new Paragraph("", fuente0));
              PdfPCell celda8 = new PdfPCell(new Paragraph("", fuente0));
              PdfPCell celda9 = new PdfPCell(new Paragraph("Fecha de reporte :", fuente0));
@@ -238,34 +228,46 @@ public class reporte1 extends HttpServlet {
              titulo.setAlignment(Paragraph.ALIGN_CENTER);
              titulo.setFont(FontFactory.getFont("Times New Roman", 14, Font.ITALIC, BaseColor.BLACK));
              titulo.add("DETALLE DE GASTOS PMGM CII CON CARGO");
-             titulo.add("AL GOBIERNO MUNICIPAL DE " + gam);
+             titulo.add(" AL GOBIERNO MUNICIPAL DE " + gam);
              documento.add(titulo);
              Paragraph titulo2 = new Paragraph();
              titulo2.setAlignment(Paragraph.ALIGN_CENTER);
              titulo2.setFont(FontFactory.getFont("Times New Roman", 8, Font.ITALIC, BaseColor.BLACK));
-             titulo2.add("GESTIONES 2013 - 2017");
+             titulo2.add("GESTIONES "+ano);
              documento.add(titulo2);
              Paragraph titulo3 = new Paragraph();
              titulo3.setAlignment(Paragraph.ALIGN_CENTER);
              titulo3.setFont(FontFactory.getFont("Times New Roman", 8, Font.ITALIC, BaseColor.BLACK));
-             titulo3.add("(en Bs)");
+             titulo3.add("(en "+cambio+")");
              documento.add(titulo3);
              
              Paragraph espacio = new Paragraph();
              espacio.setAlignment(Paragraph.ALIGN_CENTER);
              espacio.setFont(FontFactory.getFont("Times New Roman", 12, Font.ITALIC, BaseColor.WHITE));
-             espacio.add("(en Bs)");
+             espacio.add("(en "+cambio+")");
              documento.add(espacio);
              
-             PdfPTable tablesup = new PdfPTable(4);
-             tablesup.setWidths(new float[]{3.5f, 1.5f, 1.5f, 1.5f});
-             tablesup.setWidthPercentage(100);
-             tablesup.getDefaultCell().setBackgroundColor(cabecera);
-             tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
-             tablesup.addCell(new Paragraph("SUBCOMPONENTE", fuenteTitulo));
-             tablesup.addCell(new Paragraph("MONTO EN BID", fuenteTitulo));
-             tablesup.addCell(new Paragraph("MONTO EN CTR", fuenteTitulo));
-             tablesup.addCell(new Paragraph("TOTAL", fuenteTitulo));   
+            PdfPTable tablesup = new PdfPTable(4);
+            tablesup.setWidths(new float[]{3.5f, 1.5f, 1.5f, 1.5f});
+            tablesup.setWidthPercentage(100);
+            tablesup.getDefaultCell().setBackgroundColor(cabecera);
+            tablesup.setHorizontalAlignment(Element.ALIGN_MIDDLE);
+            PdfPCell celdaC = new PdfPCell(new Paragraph("SUB COMPONENTE / PARTIDA", cabecera2));
+            celdaC.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celdaC.setBackgroundColor(cabecera);
+            tablesup.addCell(celdaC);
+            celdaC = new PdfPCell(new Paragraph("MONTO BID", cabecera2));
+            celdaC.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celdaC.setBackgroundColor(cabecera);
+            tablesup.addCell(celdaC);
+            celdaC = new PdfPCell(new Paragraph("MONTO CTR", cabecera2));
+            celdaC.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celdaC.setBackgroundColor(cabecera);
+            tablesup.addCell(celdaC);
+            celdaC = new PdfPCell(new Paragraph("TOTAL ("+cambio+")", cabecera2));
+            celdaC.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celdaC.setBackgroundColor(cabecera);
+            tablesup.addCell(celdaC);   
              /********************* SUB COMPONENTE 2,1 ******************************/
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              tablesup.addCell(new Paragraph(dato_subcBID[0][0]+" "+dato_subcBID[0][1], subtotales));
@@ -330,7 +332,7 @@ public class reporte1 extends HttpServlet {
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              double suma_bid = Double.parseDouble(dato_subcBID[0][3])+Double.parseDouble(dato_subcBID[1][3])+Double.parseDouble(dato_subcBID[2][3])+Double.parseDouble(dato_subcBID[3][3]);
              double suma_ctr = Double.parseDouble(dato_subcCTR[0][3])+Double.parseDouble(dato_subcCTR[1][3])+Double.parseDouble(dato_subcCTR[2][3])+Double.parseDouble(dato_subcCTR[3][3]);
-             tablesup.addCell(new Paragraph("TOTAL GENERAL", fuente));
+             tablesup.addCell(new Paragraph("TOTAL GENERAL", subtotales));
              celda = new PdfPCell(new Paragraph(formatea.format(suma_bid), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_actividad);
@@ -356,7 +358,7 @@ public class reporte1 extends HttpServlet {
              comunes.setWidths(new float[]{0.8f, 1, 1, 0.5f});
              comunes.setWidthPercentage(100);
 
-             BarcodeQRCode barcodeQRCode = new BarcodeQRCode("REPORTE MUNICIPIO DE " + gam + " de la fecha " + hourdateFormat.format(date), 1000, 1000, null);
+             BarcodeQRCode barcodeQRCode = new BarcodeQRCode("REPORTE MUNICIPIO DEL GAM " + gam + " DE LA GESION(ES) "+y, 1000, 1000, null);
              Image codeQrImage = barcodeQRCode.getImage();
              codeQrImage.setAlignment(Paragraph.ALIGN_CENTER);
              codeQrImage.scaleAbsolute(100, 100);

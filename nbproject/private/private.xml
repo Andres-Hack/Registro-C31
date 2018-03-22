@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pReporte/reporte3.java</file>
             <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pReporte/Consultas.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pDistribucion/DTRmunicipios.java</file>
             <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pReporte/reporte1.java</file>
-            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pReporte/reporte2.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/src/java/pControlador/CTRReportePDF.java</file>
+            <file>file:/home/andres/NetBeansProjects/registroC31/web/reportePdf.jsp</file>
         </group>
     </open-files>
 </project-private>

@@ -31,33 +31,26 @@ public class CTRReportePDF extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String gam = request.getParameter("txtGamuep");
+        String gestion = request.getParameter("txtGestion");
+        String dolar = request.getParameter("txtDolar");
         int op=Integer.parseInt(request.getParameter("txtTipoRepo"));
         
         
         switch(op)
             {
                 case 1: 
-                    request.getRequestDispatcher("reporte1?nu15_gaf{="+gam).forward(request, response);
+                    request.getRequestDispatcher("reporte1?nu15_gaf{="+gam+"&ldiak="+gestion+"&insdw="+dolar).forward(request, response);
                     break;                
                 case 2: 
-                    request.getRequestDispatcher("reporte2?nu15_gaf{="+gam).forward(request, response);
+                    request.getRequestDispatcher("reporte2?nu15_gaf{="+gam+"&ldiak="+gestion+"&insdw="+dolar).forward(request, response);
                     break;
                 case 3: 
-                    request.getRequestDispatcher("reporte3?nu15_gaf{="+gam).forward(request, response);
+                    request.getRequestDispatcher("reporte3?nu15_gaf{="+gam+"&ldiak="+gestion+"&insdw="+dolar).forward(request, response);
                     break;
-            }/*
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet "+gam+"</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CTRReportePDF at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }*/
+                case 4: 
+                    request.getRequestDispatcher("reporte4?nu15_gaf{="+gam+"&ldiak="+gestion+"&insdw="+dolar).forward(request, response);
+                    break;
+            }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

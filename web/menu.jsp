@@ -24,19 +24,19 @@
                     </a>
               </li>
               <li>
-                    <a href="http://10.0.6.183:8084/registroC31/detalles.jsp" class="">
+                    <a href="detalles.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-signal"></span></div>
                       <span class="title">Estadisticas a Detalle</span>
                     </a>
               </li>
               <li>
-                    <a href="http://10.0.6.183:8084/registroC31/programado.jsp" class="">
+                    <a href="programado.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-stats"></span></div>
                       <span class="title">Programado</span>
                     </a>
               </li>
               <li>
-                    <a href="http://10.0.6.183:8084/registroC31/modificar.jsp" class="">
+                    <a href="modificar.jsp" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-edit"></span></div>
                       <span class="title">Modificar</span>
                     </a>
@@ -45,12 +45,6 @@
                     <a href="CTRLPorcentajes" class="">
                       <div class="gui-icon"><span class="glyphicon glyphicon-leaf"></span></div>
                       <span class="title">Distribución Porcentajes</span>
-                    </a>
-              </li>
-              <li>
-                    <a href="http://10.0.6.183:8084/registroC31/caratula.jsp" class="">
-                      <div class="gui-icon"><span class="glyphicon glyphicon-ban-circle"></span></div>
-                      <span class="title">Salir</span>
                     </a>
               </li>
             </ul>

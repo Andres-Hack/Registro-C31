@@ -163,15 +163,20 @@ public class DTRmunicipios {
         Connection con = DBConexion.IniciarSesion();
         ResultSet rs = null;
         PreparedStatement pst = null;
-        try {
-            pst = con.prepareStatement("select c_Periodo from Periodos where Gestion='"+idperiodo+"'  LIMIT 1");
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                id = rs.getString("c_Periodo");
+        if (idperiodo.equals("TODO")) {
+            id="TODO";
+        }
+        else {
+            try {
+                pst = con.prepareStatement("select c_Periodo from Periodos where Gestion='" + idperiodo + "'  LIMIT 1");
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    id = rs.getString("c_Periodo");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
-        }                                                   
+        }
         return id;
     }
 }

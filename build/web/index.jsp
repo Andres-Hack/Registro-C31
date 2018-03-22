@@ -15,8 +15,8 @@
 <body>
   <div class="form">
       <ul class="tab-group">
-        <li class="tab active"><a href="#signup">Aréa Financiera</a></li>
-        <li class="tab"><a href="#login">Aréa Técnica</a></li>
+        <li class="tab active"><a href="#signup">Área Financiera</a></li>
+        <li class="tab"><a href="#login">Área Técnica</a></li>
       </ul>
       <div class="tab-content">
         <div id="signup">

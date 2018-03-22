@@ -21,6 +21,16 @@
         <link href="./css/jquery.bootgrid.min.css" rel="stylesheet" />
         <%@ include file="/EstilosJS.jsp"  %>
         <script src="./js/jquery.bootgrid.js"></script>
+        
+        <script type="text/javascript" src="./js/tableExport.js" ></script>
+        <script type="text/javascript" src="./js/jquery.base64.js" ></script>
+        <script type="text/javascript" src="./js/sprintf.js" ></script>
+        <script type="text/javascript" src="./js/jspdf.js" ></script>
+        <script type="text/javascript" src="./js/base64.js" ></script>
+        
+        <script type="text/javascript" src="./js/html2canvas.js"></script>
+        
+        
     </head>
     <body class="menubar-pin header-fixed " ng-app="myApp">
 
@@ -143,18 +153,8 @@
                                             <td>GAM / UEP :</td>
                                             <td>&nbsp;&nbsp;&nbsp;<%= gam %></td>
                                             <td WIDTH="200"></td>
-                                            <td>SUB-ACTIVIDAD :</td>
-                                            <td>&nbsp;&nbsp;&nbsp;<%= suba %></td>
-                                            <td WIDTH="200"></td>
-                                            <td>ACTIVIDAD :</td>
-                                            <td>&nbsp;&nbsp;&nbsp;<%= actividad %></td>
-                                          </tr>
-                                          <tr>
                                             <td>SUB-COMPONENTE :</td>
                                             <td>&nbsp;&nbsp;&nbsp;<%= subc %></td>
-                                            <td WIDTH="200"></td>
-                                            <td>PARTIDA :</td>
-                                            <td>&nbsp;&nbsp;&nbsp;<%= partida %></td>
                                             <td WIDTH="200"></td>
                                             <td>FUENTE :</td>
                                             <td>&nbsp;&nbsp;&nbsp;<%= bid_ctr %></td>
@@ -206,7 +206,7 @@
                             </div>
                         </div>
                     </div>
-                    <a href="reporte?v1=<%= gamuep %>&v2=<%= subc %>&v3=<%= partida %>&v4=<%= suba %>&v5=<%= bid_ctr %>&v6=<%= actividad %>" target="_blank">
+                    <a href="#" onClick ="$('#dvData').tableExport({type:'png',escape:'false',pdfFontSize:8,pdfLeftMargin:20});">
                         <button class="btn btn-danger"><spam class="glyphicon glyphicon-print"></spam>&nbsp;&nbsp;IMPRIMIR REPORTE</button>
                     </a>
                 </div>
@@ -219,13 +219,7 @@
     </div>
     <%@ include file="/menu.jsp"  %> 
 </div>
-<script src="./js/fcJS.js" type="text/javascript" charset="utf-8"></script>
-<script>
-            $("#btnExport").click(function(e) {
-                window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('#dvData').html()));
-                e.preventDefault();
-            });
-</script>
+
 <script>
     $(function()
     {
