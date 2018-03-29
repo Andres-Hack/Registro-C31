@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <% HttpSession sesion = request.getSession(); %>
-<% if(sesion.getAttribute("usuario") != null) {%>
+<% if (sesion.getAttribute("usuario") != null) {%>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
 
     <head>
@@ -32,6 +32,7 @@
                                         <form class="form " action="CTRReportePDF" method="post" id="form-search">
                                             <div  ng-show="mirar">     
                                                 <div class="row">
+                                                    <% if ("1".equals((String) session.getAttribute("nivel"))) {%>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <select name="txtGamuep" class="form-control" required>
@@ -52,7 +53,10 @@
                                                             </select>
                                                             <label for='cite_original'>MUNICIPIO : </label>
                                                         </div>
-                                                    </div>  
+                                                    </div> 
+                                                    <%} else {%>
+                                                    <input name="txtGamuep" type="hidden" value="${sessionScope.abrev}">
+                                                    <%}%>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-4">
@@ -86,10 +90,10 @@
                                                     </div>
                                                     <div class="col-sm-1">
                                                         <div class="checkbox checkbox-styled">
-                                                            
+
                                                             <label>                                                                
                                                                 <input type="checkbox" value="true" class="form-control" name="txtDolar" >
-                                                                <span> $us</span>
+                                                                    <span> $us</span>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -130,7 +134,6 @@
         <%@ include file="/AdminMaterialJS.jsp"  %>
     </body>
 </html>
-<%}
-else {
-    response.sendRedirect("http://10.0.6.183:8084/registroC31/");
+<%} else {
+        response.sendRedirect("http://10.0.6.183:8084/registroC31/");
 }%>

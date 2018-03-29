@@ -1,6 +1,6 @@
 <%@page import="pClases.Actividad"%>
 <%@page import="java.util.LinkedList"%>
-<div class="col-md-10" style="height: 1120px;" ng-controller="myCtrl1" ng-init="cambio=6.86">
+<div class="card-body"  ng-controller="myCtrl1" ng-init="cambio=6.86">
                             
                             <script>
                                 <% if((request.getAttribute("dato")=="4") || (request.getAttribute("dato")=="1")) {%>
@@ -230,7 +230,7 @@
                                           <label style="color: white" value="0">Importe en :.</label>
                                       </div>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-lg btn-block">REGISTRAR</button>
+                                    <button type="submit" class="btn btn-block ink-reaction btn-info">REGISTRAR</button>
 
                                   </form>
                             </div>

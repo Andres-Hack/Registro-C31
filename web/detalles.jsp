@@ -289,6 +289,7 @@ $(function () {
                                                     <label for='nur'>GESTION</label>
                                                 </div>
                                             </div>
+                                            <% if ("1".equals((String) session.getAttribute("nivel"))) {%>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                     <select name="Gamuep" class="form-control">
@@ -310,6 +311,9 @@ $(function () {
                                                     <label for='cite_original'>GAM / UEP</label>
                                                 </div>
                                             </div>
+                                            <%} else {%>
+                                            <input name="Gamuep" type="hidden" value="${sessionScope.abrev}">
+                                            <%}%>
                                             <div class="col-md-4">
                                                 <div class="form-group">
                                                       <div class="checkbox">

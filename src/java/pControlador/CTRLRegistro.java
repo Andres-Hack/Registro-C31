@@ -1,9 +1,11 @@
 package pControlador;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -58,6 +60,31 @@ public class CTRLRegistro extends HttpServlet {
         }
     }
     
+    public List<Registro> getAllRegistro() {
+        List<Registro> registros = new ArrayList<Registro>();
+        Connection cnn = DBConexion.IniciarSesion();
+        try {
+            Statement statement = cnn.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT c_C31, C31, SubComp, Actividad, Subactividad, Beneficiario, Importe_Bs FROM C31 order by c_C31 desc limit 10");
+            while (rs.next()) {
+                Registro user = new Registro();
+                user.setC_C31(rs.getInt("c_C31"));
+                user.setC31(rs.getString("C31"));
+                user.setSubComp(rs.getString("SubComp"));
+                user.setActividad(rs.getString("Actividad"));
+                user.setSubactividad(rs.getString("Subactividad"));
+                user.setBeneficiario(rs.getString("Beneficiario"));
+                user.setImporte_Bs(rs.getString("Importe_Bs"));
+                
+                registros.add(user);
+            }
+        } catch (SQLException e) {
+            System.out.println("Este es el error : "+e);
+        }
+
+        return registros;
+    }
+    
     public static HttpServletRequest lista_persona(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException{                                             
        ArrayList<Registro> lista=new ArrayList<>();
@@ -68,6 +95,19 @@ public class CTRLRegistro extends HttpServlet {
 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.setAttribute("registro", getAllRegistro());
+        request.getServletContext().getRequestDispatcher("/inicio.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             Registro R = new Registro();
@@ -127,8 +167,9 @@ public class CTRLRegistro extends HttpServlet {
                 case 1: 
                     adicion(R);
                     request.setAttribute("dato", "4");
-                    request.getRequestDispatcher("inicio.jsp").forward(request, response);
-                    break;                
+                    request.setAttribute("registro", getAllRegistro());
+                    request.getServletContext().getRequestDispatcher("/inicio.jsp").forward(request, response);
+                    break;                 
                 case 2: 
                     eliminar(ls_isbn); 
                     response.sendRedirect("modificar.jsp"); 
@@ -140,41 +181,13 @@ public class CTRLRegistro extends HttpServlet {
                 case 4: 
                     adicion2(R);
                     request.setAttribute("dato", "4");
-                    request.getRequestDispatcher("inicio.jsp").forward(request, response);
-                    break; 
+                    request.setAttribute("registro", getAllRegistro());
+                    request.getServletContext().getRequestDispatcher("/inicio.jsp").forward(request, response);
+                    break;
             }
         } catch (SQLException ex) {
             Logger.getLogger(CTRLRegistro.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

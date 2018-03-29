@@ -179,4 +179,25 @@ public class DTRmunicipios {
         }
         return id;
     }
+    public static String MunicipioID( String idmunicipio) {
+        String id = "";
+        Connection con = DBConexion.IniciarSesion();
+        ResultSet rs = null;
+        PreparedStatement pst = null;
+        if (idmunicipio.equals("TODO")) {
+            id="TODO";
+        }
+        else {
+            try {
+                pst = con.prepareStatement("select c_Municipio from Municipios where Sigla='"+idmunicipio+"'");
+                rs = pst.executeQuery();
+                while (rs.next()) {
+                    id = rs.getString("c_Municipio");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return id;
+    }
 }

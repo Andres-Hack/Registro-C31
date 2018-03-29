@@ -14,48 +14,31 @@
 </head>
 <body>
   <div class="form">
-      <ul class="tab-group">
-        <li class="tab active"><a href="#signup">Área Financiera</a></li>
-        <li class="tab"><a href="#login">Área Técnica</a></li>
-      </ul>
+      <center><img src="./img/logo.png" width="235" class="img-responsive"></center>
       <div class="tab-content">
         <div id="signup">
-          <h1>Registro C-31</h1>
+          <h1>Sistema Financiero</h1>
           <form action="CTRLUsuario">
           <div class="field-wrap">
             <label>
-              Usuario<span class="req">*</span>
+              Usuario&nbsp;<span class="req">*</span>
             </label>
             <input type="text"required autocomplete="off" name="txtusuario"/>
           </div>
           <div class="field-wrap">
             <label>
-              Password<span class="req">*</span>
+              Password&nbsp;<span class="req">*</span>
             </label>
             <input type="password"required autocomplete="off" name="txtcontra"/>
           </div>
           <button type="submit" class="button button-block"/>INGRESAR</button>
           </form>
-        </div>
+        </div
         <div id="login">
-          <h1>Ficha de Control</h1>
           <form action="CTRLUsuario2">
-            <div class="field-wrap">
-            <label>
-              Usuario<span class="req">*</span>
-            </label>
-            <input type="text"required autocomplete="off" name="usuario"/>
-          </div>
-          <div class="field-wrap">
-            <label>
-              Password<span class="req">*</span>
-            </label>
-            <input type="password"required autocomplete="off" name="password"/>
-          </div>
-          <p class="forgot"><a href="#">Forgot Password?</a></p>
-          <button class="button button-block" id="tecnica"/>Ingresar</button>
+
           </form>
-        </div>
+        </div> 
       </div><!-- tab-content -->
 </div> <!-- /form -->
   <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>

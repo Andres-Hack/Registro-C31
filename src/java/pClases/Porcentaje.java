@@ -8,6 +8,7 @@ public class Porcentaje {
     private int c_Porcentaje;
     private int c_Municipio;
     private int c_Periodo;
+    private String SubComp;
     private double Porcentaje;
     private double Porcentaje2;
 
@@ -33,6 +34,14 @@ public class Porcentaje {
 
     public void setC_Periodo(int c_Periodo) {
         this.c_Periodo = c_Periodo;
+    }
+
+    public String getSubComp() {
+        return SubComp;
+    }
+
+    public void setSubComp(String SubComp) {
+        this.SubComp = SubComp;
     }
 
     public double getPorcentaje() {

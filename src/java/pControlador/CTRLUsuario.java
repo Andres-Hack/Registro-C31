@@ -1,7 +1,10 @@
 package pControlador;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -10,26 +13,71 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import pModelo.DBConexion;
 import pModelo.DBUsuario;
 
 @WebServlet(name = "CTRLUsuario", urlPatterns = {"/CTRLUsuario"})
 public class CTRLUsuario extends HttpServlet {
+    
+    public String NombreUsuario(String usuario, String password){
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1;
+        ResultSet rs1;
+        String nombre ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select concat(nombre,' ',apellido) as Nombre from personal where usuario='"+usuario+"' and clave='"+password+"' ");
+            while (rs1.next()) {
+                nombre = rs1.getString("Nombre");
+            }
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("ERROR CtrUsr : "+ex);
+        }        
+        return nombre;
+    }
+    
+    public  String NivelUsuario(String usuario, String password){
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1;
+        ResultSet rs1;
+        String nivel ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select nivel from personal where usuario='"+usuario+"' and clave='"+password+"' ");
+            while (rs1.next()) {
+                nivel = rs1.getString("nivel");
+            }
+            con.close();
+        } catch (SQLException ex) {
+             System.out.println("ERROR CtrUsr : "+ex);
+        }        
+        return nivel;
+    }
+    
+    public  String Abreviado(String usuario, String password){
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1;
+        ResultSet rs1;
+        String abrev ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select abrev from personal where usuario='"+usuario+"' and clave='"+password+"' ");
+            while (rs1.next()) {
+                abrev = rs1.getString("abrev");
+            }
+            con.close();
+        } catch (SQLException ex) {
+             System.out.println("ERROR CtrUsr : "+ex);
+        }        
+        return abrev;
+    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
           
     }
-    
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -38,17 +86,34 @@ public class CTRLUsuario extends HttpServlet {
             
             String us=request.getParameter("txtusuario");
             String pwd=request.getParameter("txtcontra");
-            //String dato = "";
             
             boolean sw = DBUsuario.Login(us, pwd, "1");
-            //System.out.println("Este es el ususario "+us+" y esta es la contraseña "+pwd+" y este es el resultado "+sw);
-            //dato = DBUsuario.Log(us, pwd);
+            String nombre = NombreUsuario(us, pwd);
+            String nivel = NivelUsuario(us, pwd);
+            String abrev = Abreviado(us, pwd);
+            
             
             if(sw==true && sesion.getAttribute("usuario") == null){
-                //si coincide usuario y password y además no hay sesión iniciada
                 sesion.setAttribute("usuario", us);
-                //redirijo a página con información de login exitoso
-                response.sendRedirect("inicio.jsp");
+                sesion.setAttribute("nombre", nombre);
+                sesion.setAttribute("nivel", nivel);
+                sesion.setAttribute("abrev", abrev);
+                switch (nivel) {
+                    case "1":
+                        response.sendRedirect("CTRLRegistro");
+                        break;
+                    case "2":
+                        response.sendRedirect("buscar.jsp");
+                        break;
+                    case "3":
+                        response.sendRedirect("buscar.jsp");
+                        break;
+                    case "4":
+                        response.sendRedirect("inicio.jsp");
+                        break;
+                    default:
+                        break;
+                }
             }else{
                 response.sendRedirect("error.jsp");
             } 
@@ -57,14 +122,6 @@ public class CTRLUsuario extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

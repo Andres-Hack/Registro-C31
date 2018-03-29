@@ -178,14 +178,14 @@ public class reporte4 extends HttpServlet {
              PdfWriter.getInstance(documento, response.getOutputStream());
              documento.open();
              
-             Image image = Image.getInstance("fotoDJ.png");
+             Image image = Image.getInstance("/opt/tomcat/bin/fotoDJ.png");
              image.scaleAbsolute(0f, 0f);
 
              PdfPTable table = new PdfPTable(1);
              PdfPCell cell = new PdfPCell(image);
              table.addCell(cell);
              documento.add(table);
-             image = Image.getInstance("fotoDJ.png");
+             image = Image.getInstance("/opt/tomcat/bin/fotoDJ.png");
              image.scaleAbsolute(550f, 45f);
              documento.add(image);
              

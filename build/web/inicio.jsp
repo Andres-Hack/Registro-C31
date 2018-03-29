@@ -3,6 +3,7 @@
     Created on : 18-01-2017, 10:21:46 AM
     Author     : andres
 --%>
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.CallableStatement"%>
@@ -13,12 +14,13 @@
 <%@page import="pClases.Registro"%>
 <%@page import="pModelo.DBConexion" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <% HttpSession sesion = request.getSession(); %>
 <% if(sesion.getAttribute("usuario") != null) {%>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <%@ include file="/EstilosJS.jsp"  %> 
-    <%@ include file="/estadisticas.jsp"  %> 
+    <%@ include file="/AdminMaterial.jsp"  %>
+    <%@ include file="/AdminMaterialJS.jsp"  %>
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300">
     <link rel="stylesheet" href="https://cdn.rawgit.com/yahoo/pure-release/v0.6.0/pure-min.css">
@@ -46,8 +48,8 @@
                 <div class="row">
                     <div class="col-md-6">
                          <div class="card card-underline">
-                            <div class="card-head ">
-                                <header class=" text-default-light"><span class="glyphicon glyphicon-save"></span> Registro C31</header>
+                            <div class="card-head style-info">
+                                <header><span class="glyphicon glyphicon-save"></span> Registro C31</header>
                             </div>
                             <div class="col-md-1"><label style="color: white">.</label></div>
                             <%@ include file="/formulario.jsp"  %> 
@@ -57,20 +59,39 @@
 
                     <div class="col-md-6 ">
                         <div class="card card-underline">
-                            <div class="card-head ">
-                                <header class=" text-default-light "><span class="glyphicon glyphicon-ok"></span> Estadisticas</header>
+                            <div class="card-head style-success">
+                                <header><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Lista de Ultimos Ingresos</header>
                             </div>
-                            <div class="nano has-scrollbar" style="height: 440px;"><div class="nano-content" tabindex="0" style="right: -15px;"><div class="card-body no-padding height-11 scroll style-default-bright" style="height: auto;">
+                            <div class="card-body no-padding">
                                 <div class="table-responsive no-margin">
-                                    <table class="table table-striped no-margin ">
+                                    <table class="table table-striped no-margin">
+                                        <thead>
+                                            <tr>
+                                                <th>Nro.</th>
+                                                <th>Nro C31</th>
+                                                <th>Sub Componente</th>
+                                                <th>Actividad</th>
+                                                <th>Sub Actividad</th>
+                                                <th>Beneficiario</th>
+                                                <th>Monto (Bs.)</th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
-                                          <script src="https://code.highcharts.com/highcharts.js"></script>
-                                          <script src="https://code.highcharts.com/modules/exporting.js"></script>
-                                          <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+                                            <c:forEach items="${registro}" var="r">
+                                                <tr>
+                                                    <td>${r.getC_C31()}</td>
+                                                    <td>${r.getC31()}</td>
+                                                    <td>${r.getSubComp()}</td>
+                                                    <td>${r.getActividad()}</td>
+                                                    <td>${r.getSubactividad()}</td>
+                                                    <td>${r.getBeneficiario()}</td>
+                                                    <td>${r.getImporte_Bs()}</td>
+                                                </tr>
+                                            </c:forEach>
                                         </tbody>
                                     </table>
-                                </div>
-                            </div></div><div class="nano-pane" style="display: none;"><div class"nano-slider" style="height: 425px; transform: translate(0px, 0px);"></div></div></div>
+                                </div><!--end .table-responsive -->
+                            </div><!--end .card-body -->
                         </div>
                     </div>                    
                 </div>

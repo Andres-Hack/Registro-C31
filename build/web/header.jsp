@@ -29,8 +29,8 @@
             <ul class="header-nav header-nav-profile">
                 <li class="dropdown">
                     <a href="" class="" data-toggle="dropdown">
-                        <img src="https://www.ocf.berkeley.edu/~dblab/blog/wp-content/uploads/2012/01/icon-profile.png" alt="">
-                        <span class="profile-info">${sessionScope.usuario}<small>${sessionScope.usuario}@oopp.gob.bo</small></span>
+                        <img src="./img/${sessionScope.usuario}.png" alt="">
+                        <span class="profile-info">${sessionScope.nombre}<small>${sessionScope.usuario}@oopp.gob.bo</small></span>
                         <span class="glyphicon glyphicon-triangle-bottom"></span>
                     </a>
                     <ul class="dropdown-menu animation-dock">
