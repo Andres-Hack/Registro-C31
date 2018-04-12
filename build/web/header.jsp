@@ -31,14 +31,7 @@
                     <a href="" class="" data-toggle="dropdown">
                         <img src="./img/${sessionScope.usuario}.png" alt="">
                         <span class="profile-info">${sessionScope.nombre}<small>${sessionScope.usuario}@oopp.gob.bo</small></span>
-                        <span class="glyphicon glyphicon-triangle-bottom"></span>
                     </a>
-                    <ul class="dropdown-menu animation-dock">
-                        <li class="dropdown-header">Opciones de usuario</li>
-                        <li><a href=""><span class="glyphicon glyphicon-leaf"></span> Perfil</a></li>
-                        <li><a href=""><span class="glyphicon glyphicon-pencil"></span> Cambiar Contraseña</a></li>
-                        <li><a href="/registroC31/CTRLSalir"><span class="glyphicon glyphicon-log-out danger"></span> Salir</a></li>
-                    </ul>
                 </li>
             </ul>
         </div>

@@ -111,6 +111,9 @@ public class CTRLUsuario extends HttpServlet {
                     case "4":
                         response.sendRedirect("inicio.jsp");
                         break;
+                    case "5":
+                        response.sendRedirect("inicio.jsp");
+                        break;
                     default:
                         break;
                 }

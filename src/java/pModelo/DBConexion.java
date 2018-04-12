@@ -11,7 +11,8 @@ public abstract class DBConexion {
             Class.forName("com.mysql.jdbc.Driver");         
             String url = "jdbc:mysql://localhost/c31";
             String user = "root";           
-            String password = "sistema123";          
+            String password = "Bolivia2016";          
+            //String password = "sistema123";          
             cn= DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException e) {
             cn=null;

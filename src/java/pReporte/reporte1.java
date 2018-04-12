@@ -269,8 +269,11 @@ public class reporte1 extends HttpServlet {
             celdaC.setBackgroundColor(cabecera);
             tablesup.addCell(celdaC);   
              /********************* SUB COMPONENTE 2,1 ******************************/
-             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[0][0]+" "+dato_subcBID[0][1], subtotales));
+             String label01="";
+             if (dato_subcBID[0][0].equals("0.0")) { label01 = dato_subcCTR[0][0]+" "+dato_subcCTR[0][1]; }
+             else { label01 = dato_subcBID[0][0]+" "+dato_subcBID[0][1];  }
+             tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);             
+             tablesup.addCell(new Paragraph(label01, subtotales));
              PdfPCell celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_actividad);
@@ -284,8 +287,10 @@ public class reporte1 extends HttpServlet {
              celda.setBackgroundColor(color_actividad);
              tablesup.addCell(celda);
              /********************* SUB COMPONENTE 2,2 ******************************/
+             if (dato_subcBID[1][0].equals("0.0")) { label01 = dato_subcCTR[1][0]+" "+dato_subcCTR[1][1]; }
+             else { label01 = dato_subcBID[1][0]+" "+dato_subcBID[1][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[1][0]+" "+dato_subcBID[1][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_actividad);
@@ -299,8 +304,10 @@ public class reporte1 extends HttpServlet {
              celda.setBackgroundColor(color_actividad);
              tablesup.addCell(celda);     
              /********************* SUB COMPONENTE 2,3 ******************************/
+             if (dato_subcBID[2][0].equals("0.0")) { label01 = dato_subcCTR[2][0]+" "+dato_subcCTR[2][1]; }
+             else { label01 = dato_subcBID[2][0]+" "+dato_subcBID[2][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[2][0]+" "+dato_subcBID[2][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_actividad);
@@ -314,8 +321,10 @@ public class reporte1 extends HttpServlet {
              celda.setBackgroundColor(color_actividad);
              tablesup.addCell(celda);   
              /********************* SUB COMPONENTE 2,4 ******************************/
+             if (dato_subcBID[3][0].equals("0.0")) { label01 = dato_subcCTR[3][0]+" "+dato_subcCTR[3][1]; }
+             else { label01 = dato_subcBID[3][0]+" "+dato_subcBID[3][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[3][0]+" "+dato_subcBID[3][1], subtotales));             
+             tablesup.addCell(new Paragraph(label01, subtotales));             
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_actividad);

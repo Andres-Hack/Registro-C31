@@ -24,17 +24,23 @@
                                           <label style="color: white" value="0">Importe en :.</label>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                                 <div class="form-group">
                                                     <input type="text" name="txtHR" value="" class="form-control" required />
                                                     <label for='cite_original'>Hoja de Ruta</label>
                                                 </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                                 <div class="form-group">
                                                     <input type="text" name="txtFactura" value="" class="form-control" required />
                                                     <label for='cite_original'>Nro. Factura / Doc. Ref</label>
                                                 </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <input type="number" name="txtNroC31" value="" class="form-control" required />
+                                                <label for='cite_original'>Nro. C31</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -52,22 +58,53 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input type="number" name="txtNroC31" value="" class="form-control" required />
-                                                <label for='cite_original'>Nro. C31</label>
+                                                <select class="form-control" name="txtGast" required >
+                                                    <option value=""></option>
+                                                    <option value="2">2</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                </select>
+                                                <label for='cite_original'>Clase de gasto</label>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" name="txtConcepto" class="form-control" style="text-transform:uppercase;" required >
+                                                <label for='cite_original'>Concepto</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">                                        
+                                    <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <select class="form-control" name="txtBidctr" required>
-                                                    <option value="BID">BID</option>
-                                                    <option value="CTR">CTR</option>
-                                                </select>
-                                                <label for='cite_original'>Recursos</label>
+                                                <input type="text" name="txtImporte" class="form-control" ng-model="bolivianos" required >
+                                                <label for='cite_original'>Inporte en  Bs <cite style="color: #D83526">* punto decimal.</cite></label>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
+                                            <div class="form-group">
+                                                <input type="text" name="txtTc" class="form-control" ng-bind="tc" ng-model="cambio" readonly>
+                                                <label for='cite_original'>T/C</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <input type="text" name="txtImporteUSD" class="form-control" placeholder="{{bolivianos/cambio}}" readonly>
+                                                <label for='cite_original'>Inporte en  $us</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                             <div class="form-group">
+                                                 <input type="text" name="txtBeneficiario" class="form-control" style="text-transform:uppercase;" required >
+                                                 <label for='cite_original'>Beneficiario / Proveedor</label>
+                                             </div>
+                                         </div>
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <select class="form-control" name="txtFf" ng-model="FF" ng-init="FF='41'" required>
                                                     <option value=""></option>
@@ -78,7 +115,7 @@
                                                 <label for='cite_original'>Fuente de Financiamiento</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <select class="form-control" name="txtOf" required>
                                                     <option value="113" ng-if="FF==='41'">113 : Tesoro General de la Nación - Coparticipación Tributaria.</option>
@@ -88,45 +125,15 @@
                                                 <label for='cite_original'>Organismo Financiador</label>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
+                                    </div>                                 
+                                    <div class="row">                                        
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input class="form-control" id="project-name" id="searchbox" required/>
-                                                <input type="hidden" name="txtSubc" id="project-id" />
-                                                <input type="hidden" name="txtDescSubc" id="project-desc" />
-                                                <label for='cite_original'>Subcomponente</label>  
-                                            </div>
-                                        </div>                                         
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                               <input class="form-control" id="actividad-name" required/>
-                                               <input type="hidden" name="txtAct" id="actividad-id" />
-                                               <input type="hidden" name="txtDescAct" id="actividad-desc" />
-                                              <label for='cite_original'>Actividad</label> 
-                                              
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input class="form-control" id="subactividad-name" required/>
-                                                <input type="hidden" name="txtSubAct" id="subactividad-id" />
-                                                <input type="hidden" name="txtDescSubAct" id="subactividad-desc" />
-                                              <label for='cite_original'>Sub actividad</label>  
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <select class="form-control" name="txtGast" required >
-                                                    <option value=""></option>
-                                                    <option value="2">2</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
+                                                <select class="form-control" name="txtBidctr" required>
+                                                    <option value="BID">BID</option>
+                                                    <option value="CTR">CTR</option>
                                                 </select>
-                                                <label for='cite_original'>Clase de gasto</label>
+                                                <label for='cite_original'>Recursos</label>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -178,47 +185,39 @@
                                                 <label for='cite_original'>GAM / UEP</label>
                                             </div>
                                         </div>
-                                    </div>
-                                     <div class="row">
-                                         
-                                         <div class="col-md-4">
-                                             <div class="form-group">
-                                                 <input type="text" name="txtBeneficiario" class="form-control" style="text-transform:uppercase;" required >
-                                                 <label for='cite_original'>Beneficiario / Proveedor</label>
-                                             </div>
-                                         </div>                                        
+                                    </div> 
+                                    <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input type="text" name="txtConcepto" class="form-control" style="text-transform:uppercase;" required >
-                                                <label for='cite_original'>Concepto</label>
+                                                <input class="form-control" id="project-name" id="searchbox" required/>
+                                                <input type="hidden" name="txtSubc" id="project-id" />
+                                                <input type="hidden" name="txtDescSubc" id="project-desc" />
+                                                <label for='cite_original'>Subcomponente</label>  
+                                            </div>
+                                        </div>                                         
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                               <input class="form-control" id="actividad-name" required/>
+                                               <input type="hidden" name="txtAct" id="actividad-id" />
+                                               <input type="hidden" name="txtDescAct" id="actividad-desc" />
+                                              <label for='cite_original'>Actividad</label> 
+                                              
                                             </div>
                                         </div>
-                                     </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <input class="form-control" id="subactividad-name" required/>
+                                                <input type="hidden" name="txtSubAct" id="subactividad-id" />
+                                                <input type="hidden" name="txtDescSubAct" id="subactividad-desc" />
+                                              <label for='cite_original'>Sub actividad</label>  
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <input id="hero-demo" autofocus type="text" name="txtProducto" class="form-control" style="text-transform:uppercase;" required >
                                                 <label for='cite_original'>Producto</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input type="text" name="txtImporte" class="form-control" ng-model="bolivianos" required >
-                                                <label for='cite_original'>Inporte en  Bs <cite style="color: #D83526">* punto decimal.</cite></label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input type="text" name="txtTc" class="form-control" ng-bind="tc" ng-model="cambio" readonly>
-                                                <label for='cite_original'>T/C</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <input type="text" name="txtImporteUSD" class="form-control" placeholder="{{bolivianos/cambio}}" readonly>
-                                                <label for='cite_original'>Inporte en  $us</label>
                                             </div>
                                         </div>
                                     </div>

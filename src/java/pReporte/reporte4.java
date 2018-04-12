@@ -298,8 +298,11 @@ public class reporte4 extends HttpServlet {
              celdaC.setBackgroundColor(cabecera);
              tablesup.addCell(celdaC);
              /********************* SUB COMPONENTE 2,1 ******************************/
+             String label01="";
+             if (dato_subcBID[0][0].equals("0.0")) { label01 = dato_subcCTR[0][0]+" "+dato_subcCTR[0][1]; }
+             else { label01 = dato_subcBID[0][0]+" "+dato_subcBID[0][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[0][0]+" "+dato_subcBID[0][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              PdfPCell celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_subcomponente);
@@ -313,9 +316,12 @@ public class reporte4 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);
              try {
+                 String label02="";
+                 if (dato_subcBID[0][0].equals("0.0")) { label02 = dato_subcCTR[0][0]; }
+                 else { label02 = dato_subcBID[0][0];  }
                  Connection cox = DBConexion.IniciarSesion();
                  statementPart = cox.createStatement();
-                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+dato_subcBID[0][0]+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
+                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+label02+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
                  while (rsPart.next()) {
                     String BID = Consultas.MontoPartida(rsPart.getString("Partida"), "BID", IDgam, "2,1", gest, dolar);
                     String CTR = Consultas.MontoPartida(rsPart.getString("Partida"), "CTR", IDgam, "2,1", gest, dolar);
@@ -344,8 +350,10 @@ public class reporte4 extends HttpServlet {
                  System.out.println("ERROR ACTIVIDAD : " + ex);
              }     
              /********************* SUB COMPONENTE 2,2 ******************************/
+             if (dato_subcBID[1][0].equals("0.0")) { label01 = dato_subcCTR[1][0]+" "+dato_subcCTR[1][1]; }
+             else { label01 = dato_subcBID[1][0]+" "+dato_subcBID[1][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[1][0]+" "+dato_subcBID[1][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_subcomponente);
@@ -359,9 +367,12 @@ public class reporte4 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);   
              try {
+                 String label02="";
+                 if (dato_subcBID[1][0].equals("0.0")) { label02 = dato_subcCTR[1][0]; }
+                 else { label02 = dato_subcBID[1][0];  }
                  Connection cox = DBConexion.IniciarSesion();
                  statementPart = cox.createStatement();
-                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+dato_subcBID[1][0]+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
+                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+label02+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
                  while (rsPart.next()) {
                     String BID = Consultas.MontoPartida(rsPart.getString("Partida"), "BID", IDgam, "2,2", gest, dolar);
                     String CTR = Consultas.MontoPartida(rsPart.getString("Partida"), "CTR", IDgam, "2,2", gest, dolar);
@@ -390,8 +401,10 @@ public class reporte4 extends HttpServlet {
                  System.out.println("error : " + ex);
              }        
              /********************* SUB COMPONENTE 2,3 ******************************/
+             if (dato_subcBID[2][0].equals("0.0")) { label01 = dato_subcCTR[2][0]+" "+dato_subcCTR[2][1]; }
+             else { label01 = dato_subcBID[2][0]+" "+dato_subcBID[2][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[2][0]+" "+dato_subcBID[2][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_subcomponente);
@@ -405,9 +418,12 @@ public class reporte4 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);   
              try {
+                 String label02="";
+                 if (dato_subcBID[2][0].equals("0.0")) { label02 = dato_subcCTR[2][0]; }
+                 else { label02 = dato_subcBID[2][0];  }
                  Connection cox = DBConexion.IniciarSesion();
                  statementPart = cox.createStatement();
-                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+dato_subcBID[2][0]+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
+                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+label02+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
                  while (rsPart.next()) {
                     String BID = Consultas.MontoPartida(rsPart.getString("Partida"), "BID", IDgam, "2,3", gest, dolar);
                     String CTR = Consultas.MontoPartida(rsPart.getString("Partida"), "CTR", IDgam, "2,3", gest, dolar);
@@ -438,7 +454,9 @@ public class reporte4 extends HttpServlet {
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              tablesup.setHorizontalAlignment(Element.ALIGN_LEFT);       
              /********************* SUB COMPONENTE 2,4 ******************************/
-             tablesup.addCell(new Paragraph(dato_subcBID[3][0]+" "+dato_subcBID[3][1], subtotales));
+             if (dato_subcBID[3][0].equals("0.0")) { label01 = dato_subcCTR[3][0]+" "+dato_subcCTR[3][1]; }
+             else { label01 = dato_subcBID[3][0]+" "+dato_subcBID[3][1];  }
+             tablesup.addCell(new Paragraph(label01, subtotales));
              tablesup.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -453,9 +471,12 @@ public class reporte4 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);
              try {
+                 String label02="";
+                 if (dato_subcBID[3][0].equals("0.0")) { label02 = dato_subcCTR[3][0]; }
+                 else { label02 = dato_subcBID[3][0];  }
                  Connection cox = DBConexion.IniciarSesion();
                  statementPart = cox.createStatement();
-                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+dato_subcBID[3][0]+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
+                 rsPart = statementPart.executeQuery(consulta2 + " WHERE a.c_Municipio="+IDgam+" and c.Codigo='"+label02+"' GROUP BY c.Codigo, g.Partida ORDER BY Cod_Subcomp, g.Partida ");
                  while (rsPart.next()) {
                     String BID = Consultas.MontoPartida(rsPart.getString("Partida"), "BID", IDgam, "2,4", gest, dolar);
                     String CTR = Consultas.MontoPartida(rsPart.getString("Partida"), "CTR", IDgam, "2,4", gest, dolar);

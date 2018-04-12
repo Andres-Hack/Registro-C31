@@ -294,8 +294,11 @@ public class reporte3 extends HttpServlet {
              celdaC.setBackgroundColor(cabecera);
              tablesup.addCell(celdaC);
              /********************* SUB COMPONENTE 2,1 ******************************/
+             String label01="";
+             if (dato_subcBID[0][0].equals("0.0")) { label01 = dato_subcCTR[0][0]+" "+dato_subcCTR[0][1]; }
+             else { label01 = dato_subcBID[0][0]+" "+dato_subcBID[0][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[0][0]+" "+dato_subcBID[0][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              PdfPCell celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[0][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_subcomponente);
@@ -309,9 +312,12 @@ public class reporte3 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);
              try {
+                 String label02="";
+                 if (dato_subcBID[0][0].equals("0.0")) { label02 = dato_subcCTR[0][0]; }
+                 else { label02 = dato_subcBID[0][0];  }
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
-                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[0][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + label02 + "%' GROUP BY b.Codigo, b.Descripcion");
                  while (rsAct.next()) {
                      String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 
                      String BID = Consultas.MontoActividadBID(IDgam, dato1, y, dolar);
@@ -336,8 +342,10 @@ public class reporte3 extends HttpServlet {
                  System.out.println("ERROR ACTIVIDAD : " + ex);
              }     
              /********************* SUB COMPONENTE 2,2 ******************************/
+             if (dato_subcBID[1][0].equals("0.0")) { label01 = dato_subcCTR[1][0]+" "+dato_subcCTR[1][1]; }
+             else { label01 = dato_subcBID[1][0]+" "+dato_subcBID[1][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[1][0]+" "+dato_subcBID[1][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[1][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_subcomponente);
@@ -351,9 +359,12 @@ public class reporte3 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);   
              try {
+                 String label02="";
+                 if (dato_subcBID[1][0].equals("0.0")) { label02 = dato_subcCTR[1][0]; }
+                 else { label02 = dato_subcBID[1][0];  }
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
-                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[1][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + label02 + "%' GROUP BY b.Codigo, b.Descripcion");
                  while (rsAct.next()) {
                      String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 
                      String BID = Consultas.MontoActividadBID(IDgam, dato1, y, dolar);
@@ -378,8 +389,10 @@ public class reporte3 extends HttpServlet {
                  System.out.println("error : " + ex);
              }        
              /********************* SUB COMPONENTE 2,3 ******************************/
+             if (dato_subcBID[2][0].equals("0.0")) { label01 = dato_subcCTR[2][0]+" "+dato_subcCTR[2][1]; }
+             else { label01 = dato_subcBID[2][0]+" "+dato_subcBID[2][1];  }
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
-             tablesup.addCell(new Paragraph(dato_subcBID[2][0]+" "+dato_subcBID[2][1], subtotales));
+             tablesup.addCell(new Paragraph(label01, subtotales));
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[2][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda.setBackgroundColor(color_subcomponente);
@@ -393,9 +406,11 @@ public class reporte3 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);   
              try {
+                 String label02="";
+                 if (dato_subcBID[2][0].equals("0.0")) { label02 = dato_subcCTR[2][0]; }
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
-                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[2][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + label02 + "%' GROUP BY b.Codigo, b.Descripcion");
                  while (rsAct.next()) {
                      String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 
                      String BID = Consultas.MontoActividadBID(IDgam, dato1, y, dolar);
@@ -422,7 +437,9 @@ public class reporte3 extends HttpServlet {
              tablesup.getDefaultCell().setBackgroundColor(color_subcomponente);
              tablesup.setHorizontalAlignment(Element.ALIGN_LEFT);       
              /********************* SUB COMPONENTE 2,4 ******************************/
-             tablesup.addCell(new Paragraph(dato_subcBID[3][0]+" "+dato_subcBID[3][1], subtotales));
+             if (dato_subcBID[3][0].equals("0.0")) { label01 = dato_subcCTR[3][0]+" "+dato_subcCTR[3][1]; }
+             else { label01 = dato_subcBID[3][0]+" "+dato_subcBID[3][1];  }
+             tablesup.addCell(new Paragraph(label01, subtotales));
              tablesup.setHorizontalAlignment(Element.ALIGN_RIGHT);
              celda = new PdfPCell(new Paragraph(formatea.format(Double.parseDouble(dato_subcBID[3][3])), subtotales));
              celda.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -437,9 +454,12 @@ public class reporte3 extends HttpServlet {
              celda.setBackgroundColor(color_subcomponente);
              tablesup.addCell(celda);
              try {
+                 String label02="";
+                 if (dato_subcBID[3][0].equals("0.0")) { label02 = dato_subcCTR[3][0]; }
+                 else { label02 = dato_subcBID[3][0];  }
                  Connection cox = DBConexion.IniciarSesion();
                  statementAct = con.createStatement();
-                 rsAct = statementAct.executeQuery(consulta2 + " '" + dato_subcBID[3][0] + "%' GROUP BY b.Codigo, b.Descripcion");
+                 rsAct = statementAct.executeQuery(consulta2 + " '" + label02 + "%' GROUP BY b.Codigo, b.Descripcion");
                  System.out.println("");
                  while (rsAct.next()) {
                      String dato1=Consultas.ActividadID(rsAct.getString("Codigo")); 

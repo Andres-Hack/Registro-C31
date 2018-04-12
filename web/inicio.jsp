@@ -56,7 +56,7 @@
                             <div class="col-md-1"><label style="color: white">.</label></div>
                         </div>
                     </div>
-
+                
                     <div class="col-md-6 ">
                         <div class="card card-underline">
                             <div class="card-head style-success">
@@ -74,6 +74,7 @@
                                                 <th>Sub Actividad</th>
                                                 <th>Beneficiario</th>
                                                 <th>Monto (Bs.)</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -86,6 +87,13 @@
                                                     <td>${r.getSubactividad()}</td>
                                                     <td>${r.getBeneficiario()}</td>
                                                     <td>${r.getImporte_Bs()}</td>
+                                                    <td>
+                                                        <a href="CTRLDetalleC31?vsd=${r.getC_C31()}&d#fg=hh">
+                                                        <button type="button" class="btn ink-reaction btn-floating-action btn-sm btn-info">
+                                                            <strong><h4 style=" font-family: monospace; text-transform: lowercase; font-weight: bold;">i</h4></strong>
+                                                        </button>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -99,10 +107,15 @@
     </div>
     <%@ include file="/menu.jsp"  %> 
 </div>
-
+<!-- BEGIN JIVOSITE CODE {literal} -->
+<script type='text/javascript'>
+(function(){ var widget_id = 'C1CPRwzVQk';var d=document;var w=window;function l(){
+var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();</script>
+<div id='jivo_copyright' style='display: none'>Live Chat desarrollado por <a href='https://www.jivochat.es' target='_blank'>www.jivochat.es</a></div>
+<!-- {/literal} END JIVOSITE CODE -->
 </body>
 </html>
 <%}
 else {
-    response.sendRedirect("http://10.0.6.183:8084/registroC31/");
+    response.sendRedirect("http://pmgmc2.oopp.gob.bo");
 }%>

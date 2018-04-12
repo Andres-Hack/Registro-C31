@@ -5,7 +5,7 @@
                 <hr>
                 <!-- BEGIN MAIN MENU -->
                 <ul id="main-menu" class="gui-controls">
-                    <% if ("1".equals((String)session.getAttribute("nivel")) || "4".equals((String)session.getAttribute("nivel"))) {%>
+                    <% if ("1".equals((String)session.getAttribute("nivel")) || "4".equals((String)session.getAttribute("nivel")) || "5".equals((String)session.getAttribute("nivel"))) {%>
                     <li class="active expanded" s>
                         <a href="CTRLRegistro" >
                             <div class="gui-icon"><span class="glyphicon glyphicon-home"></span></div>
@@ -13,7 +13,7 @@
                         </a>
                     </li>
                     <%}%>
-                    <% if ("1".equals((String)session.getAttribute("nivel")) || "2".equals((String)session.getAttribute("nivel"))) {%>
+                    <% if ("1".equals((String)session.getAttribute("nivel")) || "2".equals((String)session.getAttribute("nivel")) || "3".equals((String)session.getAttribute("nivel")) || "5".equals((String)session.getAttribute("nivel"))) {%>
                     <li>
                         <a href="buscar.jsp" class="">
                             <div class="gui-icon"><span class="glyphicon glyphicon-search"></span></div>
@@ -53,6 +53,12 @@
                         </a>
                     </li>
                     <%}%>
+                    <li>
+                        <a href="CTRLSalir" class="">
+                            <div class="gui-icon"><span style="color: red" class="glyphicon glyphicon-log-out danger"></span></div>
+                            <span class="title">Salir</span>
+                        </a>
+                    </li>
                 </ul>
 
                 <div class="menubar-foot-panel">

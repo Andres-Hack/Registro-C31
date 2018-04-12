@@ -65,7 +65,7 @@ public class CTRLRegistro extends HttpServlet {
         Connection cnn = DBConexion.IniciarSesion();
         try {
             Statement statement = cnn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT c_C31, C31, SubComp, Actividad, Subactividad, Beneficiario, Importe_Bs FROM C31 order by c_C31 desc limit 10");
+            ResultSet rs = statement.executeQuery("SELECT c_C31, C31, SubComp, Actividad, Subactividad, Beneficiario, Importe_Bs FROM C31 order by c_C31 desc limit 15");
             while (rs.next()) {
                 Registro user = new Registro();
                 user.setC_C31(rs.getInt("c_C31"));
@@ -109,6 +109,9 @@ public class CTRLRegistro extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8"); 
+        request.setCharacterEncoding("UTF-8");
+        
         try {
             Registro R = new Registro();
             float a=Float.parseFloat(request.getParameter("txtImporte"));

@@ -49,7 +49,7 @@
                                     <div class="card-body">
                                         <form class="form " action="buscar.jsp" id="form-search" method="post">
                                             <div class="row">                                            
-                                                <% if ("1".equals((String) session.getAttribute("nivel"))) {%>
+                                                <% if ("1".equals((String) session.getAttribute("nivel")) || "3".equals((String) session.getAttribute("nivel")) || "5".equals((String) session.getAttribute("nivel"))) {%>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <select name="txtGamuep" class="form-control">
@@ -248,10 +248,15 @@
                 init();
             });
         </script>
-
+        <!-- BEGIN JIVOSITE CODE {literal} -->
+<script type='text/javascript'>
+(function(){ var widget_id = 'C1CPRwzVQk';var d=document;var w=window;function l(){
+var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();</script>
+<div id='jivo_copyright' style='display: none'>Live Chat desarrollado por <a href='https://www.jivochat.es' target='_blank'>www.jivochat.es</a></div>
+<!-- {/literal} END JIVOSITE CODE -->
     </body>
 </html>
 </html>
 <%} else {
-        response.sendRedirect("http://10.0.6.183:8084/registroC31/");
+        response.sendRedirect("http://pmgmc2.oopp.gob.bo");
     }%>
