@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import pClases.Registro;
 import pModelo.DBConexion;
+import pControlador.CTRLRegistro;
 
 /**
  *
@@ -23,6 +28,30 @@ import pModelo.DBConexion;
  */
 @WebServlet(name = "CTRLModificar", urlPatterns = {"/CTRLModificar"})
 public class CTRLModificar extends HttpServlet {
+    
+    protected void EliminarC31(String id) throws SQLException            
+    {   
+        String ls_query = "";
+        ls_query = " delete from C31 where c_C31 = "+id;
+        try (Connection cnn = DBConexion.IniciarSesion()) {
+            Statement l_statement = cnn.createStatement();
+            l_statement.execute(ls_query);
+            l_statement.execute(ls_query);
+            cnn.close();
+        }
+    }
+    
+    protected void EliminarDist(String id) throws SQLException            
+    {   
+        String ls_query = "";
+        ls_query = " delete from Detalle where c_C31 = "+id;
+        try (Connection cnn = DBConexion.IniciarSesion()) {
+            Statement l_statement = cnn.createStatement();
+            l_statement.execute(ls_query);
+            l_statement.execute(ls_query);
+            cnn.close();
+        }
+    }
     
     protected void modificar(Registro R) throws SQLException            
     {   
@@ -56,35 +85,71 @@ public class CTRLModificar extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8"); 
+        request.setCharacterEncoding("UTF-8");
         
-        float a=Float.parseFloat(request.getParameter("txtImporte"));
-        float usd = (float) (a/6.86);
-        String usd2 = Float.toString(usd);
-        String query = "update C31 set "
-                    + "Fecha_Emision='"+request.getParameter("txtFechE")+"', "
-                    + "Fecha_Pago='"+request.getParameter("txtFechP")+"', "
-                    + "Mes_Dev='"+request.getParameter("txtMesC31")+"', "
-                    + "Mes_Pago='"+request.getParameter("txtMesPa")+"', "
-                    + "C31='"+request.getParameter("txtNroC31")+"', "
-                    + "BID_CTR='"+request.getParameter("txtBidCtr")+"', "
-                    + "Inst='"+request.getParameter("txtInst")+"', "
-                    + "GAM_UEP='"+request.getParameter("txtGam")+"', "
-                    + "Beneficiario='"+request.getParameter("txtBene")+"', "
-                    + "Importe_Bs="+request.getParameter("txtImporte")+", "
-                    + "Importe_Us="+usd2+", "
-                    + "Hoja_Ruta='"+request.getParameter("txtHR")+"', "
-                    + "Nro_Factura='"+request.getParameter("txtNroFac")+"' "
-                    + "where c_C31="+request.getParameter("txtID");
-        PreparedStatement preparedStatement = null;
-        try (Connection cnn = DBConexion.IniciarSesion()) {            
-            preparedStatement = cnn.prepareStatement(query);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-            cnn.close();
-        } catch (SQLException e) {
-            System.err.println("EL ERROR ES GARRAFAL ...!! EN  " + e);
+        try {
+            
+            float a=Float.parseFloat(request.getParameter("txtImporte"));
+            float usd = (float) (a/6.86);
+            String usd2 = Float.toString(usd);
+            Calendar cal= Calendar.getInstance();
+            int year= cal.get(Calendar.YEAR);
+            
+            Registro R = new Registro();
+            R.setC_C31(Integer.parseInt(request.getParameter("txtID")));
+            R.setHoja_Ruta(request.getParameter("txtHR").toUpperCase());
+            R.setNro_Factura(request.getParameter("txtFactura").toUpperCase());
+            R.setAnio_Pago(String.valueOf(year));
+            R.setFecha_Emision(request.getParameter("txtFechaE"));
+            R.setFecha_Pago(request.getParameter("txtFechaP"));
+            R.setMes_Dev(request.getParameter("txtMesC31"));
+            R.setMes_Pago(request.getParameter("txtMesPa"));
+            R.setC31(request.getParameter("txtNroC31"));
+            R.setBID_CTR(request.getParameter("txtBidCtr").toUpperCase());
+            R.setF_F(request.getParameter("txtFF"));
+            R.setO_F(request.getParameter("txtOF"));
+            R.setSubComp(request.getParameter("txtSubComp"));
+            R.setDescripcion(request.getParameter("txtDescSubc").toUpperCase());
+            R.setActividad(request.getParameter("txtAct"));
+            R.setDescripcion_Actividad(request.getParameter("txtDescAct").toUpperCase());
+            R.setSubactividad(request.getParameter("txtSubAct"));
+            R.setDescripcion_Subactividad(request.getParameter("txtDescSubAct").toUpperCase());
+            R.setC_G(request.getParameter("txtCg"));
+            R.setT_G("0");
+            R.setPartida(request.getParameter("txtPartida"));
+            R.setInst(request.getParameter("txtInst").toUpperCase());
+            R.setGAM_UEP(request.getParameter("txtGamuep").toUpperCase());
+            R.setTipo(request.getParameter("txtTipo"));
+            R.setBeneficiario(request.getParameter("txtBeneficiario").toUpperCase());
+            R.setConcepto(request.getParameter("txtConcepto").toUpperCase());
+            R.setProducto(request.getParameter("txtProducto").toUpperCase());
+            R.setImporte_Bs(request.getParameter("txtImporte"));
+            R.setTC("6.86");
+            R.setImporte_Us(usd2);
+            
+            
+            EliminarC31(request.getParameter("txtID"));
+            EliminarDist(request.getParameter("txtID"));
+           
+            
+            if ("UEP".equals(request.getParameter("txtInst"))) {
+                CTRLRegistro wd = new CTRLRegistro();
+                wd.adicion2(R, "2", request.getParameter("txtusuario"));
+                request.getRequestDispatcher("modificar.jsp").forward(request, response);  
+            }
+            else{
+                CTRLRegistro wd = new CTRLRegistro();
+                wd.adicion(R, "2", request.getParameter("txtusuario"));
+                request.getRequestDispatcher("modificar.jsp").forward(request, response);                  
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CTRLModificar.class.getName()).log(Level.SEVERE, null, ex);
         }
-        request.getRequestDispatcher("modificar.jsp").forward(request, response);    
+        
+          
         
     }
 

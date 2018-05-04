@@ -9,8 +9,20 @@
   <title>Ingreso</title>
   <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-
   <link rel="stylesheet" href="css/style4.css">
+  <style>
+      .panel {
+        display: inline-block;
+        background: #ffffff;
+        min-height: 45px;
+        height: 45px;
+        padding: 10px;
+      }
+      .panel2 {
+        min-width: 245px;
+        width: 80%;
+      }
+  </style>
 </head>
 <body>
   <div class="form">
@@ -33,6 +45,10 @@
           </div>
           <button type="submit" class="button button-block"/>INGRESAR</button>
           </form>
+          <br />
+          <div class="panel panel2">
+              <img src="./img/Chrome.png" width="5%" class="img-responsive" style="text-align: "></img>&nbsp;<i> Se lo recomienda ingresar con navegador Chrome.</i>
+          </div>
         </div
         <div id="login">
           <form action="CTRLUsuario2">

@@ -154,7 +154,7 @@
                             </div><!--end .card-body -->
                         </div>
                     </div>                    
-                    <p><a href="CTRLRegistro"><button type="button" class="btn ink-reaction btn-floating-action btn-primary active"><i class="glyphicon glyphicon-chevron-left" ></i></button></p></a>
+                    <p><a href="CTRLRegistro"><button type="button" class="btn ink-reaction btn-floating-action btn-primary active"><i class="oi oi-chevron-left" style="font-size: 20px"></i></button></p></a>
                 </div>
         </div></section>
     </div>

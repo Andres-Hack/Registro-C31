@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pClases.Registro;
@@ -17,7 +20,7 @@ import pModelo.DBConexion;
  */
 public class DTRmunicipios {
     
-    public static void distribucion(Registro R2) {
+    public static void distribucion(Registro R2, String sw, String us) {
         
         Calendar fecha = Calendar.getInstance();
         int año = fecha.get(Calendar.YEAR);
@@ -31,7 +34,7 @@ public class DTRmunicipios {
         System.out.println("BUSCAMOS BIEN EL ID DEL ACTIVIDAD : "+IDactividad+" DE LA ACTIVIDAD "+R2.getActividad());
         
         /*//////////////////////////////////////*/
-        distribucionB(R2, id_C31, IDactividad, IDperiodo);        
+        distribucionB(R2, id_C31, IDactividad, IDperiodo, sw, us);        
         System.out.println("SE REGISTRO CORRECTAMENTE EL DISTRIBUCION");
         /*//////////////////////////////////////*/
     }
@@ -84,7 +87,7 @@ public class DTRmunicipios {
         }        
     }
     
-    public static void distribucionB(Registro R2, String id_C31, String IDactividad, String IDperiodo)  {
+    public static void distribucionB(Registro R2, String id_C31, String IDactividad, String IDperiodo, String sw, String us)  {
         Connection con = DBConexion.IniciarSesion();
         
         Double porcentaje=0.0;
@@ -93,7 +96,7 @@ public class DTRmunicipios {
         PreparedStatement pst = null, pst2 = null;
         String BID_CTR="";
         if (R2.getBID_CTR().equals("BID")) { BID_CTR = "1"; } else { BID_CTR = "2"; }
-
+        DTRmunicipios.LogTableAction(us,"C31",id_C31, sw);
         for (int j = 1; j <= 12; j++) {          
                                                                 
             consulta = "select Porcentaje from Porcentajes where c_Municipio="+j+" and c_Periodo="+IDperiodo+" and SubComp='"+R2.getSubComp()+"'";
@@ -119,10 +122,11 @@ public class DTRmunicipios {
                 pst2.setString(7,R2.getImporte_Bs());
                 pst2.setString(8,String.valueOf(6.86));
                 pst2.executeUpdate();
-                System.out.println("LA DISTRIBUCION SE REALIZO SATISFACTORIUAMENTE .... XD");
+                System.out.println("LA DISTRIBUCION SE REALIZO SATISFACTORIAMENTE .... XD --- "+j);
             } catch (SQLException ex) {
                 Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
-            }            
+            }
+            DTRmunicipios.LogTableAction(us,"Detalle",detalleID(), sw);
         }
     }
     
@@ -136,6 +140,22 @@ public class DTRmunicipios {
             rs = pst.executeQuery();
             while (rs.next()) {
                 id = rs.getString("c_C31");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
+        }                                                   
+        return id;
+    }
+    public static String detalleID() {
+        String id = "";
+        Connection con = DBConexion.IniciarSesion();
+        ResultSet rs = null;
+        PreparedStatement pst = null;
+        try {
+            pst = con.prepareStatement("select c_Detalle from Detalle order by c_Detalle desc limit 1");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                id = rs.getString("c_Detalle");
             }
         } catch (SQLException ex) {
             Logger.getLogger(DTRmunicipios.class.getName()).log(Level.SEVERE, null, ex);
@@ -200,4 +220,34 @@ public class DTRmunicipios {
         }
         return id;
     }
+    public static void LogTableAction(String c_Personal,String NameTable,String c_Id, String sw){
+       
+       String Desc = "";
+       Date date = new Date();
+       DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+       Connection cnn = DBConexion.IniciarSesion();
+        if (sw.equals("1")) {
+            Desc = "FUE CREADO EL NUEVO REGISTRO";
+        } else {
+            Desc = "EL REGISTRO FUE MODIFICADO";
+        }
+        
+        try {
+            PreparedStatement ps = cnn.prepareStatement("INSERT INTO LogUpDown (c_Personal, NameTable, c_Id, Fecha, Descripcion) VALUES (?,?,?,?,?)");
+            ps.setString(1, c_Personal);
+            ps.setString(2, NameTable);
+            ps.setString(3, c_Id);
+            ps.setString(4, hourdateFormat.format(date));
+            ps.setString(5, Desc);
+            ps.executeUpdate();
+            
+            cnn.commit();
+            cnn.close();
+            ps.close();
+            
+        } catch (SQLException e) {
+            System.out.println("ESTE ES EL ERROR : "+e);
+        }
+       
+   }
 }

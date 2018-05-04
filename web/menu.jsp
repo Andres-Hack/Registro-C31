@@ -5,10 +5,11 @@
                 <hr>
                 <!-- BEGIN MAIN MENU -->
                 <ul id="main-menu" class="gui-controls">
+
                     <% if ("1".equals((String)session.getAttribute("nivel")) || "4".equals((String)session.getAttribute("nivel")) || "5".equals((String)session.getAttribute("nivel"))) {%>
-                    <li class="active expanded" s>
-                        <a href="CTRLRegistro" >
-                            <div class="gui-icon"><span class="glyphicon glyphicon-home"></span></div>
+                    <li class="gui-folder">
+                        <a href="CTRLRegistro" class="">
+                            <div class="gui-icon"><center><i class="oi oi-home" style="font-size: 25px"></i></center></div>
                             <span class="title">Registro</span>
                         </a>
                     </li>
@@ -16,25 +17,25 @@
                     <% if ("1".equals((String)session.getAttribute("nivel")) || "2".equals((String)session.getAttribute("nivel")) || "3".equals((String)session.getAttribute("nivel")) || "5".equals((String)session.getAttribute("nivel"))) {%>
                     <li>
                         <a href="buscar.jsp" class="">
-                            <div class="gui-icon"><span class="glyphicon glyphicon-search"></span></div>
+                            <div class="gui-icon"><center><i class="oi oi-magnifying-glass" style="font-size: 20px"></i></center></div>
                             <span class="title">Busqueda y Reporte</span>
                         </a>
                     </li>
                     <li>
                         <a href="reportePdf.jsp" class="">
-                            <div class="gui-icon"><span class="glyphicon glyphicon-send"></span></div>
+                            <div class="gui-icon"><center><i class="oi oi-document" style="font-size: 20px"></i></center></div>
                             <span class="title">Reporte Rápido</span>
                         </a>
                     </li>
                     <li>
                         <a href="detalles.jsp" class="">
-                            <div class="gui-icon"><span class="glyphicon glyphicon-signal"></span></div>
+                            <div class="gui-icon"><center><i class="oi oi-bar-chart" style="font-size: 20px"></i></center></div>
                             <span class="title">Estadisticas a Detalle</span>
                         </a>
                     </li>
                     <li>
                         <a href="programado.jsp" class="">
-                            <div class="gui-icon"><span class="glyphicon glyphicon-stats"></span></div>
+                            <div class="gui-icon"><center><i class="oi oi-graph" style="font-size: 20px"></i></center></div>
                             <span class="title">Programado</span>
                         </a>
                     </li>
@@ -42,20 +43,22 @@
                     <% if ("1".equals((String)session.getAttribute("nivel"))) {%>
                     <li>
                         <a href="CTRLPorcentajes" class="">
-                            <div class="gui-icon"><span class="glyphicon glyphicon-edit"></span></div>
+                            <div class="gui-icon"><center><i class="oi oi-pie-chart" style="font-size: 20px"></i></center></div>
                             <span class="title">Distribución Porcentajes</span>
                         </a>
                     </li>
+                    <%}%>
+                    <% if ("1".equals((String)session.getAttribute("nivel")) || "5".equals((String)session.getAttribute("nivel"))) {%>
                     <li>
                         <a href="modificar.jsp" class="">
-                            <div class="gui-icon"><span class="glyphicon glyphicon-refresh"></span></div>
+                            <div class="gui-icon"><center><i class="oi oi-pencil" style="font-size: 20px"></i></center></div>
                             <span class="title">Modificar</span>
                         </a>
                     </li>
                     <%}%>
                     <li>
                         <a href="CTRLSalir" class="">
-                            <div class="gui-icon"><span style="color: red" class="glyphicon glyphicon-log-out danger"></span></div>
+                            <div class="gui-icon"><center><i class="oi oi-power-standby" style="font-size: 20px; color: red"></i></center></div>
                             <span class="title">Salir</span>
                         </a>
                     </li>

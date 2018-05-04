@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import pClases.Registro;
 import pControlador.ListaPorcentaje;
+import pDistribucion.DTRmunicipios;
 import static pDistribucion.DTRmunicipios.ActividadID;
 import static pDistribucion.DTRmunicipios.PeriodoID;
 import static pDistribucion.DTRmunicipios.buscarID;
+import static pDistribucion.DTRmunicipios.detalleID;
 
 public abstract class DBRegistro {
     
@@ -38,7 +40,7 @@ public abstract class DBRegistro {
         return lista;
     }
     
-    public static void adicion(Registro R) throws SQLException {
+    public static void adicion(Registro R, String sw, String us) throws SQLException {
         
         Connection cnn = DBConexion.IniciarSesion();        
         cnn.setAutoCommit(false);
@@ -86,7 +88,7 @@ public abstract class DBRegistro {
             cnn.close();
             ps.close();
            
-            adicionDetalle(R);
+            adicionDetalle(R, sw, us);
             
         } catch (SQLException e) {
             cnn.rollback();
@@ -94,7 +96,7 @@ public abstract class DBRegistro {
         }       
     }
     
-   public static void adicionDetalle(Registro R){
+   public static void adicionDetalle(Registro R, String sw, String us){
        String id_C31 = buscarID();
        String IDactividad = ActividadID(R.getActividad());
        String IDgam = ListaPorcentaje.IDmunicipio(R.getGAM_UEP());
@@ -121,6 +123,12 @@ public abstract class DBRegistro {
             cnn.commit();
             cnn.close();
             ps.close();
+            
+            String id_Detalle = detalleID();
+            DTRmunicipios.LogTableAction(us,"C31",id_C31, sw);
+            DTRmunicipios.LogTableAction(us,"Detalle",id_Detalle, sw);
+                        
+            
             
         } catch (SQLException e) {
             System.out.println("ESTE ES EL ERROR : "+e);

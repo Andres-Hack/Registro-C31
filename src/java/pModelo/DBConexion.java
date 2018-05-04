@@ -9,10 +9,10 @@ public abstract class DBConexion {
         Connection cn = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");         
-            String url = "jdbc:mysql://localhost/c31";
+            String url = "jdbc:mysql://localhost/c31?autoReconnect=true&relaxAutoCommit=true";
             String user = "root";           
-            String password = "Bolivia2016";          
-            //String password = "sistema123";          
+            //String password = "Bolivia2016";          
+            String password = "sistema123";          
             cn= DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException e) {
             cn=null;

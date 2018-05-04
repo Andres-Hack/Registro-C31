@@ -2,9 +2,13 @@ package pControlador;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -18,6 +22,48 @@ import pModelo.DBUsuario;
 
 @WebServlet(name = "CTRLUsuario", urlPatterns = {"/CTRLUsuario"})
 public class CTRLUsuario extends HttpServlet {
+    
+    public String LogUsuario(String id) throws SQLException{
+        Connection con = DBConexion.IniciarSesion();
+        con.setAutoCommit(false);
+        Date date = new Date();
+        DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        
+        String nombre ="";
+        try {
+            PreparedStatement ps = con.prepareStatement("insert into LogUser (c_Log,c_Personal,fecha) values (null,?,?)");
+            ps.setString(1, id);
+            ps.setString(2, hourdateFormat.format(date));
+            ps.executeUpdate();
+            
+            con.commit();
+            con.close();
+            ps.close();
+            
+        } catch (SQLException e) {
+            con.rollback();
+            System.out.println("ESTE ES EL ERROR : "+e);
+        }         
+        return nombre;
+    }
+    
+    public String IdUsuario(String usuario, String password){
+        Connection con = DBConexion.IniciarSesion();
+        Statement statement1;
+        ResultSet rs1;
+        String id ="";
+        try {
+            statement1 = con.createStatement();
+            rs1 = statement1.executeQuery("select id from personal where usuario='"+usuario+"' and clave='"+password+"' ");
+            while (rs1.next()) {
+                id = rs1.getString("id");
+            }
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("ERROR CtrUsr : "+ex);
+        }        
+        return id;
+    }
     
     public String NombreUsuario(String usuario, String password){
         Connection con = DBConexion.IniciarSesion();
@@ -93,11 +139,13 @@ public class CTRLUsuario extends HttpServlet {
             String abrev = Abreviado(us, pwd);
             
             
+            
             if(sw==true && sesion.getAttribute("usuario") == null){
                 sesion.setAttribute("usuario", us);
                 sesion.setAttribute("nombre", nombre);
                 sesion.setAttribute("nivel", nivel);
                 sesion.setAttribute("abrev", abrev);
+                LogUsuario(IdUsuario(us, pwd));
                 switch (nivel) {
                     case "1":
                         response.sendRedirect("CTRLRegistro");

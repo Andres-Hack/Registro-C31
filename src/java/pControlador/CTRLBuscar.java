@@ -47,19 +47,33 @@ public class CTRLBuscar extends HttpServlet {
             ps.setString(1, id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                datos.add(rs.getString("c_C31"));
-                datos.add(rs.getString("Fecha_Emision"));
-                datos.add(rs.getString("Fecha_Pago"));
-                datos.add(rs.getString("Mes_Dev"));
-                datos.add(rs.getString("Mes_Pago"));
-                datos.add(rs.getString("C31"));
-                datos.add(rs.getString("BID_CTR"));
-                datos.add(rs.getString("Inst"));
-                datos.add(rs.getString("GAM_UEP"));
-                datos.add(rs.getString("Beneficiario"));
-                datos.add(rs.getString("Importe_Bs"));
-                datos.add(rs.getString("Hoja_Ruta"));
-                datos.add(rs.getString("Nro_Factura"));
+                datos.add(rs.getString("c_C31"));           //0
+                datos.add(rs.getString("Fecha_Emision"));   //1
+                datos.add(rs.getString("Fecha_Pago"));      //2
+                datos.add(rs.getString("Mes_Dev"));         //3
+                datos.add(rs.getString("Mes_Pago"));        //4
+                datos.add(rs.getString("C31"));             //5
+                datos.add(rs.getString("BID_CTR"));         //6
+                datos.add(rs.getString("F_F"));             //7
+                datos.add(rs.getString("O_F"));             //8
+                datos.add(rs.getString("SubComp"));         //9
+                datos.add(rs.getString("Actividad"));       //10
+                datos.add(rs.getString("Subactividad"));    //11
+                datos.add(rs.getString("C_G"));             //12
+                datos.add(rs.getString("T_G"));             //13
+                datos.add(rs.getString("Partida"));         //14
+                datos.add(rs.getString("Inst"));            //15
+                datos.add(rs.getString("GAM_UEP"));         //16
+                datos.add(rs.getString("Beneficiario"));    //17
+                datos.add(rs.getString("Tipo"));            //18
+                datos.add(rs.getString("Producto"));        //19
+                datos.add(rs.getString("Concepto"));        //20
+                datos.add(rs.getString("Importe_Bs"));      //21
+                datos.add(rs.getString("Hoja_Ruta"));       //22
+                datos.add(rs.getString("Nro_Factura"));     //23
+                datos.add(rs.getString("Descripcion"));      //24
+                datos.add(rs.getString("Descripcion_Actividad"));//25
+                datos.add(rs.getString("Descripcion_Subactividad"));//26
             }
             rs.close();
             con.close();

@@ -24,12 +24,12 @@ import pModelo.DBRegistro;
 @WebServlet(name = "CTRLRegistro", urlPatterns = {"/CTRLRegistro"})
 public class CTRLRegistro extends HttpServlet {
     
-    protected void adicion(Registro R) throws SQLException  {
-        DBRegistro.adicion(R);
+    protected void adicion(Registro R, String sw, String us) throws SQLException  {
+        DBRegistro.adicion(R, sw, us);
     }
     
-    protected void adicion2(Registro R) throws SQLException{
-        pDistribucion.DTRmunicipios.distribucion(R);                                       
+    protected void adicion2(Registro R, String sw, String us) throws SQLException{
+        pDistribucion.DTRmunicipios.distribucion(R, sw, us);                                       
     }
     
     protected void modificar(Registro R, String xx) throws SQLException            
@@ -127,8 +127,8 @@ public class CTRLRegistro extends HttpServlet {
             String fech_pago = String.valueOf(Integer.parseInt(temp2[1]));            
             String usd2 = Float.toString(usd);
             
-            R.setHoja_Ruta(request.getParameter("txtHR"));
-            R.setNro_Factura(request.getParameter("txtFactura"));
+            R.setHoja_Ruta(request.getParameter("txtHR").toUpperCase());
+            R.setNro_Factura(request.getParameter("txtFactura").toUpperCase());
             R.setAnio_Pago(request.getParameter("txtGestion"));         
             R.setFecha_Emision(request.getParameter("txtFechaE"));
             R.setFecha_Pago(request.getParameter("txtFechaP"));
@@ -150,9 +150,9 @@ public class CTRLRegistro extends HttpServlet {
             R.setInst(request.getParameter("txtInst"));
             R.setGAM_UEP(request.getParameter("txtGamuep"));
             R.setTipo(request.getParameter("txtTipo"));
-            R.setBeneficiario(request.getParameter("txtBeneficiario"));
-            R.setConcepto(request.getParameter("txtConcepto"));
-            R.setProducto(request.getParameter("txtProducto"));
+            R.setBeneficiario(request.getParameter("txtBeneficiario").toUpperCase());
+            R.setConcepto(request.getParameter("txtConcepto").toUpperCase());
+            R.setProducto(request.getParameter("txtProducto").toUpperCase());
             R.setImporte_Bs(request.getParameter("txtImporte"));
             R.setTC(request.getParameter("txtTc"));
             R.setImporte_Us(usd2);       
@@ -168,7 +168,7 @@ public class CTRLRegistro extends HttpServlet {
             switch(op)
             {
                 case 1: 
-                    adicion(R);
+                    adicion(R, "1", request.getParameter("txtusuario"));
                     request.setAttribute("dato", "4");
                     request.setAttribute("registro", getAllRegistro());
                     request.getServletContext().getRequestDispatcher("/inicio.jsp").forward(request, response);
@@ -182,7 +182,7 @@ public class CTRLRegistro extends HttpServlet {
                     response.sendRedirect("modificar.jsp"); 
                     break;
                 case 4: 
-                    adicion2(R);
+                    adicion2(R, "1", request.getParameter("txtusuario"));
                     request.setAttribute("dato", "4");
                     request.setAttribute("registro", getAllRegistro());
                     request.getServletContext().getRequestDispatcher("/inicio.jsp").forward(request, response);

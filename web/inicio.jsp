@@ -19,8 +19,7 @@
 <% HttpSession sesion = request.getSession(); %>
 <% if(sesion.getAttribute("usuario") != null) {%>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <%@ include file="/AdminMaterial.jsp"  %>
-    <%@ include file="/AdminMaterialJS.jsp"  %>
+    <%@ include file="./AdminMaterial.jsp"  %>    
     
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300">
     <link rel="stylesheet" href="https://cdn.rawgit.com/yahoo/pure-release/v0.6.0/pure-min.css">
@@ -33,7 +32,19 @@
     <script type="text/javascript" src="./js/alertify.js"></script>
     <link rel="stylesheet" href="./css/alertify.core.css" />
     <link rel="stylesheet" href="./css/alertify.default.css" />
-
+    <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/59a6b7087ab2de3aea9d75ac/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
 
 </head>
 
@@ -49,7 +60,7 @@
                     <div class="col-md-6">
                          <div class="card card-underline">
                             <div class="card-head style-info">
-                                <header><span class="glyphicon glyphicon-save"></span> Registro C31</header>
+                                <header>Registro C31</header>
                             </div>
                             <div class="col-md-1"><label style="color: white">.</label></div>
                             <%@ include file="/formulario.jsp"  %> 
@@ -60,7 +71,7 @@
                     <div class="col-md-6 ">
                         <div class="card card-underline">
                             <div class="card-head style-success">
-                                <header><span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;Lista de Ultimos Ingresos</header>
+                                <header>Lista de Ultimos Ingresos</header>
                             </div>
                             <div class="card-body no-padding">
                                 <div class="table-responsive no-margin">
@@ -107,12 +118,7 @@
     </div>
     <%@ include file="/menu.jsp"  %> 
 </div>
-<!-- BEGIN JIVOSITE CODE {literal} -->
-<script type='text/javascript'>
-(function(){ var widget_id = 'C1CPRwzVQk';var d=document;var w=window;function l(){
-var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();</script>
-<div id='jivo_copyright' style='display: none'>Live Chat desarrollado por <a href='https://www.jivochat.es' target='_blank'>www.jivochat.es</a></div>
-<!-- {/literal} END JIVOSITE CODE -->
+<%@ include file="./AdminMaterialJS.jsp"  %>
 </body>
 </html>
 <%}

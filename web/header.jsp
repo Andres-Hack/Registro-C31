@@ -22,7 +22,7 @@
             <ul class="header-nav header-nav-options">
                 <li>
                     <form action="buscar.jsp">
-                        <button type="submit" class="btn btn-icon-toggle ink-reaction"><span class="glyphicon glyphicon-search"></span></button>
+                        <button type="submit" class="btn btn-icon-toggle ink-reaction"><span class="oi oi-magnifying-glass" style="font-size: 20px"></span></button>
                     </form>
                 </li>
             </ul>

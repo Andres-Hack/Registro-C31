@@ -20,6 +20,7 @@
     
                               <form class="form " action="CTRLRegistro" id="form-search" method="post">
                                     <input type="hidden" name="op" value="1" />
+                                    <input type="hidden" name="txtusuario" value="${sessionScope.usuario}" />
                                     <div class="col-md-12 col-sm-12">
                                           <label style="color: white" value="0">Importe en :.</label>
                                     </div>
@@ -189,19 +190,18 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <input class="form-control" id="project-name" id="searchbox" required/>
-                                                <input type="hidden" name="txtSubc" id="project-id" />
-                                                <input type="hidden" name="txtDescSubc" id="project-desc" />
+                                                <input class="form-control" id="subactividad-namesubc" id="searchbox" disabled=""/>
+                                                <input type="hidden" name="txtSubc" id="subactividad-codsubc" />
+                                                <input type="hidden" name="txtDescSubc" id="subactividad-descsubc" />
                                                 <label for='cite_original'>Subcomponente</label>  
                                             </div>
                                         </div>                                         
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                               <input class="form-control" id="actividad-name" required/>
-                                               <input type="hidden" name="txtAct" id="actividad-id" />
-                                               <input type="hidden" name="txtDescAct" id="actividad-desc" />
-                                              <label for='cite_original'>Actividad</label> 
-                                              
+                                                <input class="form-control" id="subactividad-nameact" disabled=""/>
+                                                <input type="hidden" name="txtAct" id="subactividad-codact" />
+                                                <input type="hidden" name="txtDescAct" id="subactividad-descact" />
+                                                <label for='cite_original'>Actividad</label>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -209,7 +209,7 @@
                                                 <input class="form-control" id="subactividad-name" required/>
                                                 <input type="hidden" name="txtSubAct" id="subactividad-id" />
                                                 <input type="hidden" name="txtDescSubAct" id="subactividad-desc" />
-                                              <label for='cite_original'>Sub actividad</label>  
+                                                <label for='cite_original'>Sub actividad</label>
                                             </div>
                                         </div>
                                     </div>
@@ -428,107 +428,58 @@
         });
         
         $(function() {
-            var availableTags = [
-                {key:"2,1", value:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"},
-                {key:"2,2", value:"2.2 DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL", desc:"DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL"},
-                {key:"2,3", value:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"},
-                {key:"2,4", value:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}
-            ];
-            var actividadTag = [
-                {key:"2,1,1", value:"2.1.1 CARTOGRAFIA BASE DE LOS MUNICIPIOS", desc:"CARTOGRAFIA BASE DE LOS MUNICIPIOS"},
-                {key:"2,1,2", value:"2.1.2 LEVANTAMIENTO INFORMACION CATASTRAL MUNICIPIOS", desc:"LEVANTAMIENTO INFORMACION CATASTRAL MUNICIPIOS"},
-                {key:"2,1,3", value:"2.1.3 VALORACION CATASTRAL ", desc:"VALORACION CATASTRAL "},
-                {key:"2,1,6", value:"2.1.6 SISTEMA DE CATASTRO INTERCONECTADO", desc:"SISTEMA DE CATASTRO INTERCONECTADO"},
-                {key:"2,1,7", value:"2.1.7 NORMATIVA DE USO DE SUELO URBANO Y PARAMETROS DE EDIFICACION", desc:"NORMATIVA DE USO DE SUELO URBANO Y PARAMETROS DE EDIFICACION"},
-                {key:"2,2,1", value:"2.2.1 ADQUISICION DEL SISTEMA DE CATASTRO", desc:"ADQUISICION DEL SISTEMA DE CATASTRO"},
-                {key:"2,2,2", value:"2.2.2 ADQUISICION DEL SISTEMA DE CATASTRO", desc:"ADQUISICION DEL SISTEMA DE CATASTRO"},
-                {key:"2,3,1", value:"2.3.1 CAPACITACIÓN", desc:"CAPACITACIÓN"},
-                {key:"2,3,2", value:"2.3.2 DIFUSIÓN", desc:"DIFUSIÓN"},
-                {key:"2,3,3", value:"2.3.3 ASISTENCIA TÉCNICA", desc:"ASISTENCIA TÉCNICA"},
-                {key:"2,4,1", value:"2.4.1 SERVICIOS PERSONALES", desc:"SERVICIOS PERSONALES"},
-                {key:"2,4,2", value:"2.4.2 SERVICIOS NO PERSONALES", desc:"SERVICIOS NO PERSONALES"},
-                {key:"2,4,3", value:"2.4.3 MATERIALES Y SUMINISTROS", desc:"MATERIALES Y SUMINISTROS"},
-                {key:"2,4,4", value:"2.4.4 ACTIVOS REALES", desc:"ACTIVOS REALES"},
-                {key:"2,4,5", value:"2.4.5 OTROS SERVICIOS PERSONALES", desc:"OTROS SERVICIOS PERSONALES"}
-            ];
             var subactividadTags = [
-                {key:"2,1,1,1", value:"2.1.1.1 RED GEODESICA", desc:"RED GEODESICA"},
-                {key:"2,1,1,2", value:"2.1.1.2 RED GEODESICA Y LEVANTAMIENTO TOPOGRAFICO", desc:"RED GEODESICA Y LEVANTAMIENTO TOPOGRAFICO"},
-                {key:"2,1,1,4", value:"2.1.1.4 RESTITUCION FOTOGRAMETRICA", desc:"RESTITUCION FOTOGRAMETRICA"},
-                {key:"2,1,2,1", value:"2.1.2.1 LEVANTAMIENTO CATASTRAL", desc:"LEVANTAMIENTO CATASTRAL"},
-                {key:"2,1,2,2", value:"2.1.2.2 LEVANTAMIENTO CATASTRAL", desc:"LEVANTAMIENTO CATASTRAL"},
-                {key:"2,1,3,1", value:"2.1.3.1 VALORACION CATASTRAL", desc:"VALORACION CATASTRAL"},
-                {key:"2,1,6,1", value:"2.1.6.1 EQUIPOS DE OFICINA Y MUEBLES", desc:"EQUIPOS DE OFICINA Y MUEBLES"},
-                {key:"2,1,6,2", value:"2.1.6.2 EQUIPOS DE COMPUTACIÓN", desc:"EQUIPOS DE COMPUTACIÓN"},
-                {key:"2,1,6,3", value:"2.1.6.3 VEHICULOS Y MOTOCICLETAS", desc:"VEHICULOS Y MOTOCICLETAS"},
-                {key:"2,1,6,4", value:"2.1.6.4 EQUIPOS DE COMUNICACIÓN", desc:"EQUIPOS DE COMUNICACIÓN"},
-                {key:"2,1,6,5", value:"2.1.6.5 ACTIVOS INTANGIBLES", desc:"ACTIVOS INTANGIBLES"},
-                {key:"2,1,7,1", value:"2.1.7.1 NORMA USO DE SUELO", desc:"NORMA USO DE SUELO"},
-                {key:"2,1,7,2", value:"2.1.7.2 NORMA USO DE SUELO", desc:"NORMA USO DE SUELO"},
-                {key:"2,2,1,1", value:"2.2.1.1 ADQUISICION DEL SOFTWARE, MIGRACIÓN E IMPLANTACIÓN", desc:"ADQUISICION DEL SOFTWARE, MIGRACIÓN E IMPLANTACIÓN"},
-                {key:"2,2,2,1", value:"2.2.2.1 DIGITALIZACIÓN ARCHIVOS DE CATASTRO", desc:"DIGITALIZACIÓN ARCHIVOS DE CATASTRO"},
-                {key:"2,3,1,1", value:"2.3.1.1 TALLERES, CURSOS, REUNIONES Y OTROS", desc:"TALLERES, CURSOS, REUNIONES Y OTROS"},
-                {key:"2,3,2,1", value:"2.3.2.1 MATERIAL PROMOCIONAL", desc:"MATERIAL PROMOCIONAL"},
-                {key:"2,3,2,2", value:"2.3.2.2 DIFUSIÓN MASIVA", desc:"DIFUSIÓN MASIVA"},
-                {key:"2,3,2,3", value:"2.3.2.3 PUBLICACION DE CONVOCATORIAS", desc:"PUBLICACION DE CONVOCATORIAS"},
-                {key:"2,3,2,4", value:"2.3.2.4 SOCIALIZACIÓN DEL PMGM", desc:"SOCIALIZACIÓN DEL PMGM"},
-                {key:"2,3,3,1", value:"2.3.3.1 ASISTENCIA TECNICA COMUNICACIÓN", desc:"ASISTENCIA TECNICA COMUNICACIÓN"},
-                {key:"2,3,3,2", value:"2.3.3.2 ASISTENCIA TECNICA SEICU", desc:"ASISTENCIA TECNICA SEICU"},
-                {key:"2,3,3,3", value:"2.3.3.3 ASISTENCIA TECNICA COMUNICACIÓN", desc:"ASISTENCIA TECNICA COMUNICACIÓN"},
-                {key:"2,3,3,3", value:"2.3.3.3 ASISTENCIA TECNICA UEP", desc:"ASISTENCIA TECNICA UEP"},
-                {key:"2,3,3,3", value:"2.3.3.3 REVERTIDO", desc:"REVERTIDO"},
-                {key:"2,3,3,X", value:"2.3.3.X ASISTENCIA TECNICA UEP", desc:"ASISTENCIA TECNICA UEP"},
-                {key:"2,4,1,1", value:"2.4.1.1 HONORARIOS PROFESIONALES", desc:"HONORARIOS PROFESIONALES"},
-                {key:"2,4,1,2", value:"2.4.1.2 HONORARIOS PROFESIONALES", desc:"HONORARIOS PROFESIONALES"},
-                {key:"2,4,2,1", value:"2.4.2.1 SERVICIOS BASICOS", desc:"SERVICIOS BASICOS"},
-                {key:"2,4,2,2", value:"2.4.2.2 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS"},
-                {key:"2,4,2,3", value:"2.4.2.3 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS"},
-                {key:"2,4,2,4", value:"2.4.2.4 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS"},
-                {key:"2,4,2,5", value:"2.4.2.5 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS"},
-                {key:"2,4,2,6", value:"2.4.2.6 ADQUISICION SOFTWARE DE CATASTRO", desc:"ADQUISICION SOFTWARE DE CATASTRO"},
-                {key:"2,4,3,1", value:"2.4.3.1 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS"},
-                {key:"2,4,3,2", value:"2.4.3.2 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS"},
-                {key:"2,4,3,3", value:"2.4.3.3 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS"},
-                {key:"2,4,4,1", value:"2.4.4.1 BIENES DE USO", desc:"BIENES DE USO"},
-                {key:"2,4,4,2", value:"2.4.4.2 BIENES DE USO", desc:"BIENES DE USO"},
-                {key:"2,4,4,3", value:"2.4.4.3 BIENES DE USO", desc:"BIENES DE USO"},
-                {key:"2,4,4,4", value:"2.4.4.4 BIENES DE USO", desc:"BIENES DE USO"},
-                {key:"2,4,4,5", value:"2.4.4.5 BIENES DE USO", desc:"BIENES DE USO"},
-                {key:"2,4,4,6", value:"2.4.4.6 BIENES DE USO", desc:"BIENES DE USO"},
-                {key:"2,4,4,x", value:"2.4.4.x ACTIVOS INTANGIBLES", desc:"ACTIVOS INTANGIBLES"},
-                {key:"2,4,5,1", value:"2.4.5.1 AUDITORIA EXTERNA 2013-2014", desc:"AUDITORIA EXTERNA 2013-2014"},
-                {key:"2,4,5,2", value:"2.4.5.2 AUDITORIA EXTERNA 2015", desc:"AUDITORIA EXTERNA 2015"},
-                {key:"2,4,5,3", value:"2.4.5.3 AUDITORIA EXTERNA 2016", desc:"AUDITORIA EXTERNA 2016"}
+                {key:"2,1,1,1", value:"2.1.1.1 RED GEODESICA", desc:"RED GEODESICA", act:{key1:"2,1,1", value1:"2.1.1 CARTOGRAFIA BASE DE LOS MUNICIPIOS", desc1:"CARTOGRAFIA BASE DE LOS MUNICIPIOS"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,1,2", value:"2.1.1.2 RED GEODESICA Y LEVANTAMIENTO TOPOGRAFICO", desc:"RED GEODESICA Y LEVANTAMIENTO TOPOGRAFICO", act:{key1:"2,1,1", value1:"2.1.1 CARTOGRAFIA BASE DE LOS MUNICIPIOS", desc1:"CARTOGRAFIA BASE DE LOS MUNICIPIOS"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,1,4", value:"2.1.1.4 RESTITUCION FOTOGRAMETRICA", desc:"RESTITUCION FOTOGRAMETRICA", act:{key1:"2,1,1", value1:"2.1.1 CARTOGRAFIA BASE DE LOS MUNICIPIOS", desc1:"CARTOGRAFIA BASE DE LOS MUNICIPIOS"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,2,1", value:"2.1.2.1 LEVANTAMIENTO CATASTRAL", desc:"LEVANTAMIENTO CATASTRAL", act:{key1:"2,1,2", value1:"2.1.2 LEVANTAMIENTO INFORMACION CATASTRAL MUNICIPIOS", desc1:"LEVANTAMIENTO INFORMACION CATASTRAL MUNICIPIOS"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,2,2", value:"2.1.2.2 LEVANTAMIENTO CATASTRAL", desc:"LEVANTAMIENTO CATASTRAL", act:{key1:"2,1,2", value1:"2.1.2 LEVANTAMIENTO INFORMACION CATASTRAL MUNICIPIOS", desc1:"LEVANTAMIENTO INFORMACION CATASTRAL MUNICIPIOS"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,3,1", value:"2.1.3.1 VALORACION CATASTRAL", desc:"VALORACION CATASTRAL", act:{key1:"2,1,3", value1:"2.1.3 VALORACION CATASTRAL ", desc1:"VALORACION CATASTRAL "}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,6,1", value:"2.1.6.1 EQUIPOS DE OFICINA Y MUEBLES", desc:"EQUIPOS DE OFICINA Y MUEBLES", act:{key1:"2,1,6", value1:"2.1.6 SISTEMA DE CATASTRO INTERCONECTADO", desc1:"SISTEMA DE CATASTRO INTERCONECTADO"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,6,2", value:"2.1.6.2 EQUIPOS DE COMPUTACIÓN", desc:"EQUIPOS DE COMPUTACIÓN", act:{key1:"2,1,6", value1:"2.1.6 SISTEMA DE CATASTRO INTERCONECTADO", desc1:"SISTEMA DE CATASTRO INTERCONECTADO"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,6,3", value:"2.1.6.3 VEHICULOS Y MOTOCICLETAS", desc:"VEHICULOS Y MOTOCICLETAS", act:{key1:"2,1,6", value1:"2.1.6 SISTEMA DE CATASTRO INTERCONECTADO", desc1:"SISTEMA DE CATASTRO INTERCONECTADO"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,6,4", value:"2.1.6.4 EQUIPOS DE COMUNICACIÓN", desc:"EQUIPOS DE COMUNICACIÓN", act:{key1:"2,1,6", value1:"2.1.6 SISTEMA DE CATASTRO INTERCONECTADO", desc1:"SISTEMA DE CATASTRO INTERCONECTADO"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,6,5", value:"2.1.6.5 ACTIVOS INTANGIBLES", desc:"ACTIVOS INTANGIBLES", act:{key1:"2,1,6", value1:"2.1.6 SISTEMA DE CATASTRO INTERCONECTADO", desc1:"SISTEMA DE CATASTRO INTERCONECTADO"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,7,1", value:"2.1.7.1 NORMA USO DE SUELO", desc:"NORMA USO DE SUELO", act:{key1:"2,1,7", value1:"2.1.7 NORMATIVA DE USO DE SUELO URBANO Y PARAMETROS DE EDIFICACION", desc1:"NORMATIVA DE USO DE SUELO URBANO Y PARAMETROS DE EDIFICACION"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,1,7,2", value:"2.1.7.2 NORMA USO DE SUELO", desc:"NORMA USO DE SUELO", act:{key1:"2,1,7", value1:"2.1.7 NORMATIVA DE USO DE SUELO URBANO Y PARAMETROS DE EDIFICACION", desc1:"NORMATIVA DE USO DE SUELO URBANO Y PARAMETROS DE EDIFICACION"}, subc:{key2:"2,1", value2:"2.1 ACTUALIZACION DE LOS REGISTROS DE CATASTRO", desc2:"ACTUALIZACION DE LOS REGISTROS DE CATASTRO"}},
+                {key:"2,2,1,1", value:"2.2.1.1 ADQUISICION DEL SOFTWARE, MIGRACIÓN E IMPLANTACIÓN", desc:"ADQUISICION DEL SOFTWARE, MIGRACIÓN E IMPLANTACIÓN", act:{key1:"2,2,1", value1:"2.2.1 ADQUISICION DEL SISTEMA DE CATASTRO", desc1:"ADQUISICION DEL SISTEMA DE CATASTRO"}, subc:{key2:"2,2", value2:"2.2 DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL", desc2:"DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL"}},
+                {key:"2,2,2,1", value:"2.2.2.1 DIGITALIZACIÓN ARCHIVOS DE CATASTRO", desc:"DIGITALIZACIÓN ARCHIVOS DE CATASTRO", act:{key1:"2,2,2", value1:"2.2.2 ADQUISICION DEL SISTEMA DE CATASTRO", desc1:"ADQUISICION DEL SISTEMA DE CATASTRO"}, subc:{key2:"2,2", value2:"2.2 DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL", desc2:"DESARROLLO DE LOS SISTEMAS DE GESTION CATASTRAL"}},
+                {key:"2,3,1,1", value:"2.3.1.1 TALLERES, CURSOS, REUNIONES Y OTROS", desc:"TALLERES, CURSOS, REUNIONES Y OTROS", act:{key1:"2,3,1", value1:"2.3.1 CAPACITACIÓN", desc1:"CAPACITACIÓN"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,2,1", value:"2.3.2.1 MATERIAL PROMOCIONAL", desc:"MATERIAL PROMOCIONAL", act:{key1:"2,3,2", value1:"2.3.2 DIFUSIÓN", desc1:"DIFUSIÓN"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,2,2", value:"2.3.2.2 DIFUSIÓN MASIVA", desc:"DIFUSIÓN MASIVA", act:{key1:"2,3,2", value1:"2.3.2 DIFUSIÓN", desc1:"DIFUSIÓN"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,2,3", value:"2.3.2.3 PUBLICACION DE CONVOCATORIAS", desc:"PUBLICACION DE CONVOCATORIAS", act:{key1:"2,3,2", value1:"2.3.2 DIFUSIÓN", desc1:"DIFUSIÓN"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,2,4", value:"2.3.2.4 SOCIALIZACIÓN DEL PMGM", desc:"SOCIALIZACIÓN DEL PMGM", act:{key1:"2,3,2", value1:"2.3.2 DIFUSIÓN", desc1:"DIFUSIÓN"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,3,1", value:"2.3.3.1 ASISTENCIA TECNICA COMUNICACIÓN", desc:"ASISTENCIA TECNICA COMUNICACIÓN", act:{key1:"2,3,3", value1:"2.3.3 ASISTENCIA TÉCNICA", desc1:"ASISTENCIA TÉCNICA"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,3,2", value:"2.3.3.2 ASISTENCIA TECNICA SEICU", desc:"ASISTENCIA TECNICA SEICU", act:{key1:"2,3,3", value1:"2.3.3 ASISTENCIA TÉCNICA", desc1:"ASISTENCIA TÉCNICA"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,3,3", value:"2.3.3.3 ASISTENCIA TECNICA COMUNICACIÓN", desc:"ASISTENCIA TECNICA COMUNICACIÓN", act:{key1:"2,3,3", value1:"2.3.3 ASISTENCIA TÉCNICA", desc1:"ASISTENCIA TÉCNICA"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,3,3", value:"2.3.3.3 ASISTENCIA TECNICA UEP", desc:"ASISTENCIA TECNICA UEP", act:{key1:"2,3,3", value1:"2.3.3 ASISTENCIA TÉCNICA", desc1:"ASISTENCIA TÉCNICA"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,3,3", value:"2.3.3.3 REVERTIDO", desc:"REVERTIDO", act:{key1:"2,3,3", value1:"2.3.3 ASISTENCIA TÉCNICA", desc1:"ASISTENCIA TÉCNICA"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,3,3,X", value:"2.3.3.X ASISTENCIA TECNICA UEP", desc:"ASISTENCIA TECNICA UEP", act:{key1:"2,3,3", value1:"2.3.3 ASISTENCIA TÉCNICA", desc1:"ASISTENCIA TÉCNICA"}, subc:{key2:"2,3", value2:"2.3 CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN", desc2:"CAPACITACION, ASISTENCIA TECNICA Y DIFUSIÓN"}},
+                {key:"2,4,1,1", value:"2.4.1.1 HONORARIOS PROFESIONALES", desc:"HONORARIOS PROFESIONALES", act:{key1:"2,4,1", value1:"2.4.1 SERVICIOS PERSONALES", desc1:"SERVICIOS PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,1,2", value:"2.4.1.2 HONORARIOS PROFESIONALES", desc:"HONORARIOS PROFESIONALES", act:{key1:"2,4,1", value1:"2.4.1 SERVICIOS PERSONALES", desc1:"SERVICIOS PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,2,1", value:"2.4.2.1 SERVICIOS BASICOS", desc:"SERVICIOS BASICOS", act:{key1:"2,4,2", value1:"2.4.2 SERVICIOS NO PERSONALES", desc1:"SERVICIOS NO PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,2,2", value:"2.4.2.2 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS", act:{key1:"2,4,2", value1:"2.4.2 SERVICIOS NO PERSONALES", desc1:"SERVICIOS NO PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,2,3", value:"2.4.2.3 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS", act:{key1:"2,4,2", value1:"2.4.2 SERVICIOS NO PERSONALES", desc1:"SERVICIOS NO PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,2,4", value:"2.4.2.4 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS", act:{key1:"2,4,2", value1:"2.4.2 SERVICIOS NO PERSONALES", desc1:"SERVICIOS NO PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,2,5", value:"2.4.2.5 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS", act:{key1:"2,4,2", value1:"2.4.2 SERVICIOS NO PERSONALES", desc1:"SERVICIOS NO PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,2,6", value:"2.4.2.6 ADQUISICION SOFTWARE DE CATASTRO", desc:"ADQUISICION SOFTWARE DE CATASTRO", act:{key1:"2,4,2", value1:"2.4.2 SERVICIOS NO PERSONALES", desc1:"SERVICIOS NO PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,3,1", value:"2.4.3.1 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS", act:{key1:"2,4,3", value1:"2.4.3 MATERIALES Y SUMINISTROS", desc1:"MATERIALES Y SUMINISTROS"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,3,2", value:"2.4.3.2 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS", act:{key1:"2,4,3", value1:"2.4.3 MATERIALES Y SUMINISTROS", desc1:"MATERIALES Y SUMINISTROS"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,3,3", value:"2.4.3.3 BIENES Y SERVICIOS", desc:"BIENES Y SERVICIOS", act:{key1:"2,4,3", value1:"2.4.3 MATERIALES Y SUMINISTROS", desc1:"MATERIALES Y SUMINISTROS"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,4,1", value:"2.4.4.1 BIENES DE USO", desc:"BIENES DE USO", act:{key1:"2,4,4", value1:"2.4.4 ACTIVOS REALES", desc1:"ACTIVOS REALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,4,2", value:"2.4.4.2 BIENES DE USO", desc:"BIENES DE USO", act:{key1:"2,4,4", value1:"2.4.4 ACTIVOS REALES", desc1:"ACTIVOS REALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,4,3", value:"2.4.4.3 BIENES DE USO", desc:"BIENES DE USO", act:{key1:"2,4,4", value1:"2.4.4 ACTIVOS REALES", desc1:"ACTIVOS REALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,4,4", value:"2.4.4.4 BIENES DE USO", desc:"BIENES DE USO", act:{key1:"2,4,4", value1:"2.4.4 ACTIVOS REALES", desc1:"ACTIVOS REALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,4,5", value:"2.4.4.5 BIENES DE USO", desc:"BIENES DE USO", act:{key1:"2,4,4", value1:"2.4.4 ACTIVOS REALES", desc1:"ACTIVOS REALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,4,6", value:"2.4.4.6 BIENES DE USO", desc:"BIENES DE USO", act:{key1:"2,4,4", value1:"2.4.4 ACTIVOS REALES", desc1:"ACTIVOS REALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,4,x", value:"2.4.4.x ACTIVOS INTANGIBLES", desc:"ACTIVOS INTANGIBLES", act:{key1:"2,4,4", value1:"2.4.4 ACTIVOS REALES", desc1:"ACTIVOS REALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,5,1", value:"2.4.5.1 AUDITORIA EXTERNA 2013-2014", desc:"AUDITORIA EXTERNA 2013-2014", act:{key1:"2,4,5", value1:"2.4.5 OTROS SERVICIOS PERSONALES", desc1:"OTROS SERVICIOS PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,5,2", value:"2.4.5.2 AUDITORIA EXTERNA 2015", desc:"AUDITORIA EXTERNA 2015", act:{key1:"2,4,5", value1:"2.4.5 OTROS SERVICIOS PERSONALES", desc1:"OTROS SERVICIOS PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,5,3", value:"2.4.5.3 AUDITORIA EXTERNA 2016", desc:"AUDITORIA EXTERNA 2016", act:{key1:"2,4,5", value1:"2.4.5 OTROS SERVICIOS PERSONALES", desc1:"OTROS SERVICIOS PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}},
+                {key:"2,4,5,4", value:"2.4.5.4 AUDITORIA EXTERNA 2017", desc:"AUDITORIA EXTERNA 2017", act:{key1:"2,4,5", value1:"2.4.5 OTROS SERVICIOS PERSONALES", desc1:"OTROS SERVICIOS PERSONALES"}, subc:{key2:"2,4", value2:"2.4 ADMINISTRACION, EVALUACION Y AUDITORIAS", desc2:"ADMINISTRACION, EVALUACION Y AUDITORIAS"}}
+
             ];
 
-            $("#project-name").autocomplete({
-              minLength: 0,
-              source: availableTags,
-              focus: function(event, ui) {
-                $("#project-name").val(ui.item.value);
-                return false;
-              },
-              select: function(event, ui) {
-                $("#project-name").val(ui.item.value);
-                $("#project-id").val(ui.item.key);
-                $("#project-desc").val(ui.item.desc);
-                return false;
-              }
-            });
-            $("#actividad-name").autocomplete({
-              minLength: 0,
-              source: actividadTag,
-              focus: function(event, ui) {
-                $("#actividad-name").val(ui.item.value);
-                return false;
-              },
-              select: function(event, ui) {
-                $("#actividad-name").val(ui.item.value);
-                $("#actividad-id").val(ui.item.key);
-                $("#actividad-desc").val(ui.item.desc);
-                return false;
-              }
-            });
             $("#subactividad-name").autocomplete({
               minLength: 0,
               source: subactividadTags,
@@ -540,10 +491,15 @@
                 $("#subactividad-name").val(ui.item.value);
                 $("#subactividad-id").val(ui.item.key);
                 $("#subactividad-desc").val(ui.item.desc);
+                $("#subactividad-nameact").val(ui.item.act.value1);
+                $("#subactividad-codact").val(ui.item.act.key1);
+                $("#subactividad-descact").val(ui.item.act.desc1);
+                $("#subactividad-namesubc").val(ui.item.subc.value2);
+                $("#subactividad-codsubc").val(ui.item.subc.key2);
+                $("#subactividad-descsubc").val(ui.item.subc.desc2);
                 return false;
               }
             });
-
           });
     </script>
 
